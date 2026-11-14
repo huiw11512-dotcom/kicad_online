@@ -1,0 +1,76 @@
+[
+  {
+    "library": "EasyEDA",
+    "footprint": "DFN2510A-10_L2.5-W1.0-P0.50-BL",
+    "variants": [
+      {
+        "signature": "470cce8810ff",
+        "references": [
+          "D401",
+          "D402"
+        ]
+      },
+      {
+        "signature": "eadbce169fc3",
+        "references": [
+          "D403"
+        ]
+      }
+    ]
+  },
+  {
+    "library": "Package_TO_SOT_SMD",
+    "footprint": "SOT-416",
+    "variants": [
+      {
+        "signature": "2c5a7a6f0f07",
+        "references": [
+          "D701"
+        ]
+      },
+      {
+        "signature": "52a46e9ceaa0",
+        "references": [
+          "D101",
+          "D502"
+        ]
+      }
+    ]
+  },
+  {
+    "library": "Resistor_SMD",
+    "footprint": "R_0402_1005Metric",
+    "variants": [
+      {
+        "signature": "c92acd2d1387",
+        "references": [
+          "R101",
+          "R102",
+          "R103",
+          "R104",
+          "R107",
+          "R108",
+          "R401",
+          "R402",
+          "R403",
+          "R501",
+          "R502",
+          "R605",
+          "R606",
+          "R701",
+          "R704",
+          "R705",
+          "R706",
+          "R707"
+        ]
+      },
+      {
+        "signature": "d675f63b6e28",
+        "references": [
+          "R702",
+          "R703"
+        ]
+      }
+    ]
+  }
+]
