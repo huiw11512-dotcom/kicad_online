@@ -9,7 +9,7 @@ import json, pcbnew
 root=Path("cm5_mini_host")
 board=pcbnew.LoadBoard(str(root/"CM5_MINIMA_3.kicad_pcb"))
 want={"EasyEDA","Samacsys","_pico"}
-io=pcbnew.IO_MGR.PluginFind(pcbnew.IO_MGR.KICAD_SEXPR)
+io=pcbnew.PCB_IO_KICAD_SEXPR() if hasattr(pcbnew,'PCB_IO_KICAD_SEXPR') else pcbnew.PCB_IO()
 assert io is not None, "KiCad footprint I/O plugin unavailable"
 libs=defaultdict(dict)
 for fp in board.GetFootprints():
