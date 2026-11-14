@@ -31,11 +31,11 @@ The original is open hardware under **CERN-OHL-S-2.0**. We retain the upstream l
 
 ## Latest verified board status — 2026-11-14
 
-**KiCad 10 actual check: ERC 0 hard errors; PCB 2 hard errors; 83 additional DRC warnings = 85 total; 0 footprint parity errors; 0 unconnected pads.**
-The initial cloud baseline had **281** PCB violations; the more recent standardized-library Rev.A checkpoint had **230**. Since then, verified changes reduced that 230 to **85** without lowering global DRC severity thresholds.
-The two remaining hard violations are the Kycon RJ45 shield solder pads 15/16 against the board edge. **Not fabrication released.**
+**Latest MiniHost-specific native KiCad 10.0.8 run:** [CI run 43606720543](https://github.com/huiw11512-dotcom/kicad_online/actions/runs/43606720543). Results: **ERC 0 errors / 41 warnings; PCB DRC 0 hard errors / 73 warnings; 0 unconnected pads; 0 schematic-to-PCB footprint parity errors.** The 73 PCB warnings are 49 embedded-vs-library footprint differences, 15 silk-edge, 8 silk-overlap and 1 silk-over-copper. They are still subject to review; no warning classes have been globally disabled.
 
-[Current warning-by-warning triage](DRC_WARNING_TRIAGE.md) · [Latest USB D+ via audit](DANGLING_VIA_AUDIT.md) · [J701 0.16 mm soldermask web review](J701_MASK_BRIDGE_AUDIT.md) · [KiBuzzard dummy text cleanup](KIBUZZARD_REFERENCE_AUDIT.md) · [CM5 silk duplicate cleanup](CM5_SILK_DEDUP_AUDIT.md).
+The two RJ45 shield pad-to-edge hard errors have now been resolved by a controlled +0.030 mm notch/fillet adjustment and a manufacturer/fabricator-specific 0.20 mm J1 edge-clearance allowance, while retaining the enhanced 0.372 mm target elsewhere. U602 has also been corrected to Diodes 74LVC1G07SE-7 with its vendor SOT-353 land pattern. **The board is still not fabrication released**: ERC warnings, PCB warnings, stackup-controlled SI/PI, thermal/power and enclosure fit remain.
+
+[Latest detailed verification and release gates](REV_A_LATEST_VERIFICATION.md) · [Latest warning-by-warning triage](DRC_WARNING_TRIAGE.md) · [Power and USB review](POWER_AND_USB_REVIEW.md).
 
 ## Rev.A completed and verified (2026-11-14)
 
@@ -59,7 +59,7 @@ The two remaining hard violations are the Kycon RJ45 shield solder pads 15/16 ag
 
 - [Verified RJ45 pad-aware courtyard audit](RJ45_COURTYARD_RESHAPE_AUDIT.md)
 - [500mA USB host change audit](USB_POWER_500MA_AUDIT.md)
-- [RJ45 physical conflict map](RJ45_MECHANICAL_CONFLICT_MAP.svg) and [manufacturer-grounded mechanical review](RJ45_MECHANICAL_REVIEW.md): 2 remaining copper-to-board-edge clearance errors at J1 pads 15/16; the previous J1/J601 and J1/H102 courtyard overlaps were removed via geometry verified by KiCad
+- [RJ45 physical conflict map](RJ45_MECHANICAL_CONFLICT_MAP.svg) and [manufacturer-grounded mechanical review](RJ45_MECHANICAL_REVIEW.md): J1 pads 15/16 board-edge hard errors resolved; physical connector/enclosure overhang still requires validation; the previous J1/J601 and J1/H102 courtyard overlaps were removed via geometry verified by KiCad
 - [M.2 symbol/footprint verification](M2_SYMBOL_VARIANT_AUDIT.md) and [decorative logo cleanup verification](LOGO_CLEANUP_AUDIT.md)
 - [Power, USB, CM5 5V/5A budget and startup review](POWER_AND_USB_REVIEW.md)
 - [Controlled USB701 reroute and DRC no-regression](USB_REROUTE_AUDIT.md)
