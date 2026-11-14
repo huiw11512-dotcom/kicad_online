@@ -15,7 +15,6 @@ for name,layer in targets:
     z=pcbnew.ZONE(b)
     z.SetLayer(layer)
     z.SetNet(gnd)
-    z.SetPriority(0)
     z.SetLocalClearance(pcbnew.FromMM(0.13))
     z.SetMinThickness(pcbnew.FromMM(0.25))
     z.SetPadConnection(pcbnew.ZONE_CONNECTION_THERMAL)
