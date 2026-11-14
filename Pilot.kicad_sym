@@ -32,7 +32,7 @@
       (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
       (property "Datasheet" "" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
       
-      (symbol "Cap_0_1" (polyline (pts (xy -3.175 1.27) (xy 3.175 1.27)) (stroke (width 0.508) (type default)) (fill (type none1.27)olyline (pts (xy -3.175 -1.27) (xy 3.175 -1.27)) (stroke (width 0.508) (type default)) (fill (type none1.27)in passive line (at 0 5.08 270) (length 3.81)
+      (symbol "Cap_0_1" (polyline (pts (xy -3.175 1.27) (xy 3.175 1.27)) (stroke (width 0.508) (type default)) (fill (type none)))(polyline (pts (xy -3.175 -1.27) (xy 3.175 -1.27)) (stroke (width 0.508) (type default)) (fill (type none)))(pin passive line (at 0 5.08 270) (length 3.81)
          (name "~" (effects (font (size 1.27 1.27))))
          (number "1" (effects (font (size 1.27 1.27)))))(pin passive line (at 0 -5.08 90) (length 3.81)
          (name "~" (effects (font (size 1.27 1.27))))
