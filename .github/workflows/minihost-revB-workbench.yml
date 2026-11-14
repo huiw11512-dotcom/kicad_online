@@ -38,6 +38,8 @@ jobs:
           python3 cm5_mini_host/scripts/clear_dnp_m303_footprint.py
       - name: Clean clipped and overlapping silkscreen graphics
         run: python3 cm5_mini_host/scripts/silk_drc_cleanup_revB.py
+      - name: Reroute U602 VCC pad to CM5 3.3V copper rail
+        run: python3 cm5_mini_host/scripts/reroute_u602_vcc_revB.py
       - name: Inspect U602 VCC rail connectivity before power-net reroute
         run: python3 cm5_mini_host/scripts/inspect_u602_vcc_route.py
       - name: Snapshot exact board-embedded footprint geometry
