@@ -1,4 +1,16 @@
-# KiCad Web Pilot — 5 V filter board
+# KiCad projects controlled through ChatGPT → GitHub → ZiroEDA
+
+## CM5 MiniHost — Linux-capable high-speed carrier
+
+[Open CM5 mini-host folder](https://github.com/huiw11512-dotcom/kicad_online/tree/main/cm5_mini_host) · [Open with ZiroEDA](https://designer.ziroeda.com/gh/huiw11512-dotcom/kicad_online/tree/main/cm5_mini_host) · [Actual KiCad 10 audit](cm5_mini_host/AUDIT_2026-11-14.md)
+
+The imported, editable PCB baseline is adapted with **source attribution** from [CM5 MINIMA REV3](https://github.com/piecol/CM5_MINIMA_REV3) (CERN-OHL-S-2.0). It includes CM5, HDMI, GbE, PCIe/M.2 and USB-C, but is **not a validated original fabrication release**. See the audit results.
+
+---
+
+## Earlier small test — KiCad Web Pilot
+
+
 
 A small native KiCad project created to test **ChatGPT → GitHub → ZiroEDA** engineering workflows.
 
