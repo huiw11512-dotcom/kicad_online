@@ -10,7 +10,7 @@ on:
       - '.github/workflows/minihost-revB-workbench.yml'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   native-kicad-audit:
@@ -102,6 +102,26 @@ jobs:
             fab_revB_candidate/
           if-no-files-found: error
           retention-days: 30
+      - name: Publish editable board candidate to independent GitHub branch
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          NAME="minihost-revB-candidate"
+          if git ls-remote --exit-code --heads origin "$NAME" >/dev/null 2>&1; then
+            echo "Candidate branch exists; preserving previous approved candidate."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp reports/erc.rpt cm5_mini_host/REV_B_VERIFIED_ERC.rpt
+          cp reports/drc.rpt cm5_mini_host/REV_B_VERIFIED_DRC.rpt
+          cp fab_revB_candidate/audit/fab_manifest.json cm5_mini_host/REV_B_FAB_MANIFEST.json
+          git switch -c "$NAME"
+          git add -A cm5_mini_host/
+          git commit -m "Publish Rev.B KiCad source candidate after native ERC/DRC and fab-gate [skip ci]"
+          git push origin "HEAD:refs/heads/$NAME"
+          echo "Candidate branch URL: https://github.com/huiw11512-dotcom/kicad_online/tree/$NAME/cm5_mini_host"
       - name: Upload native reports
         if: always()
         uses: actions/upload-artifact@v4
