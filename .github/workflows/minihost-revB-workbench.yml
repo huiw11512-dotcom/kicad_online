@@ -30,8 +30,6 @@ jobs:
           kicad-cli version
       - name: Normalize embedded schematic symbols and passive contacts
         run: python3 cm5_mini_host/scripts/snapshot_embedded_symbols.py
-      - name: Add ERC power-source flag for CM5 3.3V output
-        run: python3 cm5_mini_host/scripts/add_u602_3v3_pwr_flag.py
       - name: Correct U602 logic buffer supply rail
         run: python3 cm5_mini_host/scripts/fix_u602_3v3_pi.py
       - name: Remove audited orphan wire and DNP placeholder link
