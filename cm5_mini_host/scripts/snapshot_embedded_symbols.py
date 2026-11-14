@@ -85,9 +85,10 @@ for path in files:
         library_expr=cached.replace(f'(symbol "{cache_name}"',f'(symbol "{name}"',1)
         digest=hashlib.sha256(library_expr.encode()).hexdigest()
         old=libs[nick].get(name)
-        if old and hashlib.sha256(old.encode()).hexdigest()!=digest:
-            raise SystemExit(f"Conflicting aliased cached symbol definitions: {nick}:{name}")
-        libs[nick][name]=library_expr
+        # Prefer an already fully-qualified cache definition. Only use the alias
+        # when the corresponding library symbol is otherwise absent.
+        if old is None:
+            libs[nick][name]=library_expr
 
     path.write_text(src,encoding="utf-8")
 
