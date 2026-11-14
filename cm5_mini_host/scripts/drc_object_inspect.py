@@ -74,8 +74,9 @@ for nick in sorted(nicks):
 try:
     sample=next(fp for fp in b.GetFootprints() if str(fp.GetFPID().GetLibNickname()) in {"EasyEDA","Samacsys","_pico"})
     testlib=out/"FootprintExportTest.pretty"
-    pcbnew.FootprintLibCreate(str(testlib))
-    pcbnew.FootprintSave(str(testlib),sample)
+    testlib.mkdir(parents=True,exist_ok=True)
+    sample_name=str(sample.GetFPID().GetLibItemName())
+    pcbnew.FootprintSave(str(testlib/(sample_name+".kicad_mod")),sample)
     saved=list(testlib.glob("*.kicad_mod"))
     lines.append(f"- FootprintSave test: {len(saved)} file(s), "+(saved[0].name if saved else "none"))
     if saved:
