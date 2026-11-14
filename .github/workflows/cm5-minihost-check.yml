@@ -63,6 +63,8 @@ jobs:
           echo '' >> "$GITHUB_STEP_SUMMARY"
           cat reports/board_inventory.md >> "$GITHUB_STEP_SUMMARY"
           cat reports/command_status.txt >> "$GITHUB_STEP_SUMMARY"
+          echo '' >> "$GITHUB_STEP_SUMMARY"
+          echo '**NOTICE:** This green check means only that ERC/PCB hard errors passed. It does NOT approve fabrication. Library warnings, silkscreen, vendor stackup, SI/PI, enclosure fit, power and bring-up remain subject to the engineering release checklist.' >> "$GITHUB_STEP_SUMMARY"
       - name: Upload review reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -71,7 +73,7 @@ jobs:
           path: reports/
           if-no-files-found: warn
 
-      - name: Manufacturing release gate — fail on electrical / copper rule errors
+      - name: Electrical hard-error gate only — this is not a fabrication release
         if: always()
         shell: bash
         run: |
@@ -85,5 +87,5 @@ jobs:
           drc_errors=len(re.findall(r';\s*error\s*$',drc,re.M))
           print('Schematic ERC errors:',errors,'PCB DRC errors:',drc_errors)
           if errors or drc_errors:
-              sys.exit('BLOCKED: Fix or explicitly review reported errors before fabrication release')
+              sys.exit('BLOCKED: KiCad has electrical/PCB hard errors; correct before even considering fab signoff')
           PY
