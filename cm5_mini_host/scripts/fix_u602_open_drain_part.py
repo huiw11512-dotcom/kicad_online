@@ -71,6 +71,29 @@ if len(before)!=5:raise SystemExit("U602 needs exactly five pads")
 trackcount=len(b.GetTracks());zones=len(b.Zones());nets=b.GetNetCount()
 f.SetValue(newpart)
 pcbnew.SaveBoard(str(boardfile),b)
+
+# KiCad footprint also stores a user-defined P/N field, separately from Value.
+# Changing Value alone creates footprint_symbol_field_mismatch, so update
+# precisely this U602 footprint's P/N property in the serialized native board.
+raw=boardfile.read_text(encoding="utf-8")
+pnpos=raw.find('(property "Reference" "U602"')
+if pnpos<0 or raw.count('(property "Reference" "U602"')!=1:
+    raise SystemExit("No unique PCB U602 footprint reference")
+fbeg=raw.rfind("\\n\\t(footprint",0,pnpos)+2
+if fbeg<2:raise SystemExit("Cannot locate U602 footprint record")
+fend=end(raw,fbeg)
+ft=raw[fbeg:fend]
+old_field='(property "P/N" "'+oldpart+'"'
+new_field='(property "P/N" "'+newpart+'"'
+if ft.count(old_field)!=1:
+    raise SystemExit("U602 P/N field is not the expected old part")
+ft=ft.replace(old_field,new_field,1)
+old_ds='(property "Datasheet" "'+oldurl+'"'
+if old_ds in ft:
+    ft=ft.replace(old_ds,'(property "Datasheet" "'+datasheet+'"',1)
+raw=raw[:fbeg]+ft+raw[fend:]
+boardfile.write_text(raw,encoding="utf-8")
+
 b2=pcbnew.LoadBoard(str(boardfile))
 p2=next(x for x in b2.GetFootprints() if x.GetReference()=="U602")
 assert p2.GetValue()==newpart and pad(p2)==before
