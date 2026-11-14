@@ -15,11 +15,13 @@ def pad_sig(fp):
     out=[]
     for p in fp.Pads():
         pos=p.GetFPRelativePosition(); size=p.GetSize(); drill=p.GetDrillSize()
-        layers=str(p.GetLayerSet().FmtHex()) if hasattr(p.GetLayerSet(),"FmtHex") else str(p.GetLayerSet())
+        # KiCad exports a B.Cu footprint into a top-side library with local Y mirrored.
+        # Normalize only this expected library-coordinate transform for comparison.
+        y=-int(pos.y) if fp.GetLayer()==pcbnew.B_Cu else int(pos.y)
         raw_mask=p.GetLocalSolderMaskMargin() if hasattr(p,"GetLocalSolderMaskMargin") else None
         mask=0 if raw_mask is None else int(raw_mask)
         out.append((str(p.GetNumber()),int(p.GetAttribute()),int(p.GetShape()),
-                    int(pos.x),int(pos.y),int(size.x),int(size.y),int(drill.x),int(drill.y),mask,layers))
+                    int(pos.x),y,int(size.x),int(size.y),int(drill.x),int(drill.y),mask))
     return tuple(sorted(out))
 
 def state(b):
