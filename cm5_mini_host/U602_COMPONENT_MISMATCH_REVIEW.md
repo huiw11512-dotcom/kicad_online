@@ -1,3 +1,5 @@
+> **Revision update / actual hardware fix (2026-11-14):** The model identity inconsistency described below has now been corrected in native KiCad after a verified review of the power LED signal. The selected source is **Diodes 74LVC1G07SE-7, LCSC/JLC C67531**, an SOT-353 non-inverting **open-drain** buffer, matching the existing symbol's pin logic and the nPWR_LED→R605/D605 5V LED sink path. Both `IO.kicad_sch` and `CM5_MINIMA_3.kicad_pcb` part value/P/N fields were updated and re-checked: **ERC 0, DRC hard 2, parity 0, unconnected 0**, unchanged DRC total **85**. [Native KiCad cloud verified correction](U602_BOM_CORRECTION_AUDIT.md). **Remaining hold:** physical SOT-353 PCB copper land dimensions and assembly/LED polarity still require actual datasheet/machine validation. The sections below document the original discovered mismatch for traceability; no longer describe the current corrected BOM.
+
 # Manufacturing blocker: U602 **symbol / function / package** conflict
 
 **Reviewed 2026-11-14. Status: HIGH PRIORITY — do not fabricate or assemble until resolved.**
