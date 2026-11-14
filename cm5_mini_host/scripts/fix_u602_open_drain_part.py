@@ -79,7 +79,7 @@ raw=boardfile.read_text(encoding="utf-8")
 pnpos=raw.find('(property "Reference" "U602"')
 if pnpos<0 or raw.count('(property "Reference" "U602"')!=1:
     raise SystemExit("No unique PCB U602 footprint reference")
-fbeg=raw.rfind("\\n\\t(footprint",0,pnpos)+2
+fbeg=raw.rfind("\n\t(footprint",0,pnpos)+2
 if fbeg<2:raise SystemExit("Cannot locate U602 footprint record")
 fend=end(raw,fbeg)
 ft=raw[fbeg:fend]
