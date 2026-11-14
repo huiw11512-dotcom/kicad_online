@@ -1,0 +1,11 @@
+(version 1)
+# Physical manufacturing minimum for routed 6L JLCPCB board: 0.2mm.
+# Default enhanced design target: retain original 0.372mm elsewhere.
+(rule "Robust 0p372 edge copper margin other than RJ45"
+    (constraint edge_clearance (min 0.372mm)))
+# Kycon GLPLX-SMT-188S7 board-edge shield tabs (pads 15 and 16):
+# within manufacturer's 15.5mm central slot and recommended copper lands,
+# edge clearance >= 0.2mm after upper notch 0.030mm adjustment.
+(rule "Kycon J1 board-edge solder tabs manufacturer allowance"
+    (constraint edge_clearance (min 0.2mm))
+    (condition "A.memberOfFootprint('J1') || B.memberOfFootprint('J1')"))
