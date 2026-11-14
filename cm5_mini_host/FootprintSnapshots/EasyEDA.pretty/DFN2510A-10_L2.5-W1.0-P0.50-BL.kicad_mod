@@ -1,0 +1,227 @@
+(footprint "DFN2510A-10_L2.5-W1.0-P0.50-BL"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(property "Reference" "D401"
+		(at 0 -4.43 180)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "d7615067-72b3-47fb-9847-42c22c82ac64")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "PUSB3F96X"
+		(at 0 4.43 180)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "22158a50-8b28-4131-995c-35cdc65ab536")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" "https://lcsc.com/product-detail/Diodes-ESD_Nexperia-PUSB3F96_C478121.html"
+		(at 0 0 180)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "defe4640-a4df-40fb-aa53-ff81c6450878")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 180)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d2474ac5-4789-4a66-b1c7-ead5e1568280")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LCSC Part" "C478121"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d35a272a-60b2-4afb-86b2-7720b926df15")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(sheetname "/HDMI/")
+	(sheetfile "HDMI.kicad_sch")
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -1.36 -1.02)
+		(end -1.36 1.02)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "1e000249-8b3b-4c9a-97c0-12de3fd29ab4")
+	)
+	(fp_line
+		(start -1.36 -1.02)
+		(end 1.36 -1.02)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "80264806-cefb-49fc-94c2-90d75b62d227")
+	)
+	(fp_line
+		(start -1.36 1.02)
+		(end 1.36 1.02)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "07b3c3df-b877-408e-af8d-2fbb8196ccfa")
+	)
+	(fp_line
+		(start 1.36 -1.02)
+		(end 1.36 1.02)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "5f9bb315-12fa-4e24-b445-ee97b795de98")
+	)
+	(fp_circle
+		(center -1.02 1.4)
+		(end -0.96 1.4)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "fc22b7f9-e3fc-435d-bd7a-8b89ff1ad1fb")
+	)
+	(fp_circle
+		(center -1.02 0.51)
+		(end -0.92 0.51)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(fill no)
+		(layer "Cmts.User")
+		(uuid "c678eed3-88e8-426c-b36e-a2113e1e2205")
+	)
+	(fp_circle
+		(center -1.25 0.5)
+		(end -1.22 0.5)
+		(stroke
+			(width 0.06)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "e6c743aa-06ff-4b3c-9e3f-242973cdf7f8")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 180)
+		(layer "F.Fab")
+		(uuid "d352e129-c47b-4595-a11b-55cd9e84fccd")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" smd rect
+		(at -1 0.43)
+		(size 0.25 0.68)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "9082c464-eada-43da-98b3-9026490a785e")
+	)
+	(pad "2" smd rect
+		(at -0.5 0.43)
+		(size 0.25 0.68)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "9cac1dec-bc96-4ba5-aa8e-9c65327e3d05")
+	)
+	(pad "3" smd rect
+		(at 0 0.43)
+		(size 0.25 0.68)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "86a14727-b361-4ecd-98ad-73a00bd07fe4")
+	)
+	(pad "4" smd rect
+		(at 0.5 0.43)
+		(size 0.25 0.68)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "179fb7c2-3f77-488f-82bf-88418e168ff2")
+	)
+	(pad "5" smd rect
+		(at 1 0.43)
+		(size 0.25 0.68)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "caa80888-2dc4-41ce-90d6-8cb2848e4022")
+	)
+	(pad "6" smd rect
+		(at 1 -0.43)
+		(size 0.25 0.68)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "5cc166ae-3559-4905-9af9-d5df35de84a2")
+	)
+	(pad "7" smd rect
+		(at 0.5 -0.43)
+		(size 0.25 0.68)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "34fd64fe-b9f2-410f-ae5a-76aa9351b1e3")
+	)
+	(pad "8" smd rect
+		(at 0 -0.43)
+		(size 0.25 0.68)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "bf9faa66-b452-404a-acfa-9636a628394c")
+	)
+	(pad "9" smd rect
+		(at -0.5 -0.43)
+		(size 0.25 0.68)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "b9f7410d-372e-4a2f-a94f-77347d64bed7")
+	)
+	(pad "10" smd rect
+		(at -1 -0.43)
+		(size 0.25 0.68)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "aff7861e-30b5-4066-b90d-3cf13bf0757f")
+	)
+	(embedded_fonts no)
+	(model "${KICAD_3RD_PARTY}/EasyEDA.3dshapes/DFN2510A-10_L2.5-W1.0-H0.5-P0.50-BL.wrl"
+		(offset
+			(xyz 0 -0 -0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 90)
+		)
+	)
+)

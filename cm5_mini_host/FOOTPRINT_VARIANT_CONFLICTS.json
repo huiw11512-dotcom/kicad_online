@@ -8,67 +8,236 @@
         "references": [
           "D401",
           "D402"
+        ],
+        "pads": [
+          {
+            "pad": "1",
+            "type": 1,
+            "shape": 1,
+            "x_mm": -1.0,
+            "y_mm": 0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          },
+          {
+            "pad": "10",
+            "type": 1,
+            "shape": 1,
+            "x_mm": -1.0,
+            "y_mm": -0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          },
+          {
+            "pad": "2",
+            "type": 1,
+            "shape": 1,
+            "x_mm": -0.5,
+            "y_mm": 0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          },
+          {
+            "pad": "3",
+            "type": 1,
+            "shape": 1,
+            "x_mm": 0.0,
+            "y_mm": 0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          },
+          {
+            "pad": "4",
+            "type": 1,
+            "shape": 1,
+            "x_mm": 0.5,
+            "y_mm": 0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          },
+          {
+            "pad": "5",
+            "type": 1,
+            "shape": 1,
+            "x_mm": 1.0,
+            "y_mm": 0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          },
+          {
+            "pad": "6",
+            "type": 1,
+            "shape": 1,
+            "x_mm": 1.0,
+            "y_mm": -0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          },
+          {
+            "pad": "7",
+            "type": 1,
+            "shape": 1,
+            "x_mm": 0.5,
+            "y_mm": -0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          },
+          {
+            "pad": "8",
+            "type": 1,
+            "shape": 1,
+            "x_mm": 0.0,
+            "y_mm": -0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          },
+          {
+            "pad": "9",
+            "type": 1,
+            "shape": 1,
+            "x_mm": -0.5,
+            "y_mm": -0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          }
         ]
       },
       {
         "signature": "eadbce169fc3",
         "references": [
           "D403"
-        ]
-      }
-    ]
-  },
-  {
-    "library": "Package_TO_SOT_SMD",
-    "footprint": "SOT-416",
-    "variants": [
-      {
-        "signature": "2c5a7a6f0f07",
-        "references": [
-          "D701"
-        ]
-      },
-      {
-        "signature": "52a46e9ceaa0",
-        "references": [
-          "D101",
-          "D502"
-        ]
-      }
-    ]
-  },
-  {
-    "library": "Resistor_SMD",
-    "footprint": "R_0402_1005Metric",
-    "variants": [
-      {
-        "signature": "c92acd2d1387",
-        "references": [
-          "R101",
-          "R102",
-          "R103",
-          "R104",
-          "R107",
-          "R108",
-          "R401",
-          "R402",
-          "R403",
-          "R501",
-          "R502",
-          "R605",
-          "R606",
-          "R701",
-          "R704",
-          "R705",
-          "R706",
-          "R707"
-        ]
-      },
-      {
-        "signature": "d675f63b6e28",
-        "references": [
-          "R702",
-          "R703"
+        ],
+        "pads": [
+          {
+            "pad": "1",
+            "type": 1,
+            "shape": 1,
+            "x_mm": -1.0,
+            "y_mm": -0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          },
+          {
+            "pad": "10",
+            "type": 1,
+            "shape": 1,
+            "x_mm": -1.0,
+            "y_mm": 0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          },
+          {
+            "pad": "2",
+            "type": 1,
+            "shape": 1,
+            "x_mm": -0.5,
+            "y_mm": -0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          },
+          {
+            "pad": "3",
+            "type": 1,
+            "shape": 1,
+            "x_mm": 0.0,
+            "y_mm": -0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          },
+          {
+            "pad": "4",
+            "type": 1,
+            "shape": 1,
+            "x_mm": 0.5,
+            "y_mm": -0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          },
+          {
+            "pad": "5",
+            "type": 1,
+            "shape": 1,
+            "x_mm": 1.0,
+            "y_mm": -0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          },
+          {
+            "pad": "6",
+            "type": 1,
+            "shape": 1,
+            "x_mm": 1.0,
+            "y_mm": 0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          },
+          {
+            "pad": "7",
+            "type": 1,
+            "shape": 1,
+            "x_mm": 0.5,
+            "y_mm": 0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          },
+          {
+            "pad": "8",
+            "type": 1,
+            "shape": 1,
+            "x_mm": 0.0,
+            "y_mm": 0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          },
+          {
+            "pad": "9",
+            "type": 1,
+            "shape": 1,
+            "x_mm": -0.5,
+            "y_mm": 0.43,
+            "sx_mm": 0.25,
+            "sy_mm": 0.68,
+            "drill_x_mm": 0.0,
+            "drill_y_mm": 0.0
+          }
         ]
       }
     ]
