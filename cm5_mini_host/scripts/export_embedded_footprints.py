@@ -8,7 +8,7 @@ import json, pcbnew
 
 root=Path("cm5_mini_host")
 board=pcbnew.LoadBoard(str(root/"CM5_MINIMA_3.kicad_pcb"))
-want={"EasyEDA","Samacsys","_pico"}
+want={"CM5IO","EasyEDA","Samacsys","_pico","Package_TO_SOT_SMD","Resistor_SMD","Connector_JST","Capacitor_SMD","Inductor_SMD","Crystal","Capacitor_Tantalum_SMD","Package_LGA"}
 io=pcbnew.PCB_IO_KICAD_SEXPR() if hasattr(pcbnew,'PCB_IO_KICAD_SEXPR') else pcbnew.PCB_IO()
 assert io is not None, "KiCad footprint I/O plugin unavailable"
 libs=defaultdict(dict)
@@ -20,17 +20,26 @@ for fp in board.GetFootprints():
     if not name: raise RuntimeError(f"Blank footprint name on {fp.GetReference()}")
     key=(nick,name)
     p=libs[nick].get(name)
-    sig=lambda f: sorted((str(x.GetNumber()),int(x.GetAttribute()),
-                         int(x.GetSize().x),int(x.GetSize().y),
-                         int(x.GetDrillSize().x),int(x.GetDrillSize().y))
-                         for x in f.Pads())
+    def sig(f):
+        out=[]
+        for x in f.Pads():
+            pos=x.GetFPRelativePosition()
+            size=x.GetSize()
+            drill=x.GetDrillSize()
+            out.append((str(x.GetNumber()),int(x.GetAttribute()),int(x.GetShape()),
+                        int(pos.x),int(pos.y),int(size.x),int(size.y),
+                        int(drill.x),int(drill.y)))
+        return sorted(out)
     if p is not None and sig(p)!=sig(fp):
         raise RuntimeError(f"Footprint {key} differs across board copies; manual review necessary")
     libs[nick][name]=fp
 
 summary=[]
 for nick in sorted(want):
-    directory=root/(nick+".pretty")
+    if nick in {"CM5IO","EasyEDA","Samacsys","_pico"}:
+        directory=root/(nick+".pretty")
+    else:
+        directory=root/"FootprintSnapshots"/(nick+".pretty")
     directory.mkdir(parents=True,exist_ok=True)
     for name,fp in sorted(libs[nick].items()):
         # KiCad serializer exports a standalone .kicad_mod from the embedded board copy.
@@ -39,10 +48,6 @@ for nick in sorted(want):
         if not exported.exists(): raise RuntimeError(f"No exported file: {exported}")
         loaded=io.FootprintLoad(str(directory),name)
         if loaded is None: raise RuntimeError(f"Roundtrip library load failed: {nick}:{name}")
-        sig=lambda f: sorted((str(x.GetNumber()),int(x.GetAttribute()),
-                              int(x.GetSize().x),int(x.GetSize().y),
-                              int(x.GetDrillSize().x),int(x.GetDrillSize().y))
-                              for x in f.Pads())
         if sig(fp)!=sig(loaded):
             raise RuntimeError(f"Pad geometry changed on library roundtrip: {nick}:{name}")
         summary.append({"library":nick,"footprint":name,
@@ -53,15 +58,19 @@ assert len(summary)>=5, f"Suspiciously few custom footprints: {len(summary)}"
 
 # Keep existing CM5IO and extend, rather than replacing it.
 table='(fp_lib_table\n'
-for nick in ("CM5IO","EasyEDA","Samacsys","_pico"):
-    table+=f'  (lib (name "{nick}")(type "KiCad")(uri "${{KIPRJMOD}}/{nick}.pretty")(options "")(descr "Project local — board-embedded snapshot"))\n'
+for nick in sorted(want):
+    if nick in {"CM5IO","EasyEDA","Samacsys","_pico"}:
+        rel=f"{nick}.pretty"
+    else:
+        rel=f"FootprintSnapshots/{nick}.pretty"
+    table+=f'  (lib (name "{nick}")(type "KiCad")(uri "${{KIPRJMOD}}/{rel}")(options "")(descr "Project local — board-embedded snapshot"))\n'
 table+=')\n'
 (root/"fp-lib-table").write_text(table,encoding="utf-8")
 (root/"FOOTPRINT_SNAPSHOT.json").write_text(json.dumps(summary,indent=2)+"\n",encoding="utf-8")
 (root/"FOOTPRINT_LIBRARIES.md").write_text("""# Local footprint provenance
 These footprints were **recovered from embedded PCB geometry** of the attributed CM5 MINIMA Rev3 baseline, not redrawn, verified against datasheets or confirmed as stocked parts. They are provided to make the editable board reproducible on a fresh KiCad installation and in web viewers. Source is the same CERN-OHL-S-2.0 licensed upstream design linked from README.
 
-The extraction script checks every unique footprint's pad number, pad type, copper size and drill size by saving to and reloading from the KiCad library. **It does not validate the manufacturer's body, courtyard, stencil, plating or placement**. Do not fabricate until physical drawings, 3D height and pin mapping are checked.
+The extraction script checks every unique footprint's pad number, pad type, local pad position, copper size and drill size by saving to and reloading from the KiCad library. **It does not validate the manufacturer's body, courtyard, stencil, plating or placement**. Do not fabricate until physical drawings, 3D height and pin mapping are checked.
 
 See `FOOTPRINT_SNAPSHOT.json` for each footprint and its source reference.
 """,encoding="utf-8")
