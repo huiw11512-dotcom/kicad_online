@@ -1768,81 +1768,10 @@
 						)
 					)
 				)
-				(pin no_connect line
-					(at 25.4 -31.75 180)
-					(length 2.54)
-					(hide yes)
-					(name "GND2280"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "M4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin no_connect line
-					(at 25.4 -34.29 180)
-					(length 2.54)
-					(hide yes)
-					(name "GND2260"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "M3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin no_connect line
-					(at 25.4 -36.83 180)
-					(length 2.54)
-					(hide yes)
-					(name "GND2242"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "M2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 25.4 -39.37 180)
-					(length 2.54)
-					(name "GND2230"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "M1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
+				
+				
+				
+				
 				(pin power_in line
 					(at 25.4 -41.91 180)
 					(length 2.54)
@@ -7091,18 +7020,6 @@
 		)
 		(pin "S2"
 			(uuid "f15b1fc8-0c57-4729-a107-174cdbf3c4d9")
-		)
-		(pin "M2"
-			(uuid "c13e6ba9-6473-4711-a62e-ff4ecd63347f")
-		)
-		(pin "M1"
-			(uuid "2ce04778-8e63-4db5-be4e-a4d549e5fe4d")
-		)
-		(pin "M3"
-			(uuid "4004bb05-d0c7-4a50-9d5a-6a20537ee526")
-		)
-		(pin "M4"
-			(uuid "048b1957-39f1-48c3-be28-41ae8834adf1")
 		)
 		(instances
 			(project "CM5_MINIMA_2"
