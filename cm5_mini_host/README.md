@@ -30,18 +30,22 @@ The original is open hardware under **CERN-OHL-S-2.0**. We retain the upstream l
 - Routed one tested USB701 A7 N backside branch from 6.4241 to 4.2503 mm copper centerline; before/after **4 → 4 hard DRC** and **0 → 0 unconnected**. This is not SI signoff.
 - Recovered **8 custom PCB-embedded footprint types** into locally registered EasyEDA, Samacsys and _pico libraries, passing KiCad export/reimport pad checks.
 - Reconciled the M.2 socket schematic's four nonexistent alternative mechanical pins M1..M4 against the installed 2230/2242 connector footprint.
+- Adjusted **R701 15k→39k and R702/R703 22k→56k** in the native schematic and PCB for 500mA default-current USB2 host, with no DRC regression.
+- Replaced the oversize rectangular RJ45 F.CrtYd with a **closed pad-aware 12-edge courtyard** in both board and project library: hard errors **4→2** and courtyard overlaps **2→0**, no electrical geometry changes.
 - Removed one pad-free PCB-only demonstration logo footprint REF** (upstream license and attribution preserved).
-- Latest *verified* electrical/DFM check after these changes: **ERC 0 errors, PCB schematic/footprint parity 0 issues, PCB unconnected 0**, with **4 remaining hard DRC errors** at the edge-mounted Kycon RJ45. Warnings still exist and require review.
+- Latest *verified* electrical/DFM check after these changes: **ERC 0 errors, PCB schematic/footprint parity 0 issues, PCB unconnected 0**, with **2 remaining hard DRC errors** at the Kycon RJ45 shield solder pads and adjacent board-edge opening. Warnings still exist and require review.
 
 ## Current blockers / engineering documents
 
-- [RJ45 physical conflict map](RJ45_MECHANICAL_CONFLICT_MAP.svg) and [manufacturer-grounded mechanical review](RJ45_MECHANICAL_REVIEW.md): 2 copper/edge-distance errors, 2 assembly courtyard overlaps involving J1, J601, H102
+- [Verified RJ45 pad-aware courtyard audit](RJ45_COURTYARD_RESHAPE_AUDIT.md)
+- [500mA USB host change audit](USB_POWER_500MA_AUDIT.md)
+- [RJ45 physical conflict map](RJ45_MECHANICAL_CONFLICT_MAP.svg) and [manufacturer-grounded mechanical review](RJ45_MECHANICAL_REVIEW.md): 2 remaining copper-to-board-edge clearance errors at J1 pads 15/16; the previous J1/J601 and J1/H102 courtyard overlaps were removed via geometry verified by KiCad
 - [M.2 symbol/footprint verification](M2_SYMBOL_VARIANT_AUDIT.md) and [decorative logo cleanup verification](LOGO_CLEANUP_AUDIT.md)
 - [Power, USB, CM5 5V/5A budget and startup review](POWER_AND_USB_REVIEW.md)
 - [Controlled USB701 reroute and DRC no-regression](USB_REROUTE_AUDIT.md)
 - [Original baseline audit — historical, before Rev.A corrections](AUDIT_2026-11-14.md)
 
-**Next implementation gate:** physically redesign the RJ45/fan/mounting-hole corner to conform to the Kycon drawing while keeping an enclosure-ready mounting pattern, then close the four remaining hard DRC errors. Follow with exact factory stackup-controlled differential impedance, component datasheet verification, full PI/thermal checks, and a prototype bring-up plan. No release Gerbers have been approved.
+**Next implementation gate:** resolve the two RJ45 shield solder land copper-to-edge gap violations based on Kycon's required PCB opening and full enclosure clearance; updated pad-aware courtyard eliminated two false overlaps and was verified with KiCad. Follow with exact factory stackup-controlled differential impedance, component datasheet verification, full PI/thermal checks, and a prototype bring-up plan. No release Gerbers have been approved.
 
 ## Open in ZiroEDA
 
