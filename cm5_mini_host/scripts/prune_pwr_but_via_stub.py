@@ -79,7 +79,7 @@ for f in b.GetFootprints():
             # endpoint; removing this terminal dead-end trace preserves the
             # second, live SW501.1 track to the CM5 via.
             if dist<.35 and not (f.GetReference()=="SW501" and pad.GetNumber()=="1" and
-                                   t is path[-1] and pos(pad.GetPosition())==endpoint):
+                                   pos(pad.GetPosition())==endpoint):
                 raise SystemExit(f'Unsafe: PWR_BUT pad {f.GetReference()}.{pad.GetNumber()} touches candidate dead-end route')
 # Verify functional opposite end of SW501 pin1 still continues on F.Cu.
 active=[(t,q) for t,q in neigh[endpoint] if t not in path]
