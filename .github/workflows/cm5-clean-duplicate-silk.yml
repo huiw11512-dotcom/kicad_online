@@ -1,0 +1,79 @@
+name: CM5 duplicated module-outline silkscreen correction
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'cm5_mini_host/scripts/remove_duplicate_cm5_silk_outline.py'
+      - '.github/workflows/cm5-clean-duplicate-silk.yml'
+permissions:
+  contents: write
+jobs:
+  audit-and-correct:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: minihost-revA
+          persist-credentials: true
+      - name: Install KiCad with stock libraries
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository -y ppa:kicad/kicad-10.0-releases
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends kicad kicad-footprints kicad-symbols kicad-templates python3
+          mkdir -p "$HOME/.config/kicad/10.0"
+          cp /usr/share/kicad/template/fp-lib-table "$HOME/.config/kicad/10.0/fp-lib-table"
+          cp /usr/share/kicad/template/sym-lib-table "$HOME/.config/kicad/10.0/sym-lib-table"
+      - name: Baseline ERC and DRC
+        run: |
+          mkdir -p reports
+          (cd cm5_mini_host && kicad-cli sch erc CM5_MINIMA_3.kicad_sch -o ../reports/erc_before.rpt) || true
+          (cd cm5_mini_host && kicad-cli pcb drc CM5_MINIMA_3.kicad_pcb --schematic-parity -o ../reports/drc_before.rpt) || true
+      - name: Remove only duplicate HSS module-outline silkscreen
+        run: /usr/bin/python3 cm5_mini_host/scripts/remove_duplicate_cm5_silk_outline.py
+      - name: DRC check modified native PCB
+        run: |
+          (cd cm5_mini_host && kicad-cli sch erc CM5_MINIMA_3.kicad_sch -o ../reports/erc_after.rpt) || true
+          (cd cm5_mini_host && kicad-cli pcb drc CM5_MINIMA_3.kicad_pcb --schematic-parity -o ../reports/drc_after.rpt) || true
+      - name: Strict before/after gate
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          def scan(e,d):
+              es=Path(e).read_text(errors='replace')
+              ds=Path(d).read_text(errors='replace')
+              x=re.search(r'ERC messages:\s*\d+\s+Errors\s+(\d+)',es)
+              y=re.search(r'\*\* Found (\d+) Footprint errors \*\*',ds)
+              z=re.search(r'\*\* Found (\d+) unconnected pads \*\*',ds)
+              if not x or not y or not z:raise SystemExit('Cannot parse KiCad report')
+              errs=len(re.findall(r'^\s+Rule:[^\n]*;\s*error\s*$',ds,re.M))
+              warn=ds.count('[silk_overlap]:')
+              total=re.search(r'\*\* Found (\d+) DRC violations \*\*',ds)
+              return int(x.group(1)),errs,int(y.group(1)),int(z.group(1)),warn,int(total.group(1)) if total else -1
+          a=scan('reports/erc_before.rpt','reports/drc_before.rpt')
+          b=scan('reports/erc_after.rpt','reports/drc_after.rpt')
+          print("ERC, hard DRC, parity, unconnected, silkscreen overlaps, total:",a,"->",b)
+          if a[:4]!=(0,2,0,0) or b[:4]!=a[:4] or b[4]>=a[4] or b[5]>=a[5]:
+              raise SystemExit('Reject duplicate silk removal: insufficient DRC improvement or electrical regression')
+          Path('cm5_mini_host/CM5_SILK_DEDUP_AUDIT.md').write_text(
+              f"# CM5 double module outline removal (GPIO/HSS two-footprint design)\n\n"
+              f"KiCad before (ERC/hard DRC/footprint parity/unconnected/silk_overlap/total): {a}\n\n"
+              f"After: {b}\n\n"
+              "Removed only 4 duplicated long outer F.SilkS strokes and 4 corner arcs from Module302 (flipped B.SilkS) and from its project-local HSS footprint. "
+              "Retained full Module301 body outline and HSS connector location marks. Native pcbnew parser confirmed all footprints, pad counts, nets, zones and tracks unchanged. "
+              "Board physical mating and manufacturer dimensions are separate review gates.\n",encoding='utf-8')
+          PY
+      - name: Commit design only if verified
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add cm5_mini_host/CM5_MINIMA_3.kicad_pcb cm5_mini_host/CM5IO.pretty/Raspberry-Pi-5-Compute-Module_HSS.kicad_mod cm5_mini_host/CM5_SILK_DEDUP_AUDIT.md
+          git commit -m "Remove duplicate CM5 HSS module-body silkscreen outline (DRC verified)"
+          git push origin HEAD:minihost-revA
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cm5-silkscreen-dedup-drc
+          path: reports/
