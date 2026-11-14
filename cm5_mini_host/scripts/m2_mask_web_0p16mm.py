@@ -53,14 +53,14 @@ master=io.FootprintLoad(str(libdir),name)
 if master is None:raise SystemExit("Cannot load local project M.2 footprint")
 mlist=list(master.Pads())
 msmt=[p for p in mlist if p.GetAttribute()==pcbnew.PAD_ATTRIB_SMD]
-if len(mlist)!=71 or len(msmt)!=69:raise SystemExit(f"Library M.2 pad count unexpected: total {len(mlist)}, SMT {len(msmt)}")
+if len(mlist)!=73 or len(msmt)!=69:raise SystemExit(f"Library M.2 pad count unexpected: total {len(mlist)}, SMT {len(msmt)}")
 for pad in msmt:
     if abs(pad.GetLocalSolderMaskMargin()-nm(0.102))>nm(0.0001):
         raise SystemExit("Library pad mask expansion different from board baseline")
     pad.SetLocalSolderMaskMargin(nm(0.020))
 io.FootprintSave(str(libdir),master)
 master2=io.FootprintLoad(str(libdir),name)
-assert master2 is not None and len(list(master2.Pads()))==71
+assert master2 is not None and len(list(master2.Pads()))==73
 assert all(abs(p.GetLocalSolderMaskMargin()-nm(0.020))<nm(0.0001) for p in master2.Pads() if p.GetAttribute()==pcbnew.PAD_ATTRIB_SMD)
-print("J701: 69 local mask margins 0.102 -> 0.020 mm, project footprint synchronized, KiCad read/write verified.")
+print("J701: 69 local mask margins 0.102 -> 0.020 mm, project footprint synchronized for SMT pads only, KiCad read/write verified. Existing 2 board NPTH vs 4 library NPTH mismatch intentionally not changed.")
 print("Nominal 0.5 - 0.3 - 2*0.02 = 0.16 mm green solder mask web. Check actual fab process.")
