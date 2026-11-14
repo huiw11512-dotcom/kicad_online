@@ -52,7 +52,7 @@ jobs:
           a=state('reports/erc_before.rpt','reports/drc_before.rpt')
           b=state('reports/erc_after.rpt','reports/drc_after.rpt')
           print('ERC/unrouted/parity/total/hard/via_dangling/track_dangling',a,'->',b)
-          if a!=(0,0,0,82,0,2,0) or b!=(0,0,0,81,0,1,0):raise SystemExit("Unsafe battery tail removal")
+          if tuple(a)!=(0,0,0,82,0,2,0) or tuple(b)!=(0,0,0,81,0,1,0):raise SystemExit("Unsafe battery tail removal")
           Path('cm5_mini_host/BATT_STUB_VIA_AUDIT.md').write_text(
             f"# Unused +BATT power-via stub clean\n\nNative KiCad before: {a}\n\nAfter: {b}\n\n"
             "Removed one 0.60mm 0.40mm-wide In3.Cu track from (81.45,72.50) to (82.05,72.50) and only the branch endpoint F-B via at 81.45,72.50. "
