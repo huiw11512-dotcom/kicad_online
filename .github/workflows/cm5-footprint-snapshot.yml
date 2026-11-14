@@ -22,8 +22,59 @@ jobs:
           sudo add-apt-repository -y ppa:kicad/kicad-10.0-releases
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends kicad kicad-footprints kicad-symbols kicad-templates python3
+      - name: Capture baseline DRC and PCB SHA
+        run: |
+          mkdir -p reports
+          sha256sum cm5_mini_host/CM5_MINIMA_3.kicad_pcb > reports/pcb.sha256
+          (cd cm5_mini_host && kicad-cli pcb drc CM5_MINIMA_3.kicad_pcb -o ../reports/drc-before.rpt) || true
       - name: Extract, save, and verify native footprint libraries
         run: /usr/bin/python3 cm5_mini_host/scripts/export_embedded_footprints.py
+      - name: Verify DRC improvement with unchanged PCB
+        run: |
+          (cd cm5_mini_host && kicad-cli pcb drc CM5_MINIMA_3.kicad_pcb -o ../reports/drc-after.rpt) || true
+          python3 - <<'PY'
+          from pathlib import Path
+          import re,hashlib
+          def read(p):
+              s=Path(p).read_text(errors='replace')
+              total=re.search(r'\\*\\* Found (\\d+) DRC violations \\*\\*',s)
+              un=re.search(r'\\*\\* Found (\\d+) unconnected pads \\*\\*',s)
+              fp=re.search(r'\\*\\* Found (\\d+) Footprint errors \\*\\*',s)
+              hard=len(re.findall(r'^\\s+Rule:[^\\n]*;\\s*error\\s*
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add cm5_mini_host/CM5IO.pretty cm5_mini_host/EasyEDA.pretty cm5_mini_host/Samacsys.pretty cm5_mini_host/_pico.pretty cm5_mini_host/FootprintSnapshots cm5_mini_host/fp-lib-table cm5_mini_host/FOOTPRINT_SNAPSHOT.json cm5_mini_host/FOOTPRINT_LIBRARIES.md cm5_mini_host/FOOTPRINT_SNAPSHOT_AUDIT.md
+          if git diff --cached --quiet; then
+            echo "Footprint snapshot already committed"
+          else
+            git commit -m "Add roundtrip-verified project-local board footprint snapshots"
+            git push origin HEAD:minihost-revA
+          fi
+,s,re.M))
+              cats={}
+              for c in re.findall(r'^\\[([^\\]]+)\\]:',s,re.M):cats[c]=cats.get(c,0)+1
+              if not total or not un or not fp:raise SystemExit('Cannot parse KiCad DRC report')
+              return int(total.group(1)),hard,int(un.group(1)),int(fp.group(1)),cats
+          a=read('reports/drc-before.rpt');b=read('reports/drc-after.rpt')
+          print('DRC before:',a)
+          print('DRC after :',b)
+          if a[:4]!=(73,0,0,0):raise SystemExit('Unexpected baseline; abort')
+          if b[1:4]!=(0,0,0):raise SystemExit('Hard errors, unconnected pads or parity appeared')
+          if b[0]>=a[0] or b[4].get('lib_footprint_mismatch',0)>=a[4].get('lib_footprint_mismatch',0):
+              raise SystemExit('Snapshot did not reduce library mismatch warnings')
+          expected=Path('reports/pcb.sha256').read_text().split()[0]
+          actual=hashlib.sha256(Path('cm5_mini_host/CM5_MINIMA_3.kicad_pcb').read_bytes()).hexdigest()
+          if expected!=actual:raise SystemExit('PCB geometry source file changed')
+          Path('cm5_mini_host/FOOTPRINT_SNAPSHOT_AUDIT.md').write_text(
+            '# Project-local embedded footprint snapshot audit\\n\\n'
+            f'DRC before: {a}\\n\\nDRC after: {b}\\n\\n'
+            'PCB SHA256 unchanged. Exact embedded footprints were exported into project-local libraries under their existing nicknames and item names. '
+            'No PCB pads, copper, drills, mask, paste, placement, nets, tracks, vias, zones or Edge.Cuts were edited. '
+            'This resolves library-version drift warnings only and does not certify manufacturer land patterns or assembly fit.\\n',
+            encoding='utf-8')
+          PY
       - name: Commit library files to working branch
         run: |
           set -euo pipefail
