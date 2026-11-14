@@ -1,4 +1,4 @@
-name: Trial removal of 3 dangling signal vias with DRC guard
+name: Trial single redundant USB D+ via removal with DRC guard
 on:
   workflow_dispatch:
   push:
@@ -30,13 +30,13 @@ jobs:
           mkdir -p reports
           (cd cm5_mini_host && kicad-cli sch erc CM5_MINIMA_3.kicad_sch -o ../reports/erc_before.rpt) || true
           (cd cm5_mini_host && kicad-cli pcb drc CM5_MINIMA_3.kicad_pcb --schematic-parity -o ../reports/drc_before.rpt) || true
-      - name: Remove only three exact single-layer dangling vias
+      - name: Remove only USB D+ redundant via, preserving button and battery stubs
         run: /usr/bin/python3 cm5_mini_host/scripts/remove_3_dangling_vias.py
       - name: Recheck ERC, DRC, and netlist parity
         run: |
           (cd cm5_mini_host && kicad-cli sch erc CM5_MINIMA_3.kicad_sch -o ../reports/erc_after.rpt) || true
           (cd cm5_mini_host && kicad-cli pcb drc CM5_MINIMA_3.kicad_pcb --schematic-parity -o ../reports/drc_after.rpt) || true
-      - name: Require zero dangling vias, zero net regression, same two edge blockers
+      - name: Require USB D+ via cleanup without added dangling tracks or electrical regressions
         run: |
           python3 - <<'PY'
           import re
@@ -59,17 +59,17 @@ jobs:
           print('Before:',a,'After:',b)
           if (a['erc'],a['hard'],a['parity'],a['unconnected'],a['dangling'])!=(0,2,0,0,3):
               raise SystemExit('Unexpected baseline, refusing edit')
-          if (b['erc'],b['hard'],b['parity'],b['unconnected'],b['dangling'])!=(0,2,0,0,0):
+          if (b['erc'],b['hard'],b['parity'],b['unconnected'],b['dangling'])!=(0,2,0,0,2):
               raise SystemExit('Electrical or DRC regression')
-          if b['total']>a['total']-3:raise SystemExit('Insufficient DRC improvement')
+          if b['total']>a['total']-1:raise SystemExit('Insufficient DRC improvement')
           for k,n in b['categories'].items():
               if n>a['categories'].get(k,0):
                   raise SystemExit(f'New DRC violations of category {k}: {n}')
           Path('cm5_mini_host/DANGLING_VIA_AUDIT.md').write_text(
               "# MiniHost Rev.A dangling-via candidate\n\n"
               f"Before: {a}\n\nAfter: {b}\n\n"
-              "Exact removed via centers from KiCad DRC: /USB_C.D_P (85.8480,48.5204), /CM5/PWR_BUT (130.9594,65.5595), +BATT (81.4500,72.5000) mm. "
-              "Each had track endpoints on at most one copper layer. Existing copper tracks, SMT pads, net names and board outline were not changed. "
+              "Exact removed via center: /USB_C.D_P (85.8480,48.5204) mm. The PWR_BUT and +BATT vias remain because removing all three created two new dangling track warnings. "
+              "The removed USB D+ via joined two F.Cu trace endpoints and had no B.Cu track connection. Existing copper tracks, SMT pads, net names and board outline were not changed. "
               "This eliminates unused plated-via discontinuities on selected signal nets, but does not constitute SI/PI signoff.\n",encoding='utf-8')
           PY
       - name: Commit only if DRC improves without connectivity regression
@@ -77,7 +77,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add cm5_mini_host/CM5_MINIMA_3.kicad_pcb cm5_mini_host/DANGLING_VIA_AUDIT.md
-          git commit -m "Remove three verified dangling signal vias with no PCB connectivity regression"
+          git commit -m "Remove redundant USB D+ via without creating dangling tracks"
           git push origin HEAD:minihost-revA
       - uses: actions/upload-artifact@v4
         if: always()
