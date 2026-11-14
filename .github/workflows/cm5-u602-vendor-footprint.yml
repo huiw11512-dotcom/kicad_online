@@ -1,0 +1,88 @@
+name: Verify and lock U602 Diodes SOT353 manufacturer land pattern
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'cm5_mini_host/scripts/u602_vendor_land_pattern.py'
+      - '.github/workflows/cm5-u602-vendor-footprint.yml'
+permissions:
+  contents: write
+jobs:
+  lock-vendor-footprint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: minihost-revA
+          persist-credentials: true
+      - name: Install KiCad 10 with official libraries
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository -y ppa:kicad/kicad-10.0-releases
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends kicad kicad-footprints kicad-symbols kicad-templates python3
+          mkdir -p "$HOME/.config/kicad/10.0"
+          cp /usr/share/kicad/template/fp-lib-table "$HOME/.config/kicad/10.0/fp-lib-table"
+          cp /usr/share/kicad/template/sym-lib-table "$HOME/.config/kicad/10.0/sym-lib-table"
+      - name: Export source ERC and DRC
+        run: |
+          mkdir -p reports
+          (cd cm5_mini_host && kicad-cli sch erc CM5_MINIMA_3.kicad_sch -o ../reports/erc_before.rpt) || true
+          (cd cm5_mini_host && kicad-cli pcb drc CM5_MINIMA_3.kicad_pcb --schematic-parity -o ../reports/drc_before.rpt) || true
+      - name: Native manufacturer pad geometry + library synchronization
+        run: /usr/bin/python3 cm5_mini_host/scripts/u602_vendor_land_pattern.py
+      - name: Export new ERC DRC
+        run: |
+          (cd cm5_mini_host && kicad-cli sch erc CM5_MINIMA_3.kicad_sch -o ../reports/erc_after.rpt) || true
+          (cd cm5_mini_host && kicad-cli pcb drc CM5_MINIMA_3.kicad_pcb --schematic-parity -o ../reports/drc_after.rpt) || true
+          kicad-cli sch export netlist cm5_mini_host/CM5_MINIMA_3.kicad_sch -o reports/after.net
+      - name: Zero hard and parity errors, verify targeted U602 library warning eliminated
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          def state(e,d):
+              es=Path(e).read_text(errors="replace");ds=Path(d).read_text(errors="replace")
+              def grab(p,s):
+                  m=re.search(p,s)
+                  if not m:raise SystemExit("Could not read KiCad report")
+                  return int(m.group(1))
+              return dict(erc=grab(r'ERC messages:\s*\d+\s+Errors\s+(\d+)',es),
+                    hard=len(re.findall(r'^\s+Rule:[^\n]*;\s*error\s*$',ds,re.M)),
+                    parity=grab(r'\*\* Found (\d+) Footprint errors \*\*',ds),
+                    unrouted=grab(r'\*\* Found (\d+) unconnected pads \*\*',ds),
+                    total=grab(r'\*\* Found (\d+) DRC violations \*\*',ds),
+                    u602_mismatch=bool(re.search(r'^\[lib_footprint_mismatch\]:[^\n]*\n\s+Local override; warning\n\s+@\([^)]+\): Footprint U602$',ds,re.M)))
+          a=state('reports/erc_before.rpt','reports/drc_before.rpt')
+          b=state('reports/erc_after.rpt','reports/drc_after.rpt')
+          print('U602 vendor physical pad before',a,'after',b)
+          if (a['erc'],a['hard'],a['parity'],a['unrouted'])!=(0,0,0,0) or (b['erc'],b['hard'],b['parity'],b['unrouted'])!=(0,0,0,0):
+              raise SystemExit("Electrical/netlist regression on vendor footprint")
+          if not a['u602_mismatch'] or b['u602_mismatch'] or b['total']>a['total']-1:
+              raise SystemExit("U602 manufacturer footprint local library mismatch not resolved")
+          if 'CM5IO:Diodes_74LVC1G07SE7_SOT353' not in Path('reports/after.net').read_text(errors='replace'):
+              raise SystemExit('Schematic footprint mapping did not update')
+          Path('cm5_mini_host/U602_MANUFACTURER_LAND_AUDIT.md').write_text(
+              f"# U602 final vendor pad pattern\n\nNative KiCad before: {a}\n\nAfter: {b}\n\n"
+              "Diodes 74LVC1G07SE-7 SOT353 0.65mm pitch, pad row center separation C1=1.9mm, "
+              "recommended land 0.60 x 0.42mm. The previous board footprint used 0.65 x 0.40mm, same pad centers. "
+              "Only U602 land length and width were corrected, with all pad nets/centers, traces, vias and footprints preserved. "
+              "A project-local CM5IO vendor-specific PCB footprint was exported by pcbnew and referenced by the schematic symbol. "
+              "KiCad's actual local library check now matches the board. "
+              "Vendor: https://www.diodes.com/datasheet/download/74LVC1G07.pdf (DS32274 Rev12 page 13); "
+              "JLC C67531: https://jlcpcb.com/partdetail/DiodesIncorporated-74LVC1G07SE7/C67531 .\n\n"
+              "Functional LED polarity / assembly should still be tested in hardware; neither ERC nor DRC verifies board boot.\n",encoding='utf-8')
+          PY
+      - name: Commit only validated vendor footprint
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add cm5_mini_host/CM5_MINIMA_3.kicad_pcb cm5_mini_host/IO.kicad_sch cm5_mini_host/CM5IO.pretty/Diodes_74LVC1G07SE7_SOT353.kicad_mod cm5_mini_host/U602_MANUFACTURER_LAND_AUDIT.md
+          git commit -m "Match U602 SOT353 footprint to Diodes recommended land dimensions and local library"
+          git push origin HEAD:minihost-revA
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: u602-vendor-land-drc
+          path: reports/
