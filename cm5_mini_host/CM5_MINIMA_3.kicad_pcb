@@ -28262,16 +28262,7 @@
 		(clearance 0.127)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
-		(fp_line
-			(start 36.5 48)
-			(end 36.5 0)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "3d4d6bd7-d3dd-4cf6-9659-4888c1402b23")
-		)
+		
 		(fp_line
 			(start 34.94 32.9)
 			(end 32.06 32.9)
@@ -28312,16 +28303,7 @@
 			(layer "B.SilkS")
 			(uuid "a930017c-7a92-4bed-861e-c10813f2b368")
 		)
-		(fp_line
-			(start 33 -3.5)
-			(end 0 -3.5)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "d5cac4ec-7553-456d-87b5-2c2091b77ddb")
-		)
+		
 		(fp_line
 			(start 32.06 31.9)
 			(end 32.06 32.9)
@@ -28342,70 +28324,12 @@
 			(layer "B.SilkS")
 			(uuid "8da0f788-1dc3-4c68-926a-d2f3f13e0ade")
 		)
-		(fp_line
-			(start 0 51.5)
-			(end 33 51.5)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "fa04971e-8c49-4c90-b1b0-a872f3b593c5")
-		)
-		(fp_line
-			(start -3.5 0)
-			(end -3.5 48)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "d1806b6e-8ed7-48e9-bf05-78a2207721a4")
-		)
-		(fp_arc
-			(start 36.5 48)
-			(mid 35.474874 50.474874)
-			(end 33 51.5)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "659517a6-ecc6-496b-8ec9-e9507722d67b")
-		)
-		(fp_arc
-			(start 33 -3.5)
-			(mid 35.474874 -2.474874)
-			(end 36.5 0)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "23b44f45-07c2-43e8-97cc-863774f59ab5")
-		)
-		(fp_arc
-			(start 0 51.5)
-			(mid -2.474874 50.474874)
-			(end -3.5 48)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "0cde438c-aa73-4dac-8a63-66ec1364fe0c")
-		)
-		(fp_arc
-			(start -3.5 0)
-			(mid -2.474874 -2.474874)
-			(end 0 -3.5)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "B.SilkS")
-			(uuid "a6bc6a5c-f763-4246-90a5-63f3b0f648c6")
-		)
+		
+		
+		
+		
+		
+		
 		(fp_line
 			(start 35.39 32.9)
 			(end 31.61 32.9)
