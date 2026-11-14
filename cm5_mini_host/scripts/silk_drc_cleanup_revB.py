@@ -59,13 +59,13 @@ if not candidates or candidates[0][0]>pcbnew.FromMM(0.15):
     raise SystemExit(f"Cannot identify audited board-level silk segment near (130.13,62.07); nearest={nearest}")
 d,item=candidates[0]
 item.SetLayer(pcbnew.F_Fab)
-b.Save(str(p))
+pcbnew.SaveBoard(str(p),b)
 (root/"SILK_DFM_CLEANUP_REV_B.md").write_text(
     "# Rev.B silkscreen DFM cleanup\n\n"
     "Moved clipped or overlapping footprint body graphics from silkscreen to the corresponding fabrication layer; reference/value text remains on silkscreen. "
     "This preserves component outlines and orientation marks in assembly artwork while keeping the board-edge and label clearances manufacturable.\n\n"
-    "## Footprints\n\n"+"\\n".join(f"- {ref}: {count} graphical primitives moved to Fab" for ref,count in sorted(moved.items()))+
-    f"\\n\\n- Board-level silk segment nearest (130.13,62.07) mm moved to F.Fab (distance {pcbnew.ToMM(d):.4f} mm).\\n\\n"
-    "No copper, pads, tracks, vias, zones, drills, nets, component placement or reference/value text was changed.\\n",encoding="utf-8")
+    "## Footprints\n\n"+"\n".join(f"- {ref}: {count} graphical primitives moved to Fab" for ref,count in sorted(moved.items()))+
+    f"\n\n- Board-level silk segment nearest (130.13,62.07) mm moved to F.Fab (distance {pcbnew.ToMM(d):.4f} mm).\n\n"
+    "No copper, pads, tracks, vias, zones, drills, nets, component placement or reference/value text was changed.\n",encoding="utf-8")
 print("Moved footprint silk graphics to Fab:",moved)
 print(f"Moved audited board-level silk segment; distance={pcbnew.ToMM(d):.4f} mm")
