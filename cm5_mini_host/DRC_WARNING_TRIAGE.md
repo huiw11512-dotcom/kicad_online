@@ -1,10 +1,12 @@
 # KiCad 10 Rev.A DRC warning triage — 2026-11-14
 
-**Reference run:** https://github.com/huiw11512-dotcom/kicad_online/actions/runs/43596487428
+**Original 234-item reference run:** https://github.com/huiw11512-dotcom/kicad_online/actions/runs/43596487428
+
+**Latest confirmed actual report:** https://github.com/huiw11512-dotcom/kicad_online/actions/runs/43596928117 — total **230** DRC violations after CM5 duplicate nonplated drill cleanup; **0 ERC hard errors / 2 PCB hard errors / 0 schematic footprint parity / 0 unconnected**. The 2.7 mm M2.5-compatible physical holes remain in Module301, two duplicate 3.0 mm holes in Module302 were deleted. Compare `CM5_ALIGNMENT_HOLE_AUDIT.md`.
 
 The GitHub Actions KiCad 10.0.8 runner now initializes the official **KiCad 10 standard footprint/symbol library tables** (previously uninitialized). This removed 65 `lib_footprint_issues` false missing-library warnings. **It did not imply the 234 remaining items are safe.** The report retains *2 hard board-edge copper-clearance errors*. The 234 DRC violations are independently of the ERC count; ERC 0 errors still has warnings.
 
-## Actual check group counts after environment fix and RJ45 courtyard update
+## Historical 234-item group counts before CM5 NPTH de-duplication
 
 | DRC code | Count | Disposition |
 |---|---:|---|
@@ -20,7 +22,13 @@ The GitHub Actions KiCad 10.0.8 runner now initializes the official **KiCad 10 s
 | `holes_co_located` | 2 | **DRILL REVIEW**: duplicated unnumbered NPTHs on Module301/Module302 (CM5 same physical hole). Must compare exact drill and pad geometry before removing duplicate |
 | `isolated_copper` | 1 | **RETURN PATH REVIEW**: GND isolated copper island around (74.990,20.220), copper zone fill should be examined |
 
-**Counts sum to 234.** All values were retrieved from GitHub Actions' actual `drc.rpt` file; they are not inferred from PCB visualizations.
+**Historical counts sum to 234.** The current 230-item report differs only as follows:
+- `holes_co_located`: **2→0**.
+- `lib_footprint_mismatch`: **51→50** (board-embedded HSS footprint and project library now aligned).
+- `silk_over_copper`: **17→16** (the duplicate mechanical pad graphics were removed).
+- All other categories remain unchanged, including the **two hard copper-edge errors**.
+
+All counts were extracted from actual GitHub Actions `drc.rpt` artifacts, not inferred from the 3D preview.
 
 ## Priorities for engineering release
 
