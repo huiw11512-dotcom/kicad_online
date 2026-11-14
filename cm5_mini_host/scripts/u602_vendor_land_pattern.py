@@ -60,7 +60,7 @@ if block.count(oldprop)==1:
     block=block.replace(oldprop,'(property "Footprint" "'+newid+'"',1)
 padcount=0
 spans=[]
-for m in re.finditer(r'\(pad "[^"]*" smd rect\b',block):
+for m in re.finditer(r'\(pad "[^"]*" smd (?:rect|roundrect)\b',block):
     stop=expr_end(block,m.start())
     p=block[m.start():stop]
     if '(size 0.65 0.4)' not in p:
