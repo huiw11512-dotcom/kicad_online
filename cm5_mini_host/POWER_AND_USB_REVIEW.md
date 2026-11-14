@@ -34,11 +34,17 @@ The official CM5IO reference describes 5 V / 5 A (25 W) input or 5 V / 3 A with 
 
 ### NVMe 3.3V
 
-U702 = `AP3441SHE-7B`, a 2.7–5.5 V input, 1 MHz, **up-to-3 A** synchronous buck. 3 A is its rated output ceiling, **not the guaranteed continuous NVMe current nor the module's actual requirement**. Check the 2.2 µH L701 DCR/saturation at peak current, converter efficiency/thermal derating, startup inrush, SSD power-good behavior, output ripple and transient droop under a real NVMe workload. LCSC reference: `C2070918` (availability unverified as of current revision).
+U702 = `AP3441SHE-7B`, a 2.7–5.5 V input, 1 MHz, **up-to-3 A** synchronous buck. The existing feedback resistors are **R705 = 10 kΩ (upper) and R706 = 2.2 kΩ (lower)**, giving ideal 0.6 V × (1 + 10/2.2) = **3.327 V nominal**. With only the 0.591–0.609 V datasheet VFB spread (ignoring resistor error), the calculated output is approximately **3.277–3.377 V**. Feed-forward capacitor C707 is 4.7 nF across R705; this differs substantially in time constant from the illustrative 22 pF across 200 kΩ on the datasheet example. Do **not** change it blindly; confirm regulator loop response and ripple under real SSD load. 3 A is its rated output ceiling, **not the guaranteed continuous NVMe current nor the module's actual requirement**. Check the 2.2 µH L701 DCR/saturation at peak current, converter efficiency/thermal derating, startup inrush, SSD power-good behavior, output ripple and transient droop under a real NVMe workload. LCSC reference: `C2070918` (availability unverified as of current revision).
 
 ### USB701 bus switch
 
-U701 is `AP22653W6`, active-high enable (pin 3), with current-limit and overtemperature protection; CM5 pin 111 provides VBUS_EN. Verify the limit programming resistor and enable logic electrically, and that the output capacitors comply with device/USB host inrush requirements. Actual downstream peak demand can exceed the chosen planning allocation.
+U701 is `AP22653W6`, active-high enable (pin 3), with current-limit and overtemperature protection; CM5 pin 111 provides VBUS_EN.
+
+**Electrical update verified in native schematic, PCB and KiCad netlist:** R702 and R703 (source Rp pullups from +5V to CC1/CC2) are **56 kΩ** each, advertising the USB Type-C **default** current (500 mA for USB 2.0), instead of 22 kΩ / 1.5 A. R701 (U701 pin 5 ILIM to GND) is now **39 kΩ**, giving a design current-limit threshold min/typ/max of approximately **0.564 / 0.636 / 0.710 A** using Diodes' best-fit equations, excluding resistor tolerance. These are **current-limit thresholds**, not a certified continuous current capability.
+
+The previous 22 kΩ/15 kΩ arrangement advertised 1.5 A while the initial illustrative power budget allocated only 0.5 A; that discrepancy is corrected for a keyboard/mouse-focused MiniHost. See [successful before/after EDA electrical checks](USB_POWER_500MA_AUDIT.md). Review USB-C source attach detection, VBUS_EN behavior and cable detach before manufacturing; Rp resistors plus a power switch are not automatically a complete Type-C source controller.
+
+U701 output capacitor C702 = 100 µF and C703 = 10 µF, **110 µF nominal total**. The AP22653 application note depicts 120 µF output capacitance for a USB port; verify the applicable host electrical requirements, capacitor bias derating and inrush before selecting final BOM. The FAULT output is currently unconnected, so the host cannot directly log overcurrent events unless an appropriate GPIO/pull-up is added.
 
 ## Working power envelope — **example allocation, not measured or guaranteed**
 
@@ -46,26 +52,26 @@ U701 is `AP22653W6`, active-high enable (pin 3), with current-limit and overtemp
 |---|---:|
 | CM5 module | 12.5 W |
 | NVMe 3.3V × 1.5A with assumed 85% efficiency | 5.82 W |
-| USB external 5V × 0.5A | 2.50 W |
+| USB2 Type-C externally advertised default: 5V × 0.5A | 2.50 W |
 | Fan 5V × 0.2A | 1.00 W |
 | HDMI/indicators/other loads | 0.80 W |
 | **Planned total** | **22.62 W** |
 | **Nominal headroom vs 5V × 5A = 25W** | **2.38 W** |
 
-These are **design allocations only**, not CM5 or SSD maximum specifications. A heavy-load CM5, an SSD drawing near the AP3441's 3 A output rating, a higher-current USB device or startup peaks can invalidate this envelope. At 5V × 3A = 15W the allocations **do not fit**; do not assume a 3A charger is sufficient for full-featured operation.
+These are **design allocations only**, not CM5 or SSD maximum specifications. Although the USB port advertises 0.5A, the protection switch's worst-case limit can be approximately 0.71A plus resistor effects; reserve roughly **3.55W** (instead of 2.50W) for a fault/overload headroom check. At that current the illustrative total becomes **23.67W**, leaving only **1.33W** versus nominal 25W. A heavy-load CM5, an SSD drawing near the AP3441's 3 A output rating, a higher-current USB device or startup peaks can invalidate this envelope. At 5V × 3A = 15W the allocations **do not fit**; do not assume a 3A charger is sufficient for full-featured operation.
 
 ## Gates remaining before prototype order
 
 - [ ] Confirm physical J101 Type-C part's contact current rating and pad/plating, validate combined main 5V power-copper current/temperature.
-- [ ] Calculate regulator output feedback resistors and tolerances from current schematic, verify measured 3.3V and efficiency over SSD load.
-- [ ] Review USB701 U701 current-limit resistor, power-on deglitch/inrush, and host port current cap.
+- [x] Calculate nominal AP3441 divider voltage from actual schematic (3.327V ideal); [ ] verify tolerances, measured output and efficiency over SSD load.
+- [x] Rework USB2 source CC Rp and AP22653 current-limit resistor for default 500mA USB2 use; [ ] validate attach/detach, output capacitance, power-on inrush and measured current limit.
 - [ ] Test CM5 boot on known-good **USB-C PD 5V/5A source**; log 5V sag at CM5 and SSD buck at cold power-on and 100% CPU+I/O workload.
 - [ ] Compute controlled impedance with real six-layer fabrication stackup, dielectric and actual copper weights; validate USB2 90Ω differential and PCIe/HDMI pair parameters.
 - [ ] Review complete connector AC/DC discharge, ESD and chassis grounding.
 - [ ] Clear four remaining **hard** PCB DRC mechanical/edge problems at RJ45 J1/J601/H102 based on actual manufacturer dimensions.
-- [ ] Clear separate M.2 symbol/footprint parity differences; baseline CI still reports 5 footprint items.
+- [x] Clear M.2 symbol/footprint parity differences and remove non-electrical PCB logo — **0 parity issues** on latest Rev.A.
 - [ ] Close remaining KiCad 0-ERC / 4-hard-DRC state plus contextual warnings; no Gerber manufacturing release until approved.
 
 ## Related reports
 
-`USB_REROUTE_AUDIT.md` documents 2.1738 mm shortening of USB701 A7 N return branch with 4→4 hard DRC and 0→0 disconnected pads. Cloud CI shows verified mechanical and ERC status. Board data and library snapshots remain editable on `minihost-revA`.
+`USB_POWER_500MA_AUDIT.md` documents the verified 22k/15k → 56k/39k USB-C host power variant and 0/4/0/0 ERC/hard-DRC/parity/unrouted status. `USB_REROUTE_AUDIT.md` documents 2.1738 mm shortening of USB701 A7 N return branch with 4→4 hard DRC and 0→0 disconnected pads. Cloud CI shows verified mechanical and ERC status. Board data and library snapshots remain editable on `minihost-revA`.
