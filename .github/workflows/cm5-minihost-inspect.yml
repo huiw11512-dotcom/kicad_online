@@ -1,0 +1,49 @@
+name: CM5 MiniHost diagnostic object inspection
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'cm5_mini_host/scripts/drc_object_inspect.py'
+      - '.github/workflows/cm5-minihost-inspect.yml'
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install KiCad
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository -y ppa:kicad/kicad-10.0-releases
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends kicad python3
+      - name: Inspect exact pad geometry, footprint and netclass properties
+        run: |
+          mkdir -p reports
+          /usr/bin/python3 cm5_mini_host/scripts/drc_object_inspect.py cm5_mini_host/CM5_MINIMA_3.kicad_pcb reports
+      - name: Export top-level schematic netlist
+        run: |
+          mkdir -p reports
+          kicad-cli sch export netlist cm5_mini_host/CM5_MINIMA_3.kicad_sch -o reports/cm5.net
+          python3 - <<'PY'
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+          root=ET.parse('reports/cm5.net').getroot()
+          out=[]
+          for net in root.findall('.//nets/net'):
+              name=net.get('name','')
+              if 'USB' in name.upper() or 'VBUS' in name.upper() or '5V' in name.upper() or 'M2_3V3' in name:
+                  nodes=[]
+                  for node in net.findall('node'):
+                      nodes.append(f"{node.get('ref')}.{node.get('pin')}")
+                  out.append(f"{name}: "+", ".join(nodes))
+          Path('reports/usb_power_netlist.txt').write_text("\n".join(out),encoding='utf-8')
+          print("\n".join(out))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cm5-minihost-diagnostics
+          path: reports/
