@@ -23,6 +23,12 @@ Source snapshot commit: `6d77314dbbc26c8f5735add30ccb0588816cb71a`.
 
 The original is open hardware under **CERN-OHL-S-2.0**. We retain the upstream license and identify changes in version history. Do not describe the baseline as independently designed or verified in this repository. See `SOURCE_README.md` after import.
 
+## Manufacturing-risk BOM correction
+
+**U602 corrected to Diodes 74LVC1G07SE-7 (JLC/LCSC C67531)** from the physically and logically incorrect SN74LVC1G14DBVR value. The existing schematic describes a non-inverting open-drain 1G07 that sinks the R605/D605 LED branch; original 1G14 was a SOT-23 Schmitt inverter, not pin/function/footprint-equivalent in practice. Both schematic P/N+Value and PCB P/N+Value fields synchronized and validated in KiCad: **ERC 0, hard DRC 2, parity 0, unconnected 0, total DRC 85 unchanged**. [U602 verified fix](U602_BOM_CORRECTION_AUDIT.md) / [root cause and remaining footprint checks](U602_COMPONENT_MISMATCH_REVIEW.md).
+
+**Other footprint findings:** [50 mismatch summary](FOOTPRINT_MISMATCH_PAD_AUDIT.md) and [8 actual pad-by-pad comparison](EIGHT_FOOTPRINT_PAD_DELTA.md). Of the eight flagged devices, U602 had confirmed P/N/logic/package error; U1 LIS3DH and CM5 Module301 have a bottom-side coordinate-mirroring effect that must be normalized before interpreting pad offsets as routing faults; J701 difference involves alternate mounting holes. Do not automatically replace stock footprints to silence warnings.
+
 ## Latest verified board status — 2026-11-14
 
 **KiCad 10 actual check: ERC 0 hard errors; PCB 2 hard errors; 83 additional DRC warnings = 85 total; 0 footprint parity errors; 0 unconnected pads.**
