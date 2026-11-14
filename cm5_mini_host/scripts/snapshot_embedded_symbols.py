@@ -54,7 +54,7 @@ for path in files:
             if not sm:
                 rebuilt.append(expr); continue
             cache_name=sm.group(1)
-            if passive_base(cache_name):
+            if passive_base(cache_name.split(":",1)[-1]):
                 n=expr.count("(pin unspecified line")
                 if n:
                     expr=expr.replace("(pin unspecified line","(pin passive line")
