@@ -12,22 +12,34 @@ def mm(v):
 def xy(v):
     try:return f"({mm(v.x)},{mm(v.y)})"
     except:return str(v)
-lines=["# Detailed geometry for critical nets",""]
-targets=["/USB_C.D_P","/USB_C.D_N","/CM5/USB2P.D_P","/CM5/USB2P.D_N"]
-for net in targets:
-    lines += [f"## {net}",""]
-    for t in b.GetTracks():
-        if t.GetNetname()!=net: continue
-        if isinstance(t,pcbnew.PCB_VIA):
-            lines.append(f"- VIA at {xy(t.GetPosition())}, dia={mm(t.GetWidth())} mm, drill={mm(t.GetDrill())} mm")
-        else:
-            typ="ARC" if isinstance(t,pcbnew.PCB_ARC) else "SEG"
-            lines.append(f"- {typ} {xy(t.GetStart())} -> {xy(t.GetEnd())}, width={mm(t.GetWidth())} mm, layer={b.GetLayerName(t.GetLayer())}, length={mm(t.GetLength())} mm")
+lines=["# Footprint inventory and DRC object diagnostics","",f"KiCad {pcbnew.Version()}",f"Board: {src.name}",""]
+nicks=set()
+for fp in sorted(b.GetFootprints(),key=lambda f:f.GetReference()):
+    try: nick=fp.GetFPID().GetLibNickname(); name=fp.GetFPID().GetLibItemName()
+    except: nick=""; name=""
+    nicks.add(nick)
+    try: bb=fp.GetBoundingBox(True,True); box=f"{xy(bb.GetOrigin())}..{xy(bb.GetEnd())}"
+    except: box="?"
+    lines.append(f"- {fp.GetReference():8s} {fp.GetValue():32s} lib={nick}:{name} pos={xy(fp.GetPosition())} box={box}")
+lines += ["","## Used footprint library nicknames",*["- "+n for n in sorted(nicks)]]
+lines += ["","## Critical footprint pad details"]
+for fp in sorted(b.GetFootprints(),key=lambda f:f.GetReference()):
+    ref=fp.GetReference()
+    if ref not in {"J1","J601","H101","H102","H103","J101","USB701","SW101","J701","U702","L701","R704","R705","R706","C707"}:
+        continue
+    try: fpid=f"{fp.GetFPID().GetLibNickname()}:{fp.GetFPID().GetLibItemName()}"
+    except: fpid=str(fp.GetFPID())
+    lines += [f"### {ref} — {fp.GetValue()} — {fpid}",f"Position mm: {xy(fp.GetPosition())}"]
+    for p in fp.Pads():
+        num=p.GetNumber()
+        if ref=="J701" and not (num.startswith("M") or num.startswith("S") or num in {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","67","68","69","70","71","72","73","74","75"}):
+            continue
+        try: drill=xy(p.GetDrillSize())
+        except: drill="?"
+        try: attr=p.GetAttribute()
+        except: attr="?"
+        lines.append(f"- Pad {num!r} net={p.GetNetname()!r} pos={xy(p.GetPosition())} size={xy(p.GetSize())} drill={drill} attr={attr}")
     lines.append("")
-for fp in b.GetFootprints():
-    for pad in fp.Pads():
-        if pad.GetNetname() in targets:
-            lines.append(f"PAD {fp.GetReference()}.{pad.GetNumber()} net={pad.GetNetname()} pos={xy(pad.GetPosition())} size={xy(pad.GetSize())}")
 lines += ["","## Pad attribute enum"]
 for k in dir(pcbnew):
     if k.startswith("PAD_ATTRIB_"): lines.append(f"- {k}={getattr(pcbnew,k)}")
@@ -54,5 +66,6 @@ try:
         try: lines.append(f"- {name}: width={mm(nc.GetTrackWidth())} mm, clearance={mm(nc.GetClearance())} mm, diff_width={mm(nc.GetDiffPairWidth())} mm, diff_gap={mm(nc.GetDiffPairGap())} mm")
         except Exception as e: lines.append(f"- {name}: {e}")
 except Exception as e: lines.append(str(e))
-(out/"critical_geometry.md").write_text("\n".join(lines),encoding="utf-8")
+lines += ["","## Footprint save APIs",str([x for x in dir(pcbnew) if "Footprint" in x and "Save" in x])]
+(out/"footprint_inventory.md").write_text("\n".join(lines),encoding="utf-8")
 print("\n".join(lines))
