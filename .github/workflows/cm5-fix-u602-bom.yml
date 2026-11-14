@@ -1,0 +1,84 @@
+name: Correct U602 wrongly specified Schmitt inverter BOM to open-drain buffer
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'cm5_mini_host/scripts/fix_u602_open_drain_part.py'
+      - '.github/workflows/cm5-fix-u602-bom.yml'
+permissions:
+  contents: write
+jobs:
+  correct-and-verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: minihost-revA
+          persist-credentials: true
+      - name: Install KiCad 10
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository -y ppa:kicad/kicad-10.0-releases
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends kicad kicad-footprints kicad-symbols kicad-templates python3
+          mkdir -p "$HOME/.config/kicad/10.0"
+          cp /usr/share/kicad/template/fp-lib-table "$HOME/.config/kicad/10.0/fp-lib-table"
+          cp /usr/share/kicad/template/sym-lib-table "$HOME/.config/kicad/10.0/sym-lib-table"
+      - name: Record initial ERC and DRC
+        run: |
+          mkdir -p reports
+          (cd cm5_mini_host && kicad-cli sch erc CM5_MINIMA_3.kicad_sch -o ../reports/erc_before.rpt) || true
+          (cd cm5_mini_host && kicad-cli pcb drc CM5_MINIMA_3.kicad_pcb --schematic-parity -o ../reports/drc_before.rpt) || true
+      - name: Correct wrong vendor part number without changing pads/tracks
+        run: /usr/bin/python3 cm5_mini_host/scripts/fix_u602_open_drain_part.py
+      - name: Re-run full schematic and physical checks
+        run: |
+          (cd cm5_mini_host && kicad-cli sch erc CM5_MINIMA_3.kicad_sch -o ../reports/erc_after.rpt) || true
+          (cd cm5_mini_host && kicad-cli pcb drc CM5_MINIMA_3.kicad_pcb --schematic-parity -o ../reports/drc_after.rpt) || true
+          kicad-cli sch export netlist cm5_mini_host/CM5_MINIMA_3.kicad_sch -o reports/current.net
+      - name: Confirm no DRC regression and correct 74LVC1G07 part identity
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          def check(ep,dp):
+              e=Path(ep).read_text(errors="replace")
+              d=Path(dp).read_text(errors="replace")
+              m=re.search(r'ERC messages:\s*\d+\s+Errors\s+(\d+)',e)
+              p=re.search(r'\*\* Found (\d+) Footprint errors \*\*',d)
+              u=re.search(r'\*\* Found (\d+) unconnected pads \*\*',d)
+              n=re.search(r'\*\* Found (\d+) DRC violations \*\*',d)
+              if not all((m,p,u,n)):raise SystemExit("Unparseable report")
+              return int(m.group(1)),len(re.findall(r'^\s+Rule:[^\n]*;\s*error\s*$',d,re.M)),int(p.group(1)),int(u.group(1)),int(n.group(1))
+          a=check("reports/erc_before.rpt","reports/drc_before.rpt")
+          b=check("reports/erc_after.rpt","reports/drc_after.rpt")
+          print("ERC/hard PCB DRC/parity/unconnected/DRC total",a,"->",b)
+          if a[:4]!=(0,2,0,0) or b[:4]!=(0,2,0,0) or b[4]>a[4]:
+              raise SystemExit("Fail closed: KiCad layout/electrical checks regressed")
+          net=Path("reports/current.net").read_text(errors="replace")
+          if not re.search(r'\(ref "U602"\)\s*\(value "74LVC1G07SE-7"\)',net):
+              raise SystemExit("U602 corrected P/N not in exported native KiCad netlist")
+          Path("cm5_mini_host/U602_BOM_CORRECTION_AUDIT.md").write_text(
+            f"# U602 logic/BOM mismatch correction\n\nERC/hard-DRC/parity/unconnected/total: {a} → {b}\n\n"
+            "U602 revised from incorrectly assigned UMW SN74LVC1G14DBVR Schmitt-trigger inverter (SOT-23 DBV) "
+            "to Diodes Incorporated 74LVC1G07SE-7 (JLCPCB/LCSC C67531) **non-inverting open-drain buffer**. "
+            "Pin 2 is nPWR_LED and pin 4 sinks the D605/R605 5V indicator branch; an open-drain buffer matches the original symbolic intended function. "
+            "The preexisting 5-pin SC70/SOT-353 PCB footprint's pad geometry, nets, vias and tracks were NOT changed. "
+            "**The exact Diodes SOT353 recommended land pattern and first power-on LED logic still require physical review before production.**\n\n"
+            "Source schematic: IO.kicad_sch; prior root analysis U602_COMPONENT_MISMATCH_REVIEW.md; "
+            "Diodes datasheet: https://www.diodes.com/datasheet/download/74LVC1G07.pdf ; "
+            "JLC supplier part: https://jlcpcb.com/partdetail/DiodesIncorporated-74LVC1G07SE7/C67531 .\n",encoding="utf-8")
+          PY
+      - name: Commit only verified schematic and PCB part-value fixes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add cm5_mini_host/IO.kicad_sch cm5_mini_host/CM5_MINIMA_3.kicad_pcb cm5_mini_host/U602_BOM_CORRECTION_AUDIT.md
+          git commit -m "Correct MiniHost U602 to noninverting open-drain Diodes C67531 in schematic and PCB"
+          git push origin HEAD:minihost-revA
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cm5-u602-bom-functional-audit
+          path: reports/
