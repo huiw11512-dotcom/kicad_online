@@ -1,0 +1,81 @@
+name: Remove actually isolated GND plane island, audit two signal stubs
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'cm5_mini_host/scripts/remove_isolated_ground_island.py'
+      - '.github/workflows/cm5-ground-island.yml'
+permissions:
+  contents: write
+jobs:
+  zone:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: minihost-revA
+          persist-credentials: true
+      - name: Install KiCad10 and stock libraries
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository -y ppa:kicad/kicad-10.0-releases
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends kicad kicad-footprints kicad-symbols kicad-templates python3
+          mkdir -p "$HOME/.config/kicad/10.0"
+          cp /usr/share/kicad/template/fp-lib-table "$HOME/.config/kicad/10.0/fp-lib-table"
+          cp /usr/share/kicad/template/sym-lib-table "$HOME/.config/kicad/10.0/sym-lib-table"
+      - name: ERC / DRC before
+        run: |
+          mkdir -p reports
+          (cd cm5_mini_host && kicad-cli sch erc CM5_MINIMA_3.kicad_sch -o ../reports/erc_before.rpt) || true
+          (cd cm5_mini_host && kicad-cli pcb drc CM5_MINIMA_3.kicad_pcb --schematic-parity -o ../reports/drc_before.rpt) || true
+      - name: Refill GND zone only and audit two untouched vias
+        run: /usr/bin/python3 cm5_mini_host/scripts/remove_isolated_ground_island.py
+      - name: ERC / DRC after
+        run: |
+          (cd cm5_mini_host && kicad-cli sch erc CM5_MINIMA_3.kicad_sch -o ../reports/erc_after.rpt) || true
+          (cd cm5_mini_host && kicad-cli pcb drc CM5_MINIMA_3.kicad_pcb --schematic-parity -o ../reports/drc_after.rpt) || true
+      - name: Strict before/after net and GND island confirmation
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          def parse(e,d):
+              es=Path(e).read_text(errors='replace');ds=Path(d).read_text(errors='replace')
+              m=re.search(r'ERC messages:\s*\d+\s+Errors\s+(\d+)',es)
+              u=re.search(r'\*\* Found (\d+) unconnected pads \*\*',ds)
+              p=re.search(r'\*\* Found (\d+) Footprint errors \*\*',ds)
+              t=re.search(r'\*\* Found (\d+) DRC violations \*\*',ds)
+              if not all([m,u,p,t]):raise SystemExit('Missing actual KiCad DRC report')
+              cats={}
+              for k in re.findall(r'^\[([^\]]+)\]:',ds,re.M):cats[k]=cats.get(k,0)+1
+              return {'erc':int(m.group(1)),'unrouted':int(u.group(1)),'parity':int(p.group(1)),'hard':len(re.findall(r'^\s+Rule:[^\n]*;\s*error\s*$',ds,re.M)), 'total':int(t.group(1)), 'cats':cats}
+          a=parse('reports/erc_before.rpt','reports/drc_before.rpt')
+          b=parse('reports/erc_after.rpt','reports/drc_after.rpt')
+          print('GND before:',a,'after:',b)
+          if (a['erc'],a['unrouted'],a['parity'],a['hard'])!=(0,0,0,0) or (b['erc'],b['unrouted'],b['parity'],b['hard'])!=(0,0,0,0):
+              raise SystemExit('Electrical/DRC hard regression')
+          if a['cats'].get('isolated_copper',0)!=1 or b['cats'].get('isolated_copper',0)!=0 or b['total']>a['total']-1:
+              raise SystemExit('GND isolated island not truly removed')
+          for cat,n in b['cats'].items():
+              if n>a['cats'].get(cat,0):raise SystemExit('New DRC warnings: '+cat)
+          Path('cm5_mini_host/GND_ISLAND_REMOVAL_AUDIT.md').write_text(
+             f'# GND disconnected zone fill removal\n\nBefore: {a}\n\nAfter: {b}\n\n'
+             'Changed the giant 5-layer GND zone only from area-limited island removal (mode 2; 5mm²) to **always remove islands** (mode 0) using official KiCad zone semantics, and refilled. '
+             'Original contour, copper traces, vias, component pads, nets and GND fill-rule thickness/thermal parameters remained unchanged. '
+             'No actual grounded connected copper was intentionally removed; verification must still include SI/EMC return path study.\n'
+             'Reference: https://dev-docs.kicad.org/en/file-formats/sexpr-intro/index.html\n',encoding='utf-8')
+          PY
+      - name: Commit verified GND zone fill fix and via audit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add cm5_mini_host/CM5_MINIMA_3.kicad_pcb cm5_mini_host/GND_ISLAND_REMOVAL_AUDIT.md cm5_mini_host/DANGLING_VIA_DETAIL.md
+          git commit -m "Remove isolated disconnected GND island without deleting connected ground return"
+          git push origin HEAD:minihost-revA
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: minihost-ground-island-drc
+          path: reports/
