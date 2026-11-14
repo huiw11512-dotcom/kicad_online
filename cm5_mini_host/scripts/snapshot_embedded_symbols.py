@@ -36,6 +36,11 @@ def children(s,start,end):
         i=j
 
 passive={"MK-11C04-G013","TS-1010A-B","SM02B-SRSS-TB(LF)(SN)"}
+def passive_base(cache_name):
+    for target in passive:
+        if cache_name==target or cache_name.startswith(target+"_"):
+            return target
+    return None
 libs=defaultdict(dict)
 pin_fixes=[]
 for path in files:
@@ -49,7 +54,7 @@ for path in files:
             if not sm:
                 rebuilt.append(expr); continue
             cache_name=sm.group(1)
-            if cache_name in passive:
+            if passive_base(cache_name):
                 n=expr.count("(pin unspecified line")
                 if n:
                     expr=expr.replace("(pin unspecified line","(pin passive line")
@@ -82,7 +87,9 @@ for path in files:
         cache_name=lm.group(1)
         cached=cache_defs.get(cache_name)
         if cached is None: continue
-        library_expr=cached.replace(f'(symbol "{cache_name}"',f'(symbol "{name}"',1)
+        # Rename both the top-level symbol and all unit/body symbol identifiers.
+        pattern=re.compile(r'(\\(symbol\\s+")'+re.escape(cache_name)+r'(?=[_"])')
+        library_expr=pattern.sub(lambda m:m.group(1)+name,cached)
         digest=hashlib.sha256(library_expr.encode()).hexdigest()
         old=libs[nick].get(name)
         # Prefer an already fully-qualified cache definition. Only use the alias
