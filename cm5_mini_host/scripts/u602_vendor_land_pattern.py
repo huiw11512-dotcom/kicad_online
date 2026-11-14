@@ -86,6 +86,13 @@ assert len(newpads)==5
 assert [(x[0],x[1],x[2],x[3]) for x in newpads]==[(x[0],x[1],x[2],x[3]) for x in before]
 assert all(abs(pcbnew.ToMM(x[4])-.6)<.00001 and abs(pcbnew.ToMM(x[5])-.42)<.00001 for x in newpads)
 assert len(b.GetTracks())==trackcount and b.GetNetCount()==netcount and len(b.Zones())==zones
+# Pad Y grows 0.02 mm, so existing GND fill is stale and violates its old
+# clearance. Recompute every zone fill against the manufacturer's real pads.
+pcbnew.ZONE_FILLER(b).Fill(b.Zones())
+pcbnew.SaveBoard(str(pcb),b)
+b=pcbnew.LoadBoard(str(pcb))
+f=next(fp for fp in b.GetFootprints() if fp.GetReference()=='U602')
+assert len(b.GetTracks())==trackcount and b.GetNetCount()==netcount and len(b.Zones())==zones
 # Store exact geometry from board footprint via KiCad native serialiser.
 io=pcbnew.PCB_IO_KICAD_SEXPR()
 io.FootprintSave(str(libdir),f)
