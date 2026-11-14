@@ -1,0 +1,28 @@
+name: KiCad ERC and DRC
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install KiCad CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y kicad
+      - name: Print KiCad version
+        run: kicad-cli version
+      - name: Run ERC
+        run: |
+          mkdir -p reports
+          kicad-cli sch erc KiCad_Web_Pilot.kicad_sch -o reports/erc.rpt
+      - name: Run DRC
+        run: |
+          kicad-cli pcb drc KiCad_Web_Pilot.kicad_pcb -o reports/drc.rpt
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kicad-reports
+          path: reports/
