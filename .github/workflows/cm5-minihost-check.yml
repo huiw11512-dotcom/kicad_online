@@ -43,6 +43,11 @@ jobs:
         shell: bash
         run: |
           /usr/bin/python3 cm5_mini_host/scripts/usb_route_inventory.py
+      - name: Verify USB schematic and PCB agree on all four D+/D- networks
+        shell: bash
+        run: |
+          kicad-cli sch export netlist cm5_mini_host/CM5_MINIMA_3.kicad_sch -o reports/cm5.net
+          /usr/bin/python3 cm5_mini_host/scripts/verify_usb_parity.py
       - name: Summarize reports — do not confuse CI green with DRC clean
         shell: bash
         run: |
