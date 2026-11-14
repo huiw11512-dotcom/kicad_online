@@ -32,6 +32,8 @@ The original is open hardware under **CERN-OHL-S-2.0**. We retain the upstream l
 - Reconciled the M.2 socket schematic's four nonexistent alternative mechanical pins M1..M4 against the installed 2230/2242 connector footprint.
 - Adjusted **R701 15k→39k and R702/R703 22k→56k** in the native schematic and PCB for 500mA default-current USB2 host, with no DRC regression.
 - Replaced the oversize rectangular RJ45 F.CrtYd with a **closed pad-aware 12-edge courtyard** in both board and project library: hard errors **4→2** and courtyard overlaps **2→0**, no electrical geometry changes.
+- Reconciled conflicting duplicate CM5 NPTH drills: Module301 had **2.7 mm** holes, Module302 had **3.0 mm** holes in the very same locations. Preserved 2.7 mm M2.5 mounting holes and removed duplicate 3.0 mm holes, syncing the HSS project footprint. Native cloud report: **holes_co_located 2→0**, and **ERC/hard DRC/parity/unconnected stayed 0/2/0/0**.
+- Initialized official KiCad 10 standard global footprint and symbol tables in CI to remove 65 false missing-library warnings; classified remaining DRC warnings without disabling them.
 - Removed one pad-free PCB-only demonstration logo footprint REF** (upstream license and attribution preserved).
 - Latest *verified* electrical/DFM check after these changes: **ERC 0 errors, PCB schematic/footprint parity 0 issues, PCB unconnected 0**, with **2 remaining hard DRC errors** at the Kycon RJ45 shield solder pads and adjacent board-edge opening. Warnings still exist and require review.
 
@@ -43,6 +45,7 @@ The original is open hardware under **CERN-OHL-S-2.0**. We retain the upstream l
 - [M.2 symbol/footprint verification](M2_SYMBOL_VARIANT_AUDIT.md) and [decorative logo cleanup verification](LOGO_CLEANUP_AUDIT.md)
 - [Power, USB, CM5 5V/5A budget and startup review](POWER_AND_USB_REVIEW.md)
 - [Controlled USB701 reroute and DRC no-regression](USB_REROUTE_AUDIT.md)
+- [Actual KiCad 10 DRC warning triage](DRC_WARNING_TRIAGE.md) and [CM5 duplicate NPTH hole repair](CM5_ALIGNMENT_HOLE_AUDIT.md)
 - [Original baseline audit — historical, before Rev.A corrections](AUDIT_2026-11-14.md)
 
 **Next implementation gate:** resolve the two RJ45 shield solder land copper-to-edge gap violations based on Kycon's required PCB opening and full enclosure clearance; updated pad-aware courtyard eliminated two false overlaps and was verified with KiCad. Follow with exact factory stackup-controlled differential impedance, component datasheet verification, full PI/thermal checks, and a prototype bring-up plan. No release Gerbers have been approved.
