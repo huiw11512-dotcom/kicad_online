@@ -248,33 +248,7 @@
     "equivalence_files": []
   },
   "erc": {
-    "erc_exclusions": [
-      {
-        "marker": {
-          "error_type": "ERCET_PIN_NOT_DRIVEN",
-          "position": {
-            "x_nm": "147320000",
-            "y_nm": "195580000"
-          },
-          "items": [
-            {
-              "value": "096768fc-da02-4ac7-9033-3f351931643c"
-            }
-          ],
-          "sheet_specific_path": {
-            "path": [
-              {
-                "value": "b33e81d6-18a9-4b9d-a239-76a7c253462f"
-              },
-              {
-                "value": "45540f0b-d892-4f71-86ad-b9f245bcefda"
-              }
-            ]
-          }
-        },
-        "comment": "Intentional nRPIBOOT input: CM5 pin 93 has an internal 10 kΩ pull-up to CM5_3.3V; SW101 only shorts it to GND for USB boot. No external logic driver is required (CM5 datasheet §4.2, pin 93)."
-      }
-    ],
+    "erc_exclusions": [],
     "meta": {
       "version": 1
     },
