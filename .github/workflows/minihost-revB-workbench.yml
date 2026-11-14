@@ -62,6 +62,8 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           import re,sys
+          if not Path('reports/erc.rpt').exists() or not Path('reports/drc.rpt').exists():
+              sys.exit('BLOCKED: native reports were not generated; inspect the earlier failing step')
           erc=Path('reports/erc.rpt').read_text(errors='replace')
           drc=Path('reports/drc.rpt').read_text(errors='replace')
           m=re.search(r'ERC messages:\s*\d+\s+Errors\s+(\d+)',erc)
