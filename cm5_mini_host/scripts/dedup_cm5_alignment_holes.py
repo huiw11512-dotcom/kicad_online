@@ -32,6 +32,8 @@ pb=alignment_pads(c)
 if len(pa)!=2 or len(pb)!=2:raise SystemExit(f"Expected exactly two identical alignment holes per connector half: GPIO {len(pa)} HSS {len(pb)}")
 def detail(p):
     return (xy(p.GetPosition()),xy(p.GetSize()),xy(p.GetDrillSize()),int(p.GetAttribute()))
+print("Module301 candidate NPTH:",sorted(map(detail,pa)))
+print("Module302 candidate NPTH:",sorted(map(detail,pb)))
 if sorted(map(detail,pa))!=sorted(map(detail,pb)):
     raise SystemExit("Duplicated holes are not physically identical; abort")
 for p in pb:
