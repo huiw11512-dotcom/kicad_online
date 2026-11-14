@@ -4118,28 +4118,6 @@
 		)
 		(uuid "e4f3678c-75e1-4d94-9ea6-9a5985dfe473")
 	)
-	(hierarchical_label "USB_C{USB}"
-		(shape input)
-		(at 78.74 71.12 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "d5d3a945-df7f-452e-a617-8ce4f0075f8f")
-	)
-	(hierarchical_label "USB_C{USB}"
-		(shape input)
-		(at 113.03 71.12 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "f720af8a-dbdb-42e1-a349-fb27e09d78ab")
-	)
 	(symbol
 		(lib_id "power:GND")
 		(at 50.8 118.11 0)
@@ -8171,6 +8149,95 @@
 			(project "CM5_MINIMA_3"
 				(path "/b33e81d6-18a9-4b9d-a239-76a7c253462f"
 					(page "8")
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 365 245)
+			(xy 370 245)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e6b1a4a1-31b4-4e5e-9e27-3a5f2aee1f10")
+	)
+	(global_label "+BATT"
+		(shape input)
+		(at 370 245 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e6b1a4a1-31b4-4e5e-9e27-3a5f2aee1f11")
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 365 245 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e6b1a4a1-31b4-4e5e-9e27-3a5f2aee1f12")
+		(property "Reference" "#FLG0103"
+			(at 366.905 245 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 368.81 245 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 365 245 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 365 245 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 365 245 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e6b1a4a1-31b4-4e5e-9e27-3a5f2aee1f13")
+		)
+		(instances
+			(project "CM5_MINIMA_3"
+				(path "/b33e81d6-18a9-4b9d-a239-76a7c253462f"
+					(reference "#FLG0103")
+					(unit 1)
 				)
 			)
 		)
