@@ -1,4 +1,8 @@
 # MiniHost Rev.A — Power and USB interface review
+
+> **Latest Rev.A check (2026-11-14):** Native KiCad 10.0.8 MiniHost audit now reports **ERC 0 errors / 41 warnings; PCB DRC 0 hard errors / 73 warnings; 0 unconnected pads; 0 schematic-to-PCB footprint parity errors**. The RJ45 J1 board-edge hard errors have been resolved with a fab-specific 0.20 mm allowance; physical connector/enclosure tolerance remains to be checked. Latest report: [REV_A_LATEST_VERIFICATION.md](REV_A_LATEST_VERIFICATION.md). This power/USB review remains a netlist/calculation review, not measured PI/thermal validation.
+
+
 Date: 2026-11-14
 
 ## Source and scope
