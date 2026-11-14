@@ -37,10 +37,22 @@ def state(b):
     return result
 
 before=state(board); track_count=len(board.GetTracks()); zone_count=len(board.Zones()); net_count=board.GetNetCount()
+def graphics_sig(fp):
+    # TP101 has a circular Fab outline, while otherwise identical test points
+    # still have a Silk circle. One ID cannot represent both faithfully.
+    return tuple(sorted((int(item.GetLayer()),int(item.GetShape()))
+                        for item in fp.GraphicalItems()
+                        if isinstance(item,pcbnew.PCB_SHAPE)))
+
+def footprint_sig(fp,nick,name):
+    pads=pad_sig(fp)
+    graphic=graphics_sig(fp) if (nick,name)==("TestPoint","TestPoint_Pad_D1.0mm") else ()
+    return (pads,graphic)
+
 groups=defaultdict(lambda:defaultdict(list))
 for fp in board.GetFootprints():
     nick=str(fp.GetFPID().GetLibNickname()); name=str(fp.GetFPID().GetLibItemName())
-    if nick in want:groups[(nick,name)][pad_sig(fp)].append(fp)
+    if nick in want:groups[(nick,name)][footprint_sig(fp,nick,name)].append(fp)
 
 io=pcbnew.PCB_IO_KICAD_SEXPR() if hasattr(pcbnew,"PCB_IO_KICAD_SEXPR") else pcbnew.PCB_IO()
 if io is None:raise SystemExit("KiCad PCB_IO unavailable")
@@ -99,7 +111,10 @@ for nick,items in sorted(exports.items()):
         path=libdir/(name+".kicad_mod")
         if not path.exists():raise SystemExit(f"Missing exported footprint {path}")
         loaded=io.FootprintLoad(str(libdir),name)
-        if loaded is None or pad_sig(loaded)!=sig:raise SystemExit(f"Footprint roundtrip mismatch {nick}:{name}")
+        if loaded is None or pad_sig(loaded)!=sig[0]:
+            raise SystemExit(f"Pad geometry footprint roundtrip mismatch {nick}:{name}")
+        if sig[1] and graphics_sig(loaded)!=sig[1]:
+            raise SystemExit(f"Silk/Fab graphics footprint roundtrip mismatch {nick}:{name}")
         rows.append({"library":nick,"footprint":name,"references":refs,"pad_count":len(fp.Pads()),
                      "pad_signature":hashlib.sha256(repr(sig).encode()).hexdigest()})
 
