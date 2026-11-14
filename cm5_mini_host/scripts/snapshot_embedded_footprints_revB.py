@@ -104,7 +104,7 @@ table=["(fp_lib_table)"]
 table=["(fp_lib_table"]
 for nick in sorted(want):
     if nick in exports:
-        table.append(f'  (lib (name "{nick}")(type "KiCad")(uri "\${{KIPRJMOD}}/FootprintSnapshots/{nick}.pretty")(options "")(descr "Exact embedded board footprint snapshot; vendor validation separate"))')
+        table.append(f'  (lib (name "{nick}")(type "KiCad")(uri "${{KIPRJMOD}}/FootprintSnapshots/{nick}.pretty")(options "")(descr "Exact embedded board footprint snapshot; vendor validation separate"))')
 table.append(")")
 (root/"fp-lib-table").write_text("\n".join(table)+"\n",encoding="utf-8")
 pcbnew.SaveBoard(str(board_path),board)
