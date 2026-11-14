@@ -56,9 +56,9 @@ jobs:
           import re,sys
           erc=Path('reports/erc.rpt').read_text(errors='replace')
           drc=Path('reports/drc.rpt').read_text(errors='replace')
-          m=re.search(r'ERC messages:\\s*\\d+\\s+Errors\\s+(\\d+)',erc)
+          m=re.search(r'ERC messages:\s*\d+\s+Errors\s+(\d+)',erc)
           e=int(m.group(1)) if m else 9999
-          d=len(re.findall(r';\\s*error\\s*$',drc,re.M))
+          d=len(re.findall(r';\s*error\s*$',drc,re.M))
           print(f'ERC errors={e}; DRC hard errors={d}')
           if e or d: sys.exit(1)
           PY
