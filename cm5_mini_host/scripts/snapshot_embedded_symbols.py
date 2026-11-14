@@ -88,7 +88,7 @@ for path in files:
         cached=cache_defs.get(cache_name)
         if cached is None: continue
         # Rename both the top-level symbol and all unit/body symbol identifiers.
-        pattern=re.compile(r'(\\(symbol\\s+")'+re.escape(cache_name)+r'(?=[_"])')
+        pattern=re.compile(r'(\(symbol\s+")'+re.escape(cache_name)+r'(?=[_"])')
         library_expr=pattern.sub(lambda m:m.group(1)+name,cached)
         digest=hashlib.sha256(library_expr.encode()).hexdigest()
         old=libs[nick].get(name)
