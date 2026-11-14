@@ -1,0 +1,28 @@
+name: Export current native CM5 MiniHost snapshot for review
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/cm5-export-native-snapshot.yml'
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: minihost-revA
+      - name: Make minimal archive from native project text
+        run: |
+          mkdir -p release_snap
+          cp cm5_mini_host/*.kicad_pro release_snap/ || true
+          cp cm5_mini_host/*.kicad_dru release_snap/ || true
+          cp cm5_mini_host/*.kicad_pcb release_snap/
+          cp cm5_mini_host/*.kicad_sch release_snap/
+          echo "Archive source branch minihost-revA git $(git rev-parse HEAD)" > release_snap/SNAPSHOT_COMMIT.txt
+          find release_snap -maxdepth 1 -type f -printf '%f %s bytes\n' | sort
+      - uses: actions/upload-artifact@v4
+        with:
+          name: miniHost-current-native-KiCad
+          path: release_snap/
