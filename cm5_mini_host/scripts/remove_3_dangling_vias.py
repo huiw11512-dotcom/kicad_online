@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Safely drop exactly three KiCad-flagged single-layer dangling vias.
+"""Safely remove just the one unused USB D+ via (other 2 are trace-end stubs).
 
-These are not ground stitching via arrays. Precise net+XY identities are from
+This via is not a ground stitching via. Previously attempting all three caused two dangling tracks; we intentionally preserve PWR_BUT and +BATT vias until their attached stubs are individually reviewed. Precise net+XY identities are from
 KiCad 10 DRC [via_dangling]. Do not touch any other vias or trace segments.
 For each candidate, verify connected track endpoints occupy at most ONE
 copper layer; vias linking two routed layers are absolutely excluded.
@@ -15,8 +15,6 @@ path=Path("cm5_mini_host/CM5_MINIMA_3.kicad_pcb")
 b=pcbnew.LoadBoard(str(path))
 target=[
     ("/USB_C.D_P",85.8480,48.5204),
-    ("/CM5/PWR_BUT",130.9594,65.5595),
-    ("+BATT",81.4500,72.5000),
 ]
 def mm(v):return pcbnew.ToMM(v)
 def dist(v,x,y):return math.hypot(mm(v.x)-x,mm(v.y)-y)
@@ -50,7 +48,7 @@ for name,x,y in target:
         raise SystemExit(f"REJECT {name} ({x},{y}): via is pad-centered {pad_centers}")
     delete.append(v)
     print(f"Dangling via {name} ({x:.4f},{y:.4f}) F-B; connected trace endpoint layers: {touching}")
-assert len(delete)==3
+assert len(delete)==1
 for v in delete:b.Remove(v)
 pcbnew.ZONE_FILLER(b).Fill(b.Zones())
 pcbnew.SaveBoard(str(path),b)
@@ -59,6 +57,6 @@ padnew=sorted((f.GetReference(),p.GetNumber(),p.GetNetname(),p.GetPosition().x,p
                for f in c.GetFootprints() for p in f.Pads())
 assert padnew==padsig
 assert c.GetNetCount()==netbefore and len(c.Zones())==zonebefore
-assert len(c.GetTracks())==trackbefore-3
-assert sum(isinstance(t,pcbnew.PCB_VIA) for t in c.GetTracks())==nvia_before-3
-print("Roundtrip: 3 suspect vias removed; no other PCB traces, pad geometry, nets or zone definitions edited.")
+assert len(c.GetTracks())==trackbefore-1
+assert sum(isinstance(t,pcbnew.PCB_VIA) for t in c.GetTracks())==nvia_before-1
+print("Roundtrip: one USB D+ unused via removed; no other PCB traces, pad geometry, nets or zone definitions edited.")
