@@ -72,7 +72,7 @@ for nick,symbols in sorted(libs.items()):
         body+="\t"+expr.replace("\n","\n\t")+"\n"
     body+=")\n"
     (out/f"{safe}.kicad_sym").write_text(body,encoding="utf-8")
-    rows.append(f'\t(lib (name "{nick}")(type "KiCad")(uri "\${{KIPRJMOD}}/EmbeddedSymbols/{safe}.kicad_sym")(options "")(descr "Exact project-local snapshot of embedded schematic symbols"))')
+    rows.append(f'\t(lib (name "{nick}")(type "KiCad")(uri "${{KIPRJMOD}}/EmbeddedSymbols/{safe}.kicad_sym")(options "")(descr "Exact project-local snapshot of embedded schematic symbols"))')
 (root/"sym-lib-table").write_text("(sym_lib_table\n"+"\n".join(rows)+"\n)\n",encoding="utf-8")
 (root/"SYMBOL_SNAPSHOT_REV_B_AUDIT.md").write_text(
     "# Rev.B embedded-symbol library snapshot\n\n"
