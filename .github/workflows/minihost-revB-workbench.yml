@@ -89,6 +89,19 @@ jobs:
           print(f'ERC errors={e}; DRC hard errors={d}')
           if e or d: sys.exit(1)
           PY
+      - name: Fabrication candidate gate and export
+        run: |
+          bash cm5_mini_host/scripts/export_fab_revB.sh
+      - name: Upload checked six-layer fabrication candidate
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: minihost-revB-fabrication-candidate
+          path: |
+            MiniHost_RevB_Fabrication_Candidate.zip
+            fab_revB_candidate/
+          if-no-files-found: error
+          retention-days: 30
       - name: Upload native reports
         if: always()
         uses: actions/upload-artifact@v4
