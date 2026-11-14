@@ -10255,7 +10255,7 @@
 				)
 			)
 		)
-		(property "Value" "SN74LVC1G14DBVR"
+		(property "Value" "74LVC1G07SE-7"
 			(at 0 2 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -10267,7 +10267,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2405141143_UMW-Youtai-Semiconductor-Co---Ltd--SN74LVC1G14DBVR_C434069.pdf"
+		(property "Datasheet" "https://www.diodes.com/datasheet/download/74LVC1G07.pdf"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -10306,7 +10306,7 @@
 				)
 			)
 		)
-		(property "P/N" "SN74LVC1G14DBVR"
+		(property "P/N" "74LVC1G07SE-7"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
