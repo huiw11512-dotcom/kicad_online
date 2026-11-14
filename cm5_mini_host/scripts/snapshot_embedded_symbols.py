@@ -52,13 +52,16 @@ for path in files:
                 if n:
                     expr=expr.replace("(pin unspecified line","(pin passive line")
                     pin_fixes.append((path.name,nick,name,n))
-            expr=expr.replace(f'(symbol "{full}"',f'(symbol "{name}"',1)
-            digest=hashlib.sha256(expr.encode()).hexdigest()
+            cache_expr=expr
+            library_expr=cache_expr.replace(f'(symbol "{full}"',f'(symbol "{name}"',1)
+            digest=hashlib.sha256(library_expr.encode()).hexdigest()
             old=libs[nick].get(name)
             if old and hashlib.sha256(old.encode()).hexdigest()!=digest:
                 raise SystemExit(f"Conflicting cached symbol definitions: {nick}:{name}")
-            libs[nick][name]=expr
-            rebuilt.append(expr)
+            libs[nick][name]=library_expr
+            # Keep the fully-qualified LIB_ID in the schematic cache so symbol
+            # instances retain their real pin mapping and hierarchical connectivity.
+            rebuilt.append(cache_expr)
         new="(lib_symbols\n"+"\n".join("\t\t"+x.replace("\n","\n\t\t") for x in rebuilt)+"\n\t)"
         src=src[:start]+new+src[end:]
     path.write_text(src,encoding="utf-8")
