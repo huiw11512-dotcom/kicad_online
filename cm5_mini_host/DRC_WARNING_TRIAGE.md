@@ -1,19 +1,18 @@
-# MiniHost Rev.A — latest 85-item KiCad DRC triage (2026-11-14)
+# MiniHost Rev.A — latest 73-item KiCad DRC triage (2026-11-14)
 
-**Verified actual KiCad run:** [USB D+ single-via removal no-regression check](https://github.com/huiw11512-dotcom/kicad_online/actions/runs/43600307395).
-
-Native KiCad 10.0.8 on GitHub Actions now reports **85 total PCB DRC violations = 2 hard errors + 83 warnings**, **ERC 0 hard errors**, **0 PCB unconnected pads**, **0 schematic/footprint parity issues**. The initial standardized cloud report was **230**, and controlled PCB edits have reduced it to 85. No mask-rule, hard DRC or global rule disabling was used. The board remains **NOT manufacturing released**.
+**Latest actual MiniHost KiCad 10.0.8 run:** [CI run 43606720543](https://github.com/huiw11512-dotcom/kicad_online/actions/runs/43606720543). The native report contains **73 warnings, 0 hard errors, 0 unconnected pads and 0 footprint parity errors**. Schematic ERC is 0 errors / 41 warnings. This is not a fabrication release.
 
 | Current category (actual DRC code) | Count | Technical disposition |
-| --- | ---: | --- |
-| `copper_edge_clearance` | **2 hard** | Kycon J1 shield pads 15 and 16 to routed board-edge cutout, actual 0.2164 mm and 0.1914 mm against 0.372 mm design rule; keep as explicit fab blockers until board aperture and mechanical overhang are validated |
-| `lib_footprint_mismatch` | 50 warnings | Library metadata/silk/geometry differs from installed stock KiCad 10. **Do not auto-update all libraries:** must compare pad coordinates, aperture, pin numbering and drills against BOM and datasheets first |
-| `silk_edge_clearance` | 15 warnings | Edge-cut silk likely trimmed by fab. Move or shorten only nonessential silk graphics with manufacturer fit and board-edge check |
-| `silk_overlap` | 8 warnings | Remaining custom label polygons near M.2 and small parts; do not delete readable critical I/O labels solely to reduce count |
-| `silk_over_copper` | 7 warnings | Text/graphics intersect solder-mask openings; inspect fab layers and reposition or clip only genuine offending graphics |
-| `via_dangling` | 2 warnings | PWR_BUT at (130.9594,65.5595) and +BATT at (81.45,72.50) mm: removing vias alone creates two dangling trace ends, so preserve pending segment-level route correction |
-| `isolated_copper` | 1 warning | GND isolated pour near (74.99,20.22) mm; inspect zone island and high-speed return continuity before removing |
-| **Total** | **85** | **2 hard, 83 warnings** |
+|---|---:|---|
+| `lib_footprint_mismatch` | **49 warnings** | Embedded vs stock KiCad library differences. Compare pad coordinates, dimensions, drill, pin numbering and mask against actual BOM/manufacturer land patterns before updating any footprint. |
+| `silk_edge_clearance` | **15 warnings** | Silkscreen clipped/too close to Edge.Cuts; move or shorten nonessential labels and retain functional port labels. |
+| `silk_overlap` | **8 warnings** | Text and graphic overlaps; reposition labels only after checking reference readability and assembly needs. |
+| `silk_over_copper` | **1 warning** | One silkscreen object intersects a solder-mask opening; inspect the exact object and correct it. |
+| **Total** | **73 warnings** | **0 hard DRC errors** |
+
+Earlier RJ45 J1 shield pad-to-edge violations have been resolved: the upper notch and fillet were moved +0.030 mm, copper pads/routes/nets were retained, and the absolute edge rule is 0.20 mm only for the J1 manufacturer-specific cutout; the 0.372 mm enhanced rule remains elsewhere. See `RJ45_FAB_EDGE_CORRECTION_AUDIT.md`.
+
+The previous two `via_dangling` and one `isolated_copper` warnings are absent from the latest DRC report. The remaining 49 footprint warnings are library-copy differences, not evidence by themselves of broken nets; they still need actual component/datasheet checks.
 
 ## Additional discovered **functional** risk (corrected, with land-pattern signoff pending)
 
