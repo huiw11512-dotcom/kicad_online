@@ -1,6 +1,6 @@
 # CM5 MiniHost — high-speed carrier development
 
-**Stage:** V0.1 project baseline. The KiCad schematic/PCB in this directory are a sourced open-hardware baseline, **not a newly completed or electrically verified custom PCB**.
+**Stage:** Rev.A engineering prototype derived from the attributed CM5 MINIMA reference. Native KiCad 10 schematic and PCB have been edited and cloud checked, but the board **has not been fabricated, signal-integrity validated, or released for manufacture**.
 
 ## Goal
 
@@ -23,16 +23,29 @@ Source snapshot commit: `6d77314dbbc26c8f5735add30ccb0588816cb71a`.
 
 The original is open hardware under **CERN-OHL-S-2.0**. We retain the upstream license and identify changes in version history. Do not describe the baseline as independently designed or verified in this repository. See `SOURCE_README.md` after import.
 
-## Work so far
+## Rev.A completed and verified (2026-11-14)
 
-1. Selected CM5 for a compact but practical Linux mini-computer.
-2. Verified high-speed design guidance against CM5 official documentation.
-3. Added a reproducible, attributed KiCad source import and cloud review.
-4. **Next engineering work:** validate ERC/DRC, map the power and boot nets, verify M.2/HDMI/Ethernet pin connectivity, design own functional revision, review the mechanical stack, source BOM, and fabricate/test.
+- Reproduced actual six-layer CM5 Linux carrier in the native KiCad and web viewer.
+- Repaired USB-C root bus naming and verified **4/4 D+/D− schematic-net-to-PCB-pad networks match**.
+- Routed one tested USB701 A7 N backside branch from 6.4241 to 4.2503 mm copper centerline; before/after **4 → 4 hard DRC** and **0 → 0 unconnected**. This is not SI signoff.
+- Recovered **8 custom PCB-embedded footprint types** into locally registered EasyEDA, Samacsys and _pico libraries, passing KiCad export/reimport pad checks.
+- Reconciled the M.2 socket schematic's four nonexistent alternative mechanical pins M1..M4 against the installed 2230/2242 connector footprint.
+- Removed one pad-free PCB-only demonstration logo footprint REF** (upstream license and attribution preserved).
+- Latest *verified* electrical/DFM check after these changes: **ERC 0 errors, PCB schematic/footprint parity 0 issues, PCB unconnected 0**, with **4 remaining hard DRC errors** at the edge-mounted Kycon RJ45. Warnings still exist and require review.
+
+## Current blockers / engineering documents
+
+- [RJ45 physical conflict map](RJ45_MECHANICAL_CONFLICT_MAP.svg) and [manufacturer-grounded mechanical review](RJ45_MECHANICAL_REVIEW.md): 2 copper/edge-distance errors, 2 assembly courtyard overlaps involving J1, J601, H102
+- [M.2 symbol/footprint verification](M2_SYMBOL_VARIANT_AUDIT.md) and [decorative logo cleanup verification](LOGO_CLEANUP_AUDIT.md)
+- [Power, USB, CM5 5V/5A budget and startup review](POWER_AND_USB_REVIEW.md)
+- [Controlled USB701 reroute and DRC no-regression](USB_REROUTE_AUDIT.md)
+- [Original baseline audit — historical, before Rev.A corrections](AUDIT_2026-11-14.md)
+
+**Next implementation gate:** physically redesign the RJ45/fan/mounting-hole corner to conform to the Kycon drawing while keeping an enclosure-ready mounting pattern, then close the four remaining hard DRC errors. Follow with exact factory stackup-controlled differential impedance, component datasheet verification, full PI/thermal checks, and a prototype bring-up plan. No release Gerbers have been approved.
 
 ## Open in ZiroEDA
 
-https://designer.ziroeda.com/gh/huiw11512-dotcom/kicad_online/tree/main/cm5_mini_host
+https://designer.ziroeda.com/gh/huiw11512-dotcom/kicad_online/tree/minihost-revA/cm5_mini_host
 
 If the deep link fails, use ZiroEDA → File → Open from GitHub, select `huiw11512-dotcom/kicad_online` → `cm5_mini_host` → `CM5_MINIMA_3.kicad_pro`.
 
