@@ -3880,6 +3880,16 @@
 		)
 		(uuid "de94d66f-d90b-4345-b1b7-02aa88f2d7b0")
 	)
+	(label "USB_C{USB}"
+		(at 113.03 71.12 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "260b0b2e-8a25-4db7-b499-b254f48a0001")
+	)
 	(bus
 		(pts
 			(xy 113.03 71.12) (xy 123.19 71.12)
@@ -8107,8 +8117,8 @@
 	)
 	(wire
 		(pts
-			(xy 365 245)
-			(xy 370 245)
+			(xy 260.35 76.2)
+			(xy 265.43 76.2)
 		)
 		(stroke
 			(width 0)
@@ -8118,7 +8128,7 @@
 	)
 	(global_label "+BATT"
 		(shape input)
-		(at 370 245 0)
+		(at 265.43 76.2 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8129,7 +8139,7 @@
 	)
 	(symbol
 		(lib_id "power:PWR_FLAG")
-		(at 365 245 270)
+		(at 260.35 76.2 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -8138,7 +8148,7 @@
 		(fields_autoplaced yes)
 		(uuid "e6b1a4a1-31b4-4e5e-9e27-3a5f2aee1f12")
 		(property "Reference" "#FLG0103"
-			(at 366.905 245 0)
+			(at 262.255 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8147,7 +8157,7 @@
 			)
 		)
 		(property "Value" "PWR_FLAG"
-			(at 368.81 245 90)
+			(at 264.16 76.2 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8156,7 +8166,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 365 245 0)
+			(at 260.35 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8165,7 +8175,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 365 245 0)
+			(at 260.35 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8174,7 +8184,7 @@
 			)
 		)
 		(property "Description" "Special symbol for telling ERC where power comes from"
-			(at 365 245 0)
+			(at 260.35 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
