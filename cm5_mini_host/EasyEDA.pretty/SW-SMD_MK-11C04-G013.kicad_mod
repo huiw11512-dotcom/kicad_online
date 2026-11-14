@@ -1,0 +1,300 @@
+(footprint "SW-SMD_MK-11C04-G013"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(property "Reference" "SW101"
+		(at 0 -4.63 0)
+		(layer "B.SilkS")
+		(hide yes)
+		(uuid "8fddf5e6-82a7-4744-93b8-55cc20e91724")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "MK-11C04-G013"
+		(at 0 4.63 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ccec17cf-2b10-4276-91f3-26837709f943")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" "https://lcsc.com/product-detail/Toggle-Switches_G-Switch-MK-11C04-G013_C778185.html"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b14603c6-9479-4ff9-b1a3-971f06a64f0c")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8da2ab36-d30c-47df-99bc-f8cd28069682")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LCSC Part" "C778185"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "6c16a191-742a-4afd-bc60-15ae0581db16")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(sheetname "/")
+	(sheetfile "CM5_MINIMA_3.kicad_sch")
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -2.75 -0.62)
+		(end -2.75 0.05)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "8d8e6d64-bbe9-4f24-8394-85d779c9db6c")
+	)
+	(fp_line
+		(start -2.75 1.21)
+		(end -2.75 1.88)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "ae03f80e-d283-463b-9d55-befcad7be2bb")
+	)
+	(fp_line
+		(start -1.53 -0.62)
+		(end -2.75 -0.62)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "4efc8af9-be5b-4a85-862f-bba9c131b5f6")
+	)
+	(fp_line
+		(start -1.5 1.38)
+		(end -1.5 1.88)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "0c3ebe3d-7e3f-446e-8a76-44e5109b9f27")
+	)
+	(fp_line
+		(start -1.5 1.88)
+		(end -1.05 1.88)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "f83a890c-7a0b-47c2-b063-d25672f69e28")
+	)
+	(fp_line
+		(start 0.05 3.18)
+		(end 0.05 1.88)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "63bac2e4-826e-439e-b894-236c3e01065e")
+	)
+	(fp_line
+		(start 1.25 1.88)
+		(end 1.25 3.18)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "cb564750-5173-4872-a343-94f19366dc30")
+	)
+	(fp_line
+		(start 1.25 3.18)
+		(end 0.05 3.18)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "e46a895a-1575-4517-b6d1-74265e3206ea")
+	)
+	(fp_line
+		(start 1.5 1.38)
+		(end -1.5 1.38)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "51a914ed-a944-4476-8419-88ad92082749")
+	)
+	(fp_line
+		(start 1.5 1.88)
+		(end 1.5 1.38)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "ca4c781f-a4c0-4195-ba33-96f3786f4bff")
+	)
+	(fp_line
+		(start 2.75 -0.62)
+		(end 1.53 -0.62)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "461b85af-1315-4753-9691-3ea2ea1e584e")
+	)
+	(fp_line
+		(start 2.75 0.05)
+		(end 2.75 -0.62)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "a4831225-1162-45fd-97fa-ab2b387a8bc3")
+	)
+	(fp_line
+		(start 2.75 1.88)
+		(end -2.75 1.88)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "90e1459a-63ea-40fb-81c0-52015b055bc6")
+	)
+	(fp_line
+		(start 2.75 1.88)
+		(end 2.75 1.21)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "962da347-0d2f-4b53-9a08-02e72df5bf19")
+	)
+	(fp_circle
+		(center -1.28 -0.5)
+		(end -1.15 -0.5)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(fill no)
+		(layer "Cmts.User")
+		(uuid "606d1d68-8192-4e26-afab-24926ea77e02")
+	)
+	(fp_circle
+		(center -3.25 -0.76)
+		(end -3.22 -0.76)
+		(stroke
+			(width 0.06)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "c5d085b3-abf7-4546-ba79-84c0b468a689")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "8768738a-2680-4911-a58c-a51e07b4c0dd")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "" np_thru_hole circle
+		(at -1.5 0.56)
+		(size 0.9 0.9)
+		(drill 0.9)
+		(layers "*.Mask" "F.Cu" "B.Cu" "In1.Cu" "In2.Cu" "In3.Cu" "In4.Cu")
+		(uuid "37154f15-5603-438c-87e6-02d6521da221")
+	)
+	(pad "" np_thru_hole circle
+		(at 1.5 0.56)
+		(size 0.9 0.9)
+		(drill 0.9)
+		(layers "*.Mask" "F.Cu" "B.Cu" "In1.Cu" "In2.Cu" "In3.Cu" "In4.Cu")
+		(uuid "cf9d8c22-0019-4bfa-a425-aed23294e7d9")
+	)
+	(pad "1" smd rect
+		(at -1 -0.63 90)
+		(size 0.7 0.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "25dea381-ab56-48ab-8959-fa637a509950")
+	)
+	(pad "2" smd rect
+		(at 1 -0.63 90)
+		(size 0.7 0.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "55fa2dc3-d1d2-4d2b-ae4e-02864560b693")
+	)
+	(pad "4" smd rect
+		(at 3 0.63 180)
+		(size 0.9 0.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "db592456-5d1f-4c25-a4d3-f1be13c9d5f8")
+	)
+	(pad "5" smd rect
+		(at -3 0.63 180)
+		(size 0.9 0.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "ebac18f2-e858-4dbe-b1c6-8ae158422848")
+	)
+	(pad "C" smd rect
+		(at 0 -0.63 90)
+		(size 0.7 0.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "8a5212a4-ec81-466b-bf91-49a3e08ba07e")
+	)
+	(embedded_fonts no)
+	(model "/Users/pico/KiCad/EasyEDA.3dshapes/SW-SMD_MK-11C04-G013.step"
+		(offset
+			(xyz 0 -0.66 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)
