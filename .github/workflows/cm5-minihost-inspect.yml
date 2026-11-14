@@ -28,21 +28,42 @@ jobs:
           mkdir -p reports
           kicad-cli sch export netlist cm5_mini_host/CM5_MINIMA_3.kicad_sch -o reports/cm5.net
           python3 - <<'PY'
-          import xml.etree.ElementTree as ET
           from pathlib import Path
-          root=ET.parse('reports/cm5.net').getroot()
+          import re
+          s=Path('reports/cm5.net').read_text(errors='replace')
+          toks=re.findall(r'\\s*(\\(|\\)|"(?:\\\\.|[^"\\\\])*"|[^\\s()]+)',s)
+          i=0
+          def parse():
+              global i
+              t=toks[i]; i+=1
+              if t!='(': return t
+              a=[]
+              while i<len(toks) and toks[i]!=')': a.append(parse())
+              if i>=len(toks): raise ValueError('unbalanced sexpr')
+              i+=1
+              return a
+          root=parse()
+          def walk(x):
+              if isinstance(x,list):
+                  if x and x[0]=='net':
+                      yield x
+                  for c in x: yield from walk(c)
+          def val(x,key):
+              for c in x:
+                  if isinstance(c,list) and c and c[0]==key and len(c)>1: return c[1]
+              return ''
           out=[]
-          for net in root.findall('.//nets/net'):
-              name=net.get('name','')
-              if 'USB' in name.upper() or 'VBUS' in name.upper() or '5V' in name.upper() or 'M2_3V3' in name:
+          for n in walk(root):
+              name=val(n,'name')
+              if any(k in name.upper() for k in ['USB','VBUS','5V','M2_3V3']):
                   nodes=[]
-                  for node in net.findall('node'):
-                      nodes.append(f"{node.get('ref')}.{node.get('pin')}")
+                  for c in n:
+                      if isinstance(c,list) and c and c[0]=='node':
+                          nodes.append(f"{val(c,'ref')}.{val(c,'pin')}")
                   out.append(f"{name}: "+", ".join(nodes))
-          Path('reports/usb_power_netlist.txt').write_text("\n".join(out),encoding='utf-8')
-          print("\n".join(out))
-          PY
-      - uses: actions/upload-artifact@v4
+          Path('reports/usb_power_netlist.txt').write_text("\\n".join(out),encoding='utf-8')
+          print("\\n".join(out))
+          PY      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: cm5-minihost-diagnostics
