@@ -3,11 +3,12 @@
 
 CM5 MINIMA represents a single physical CM5 module with two electrical
 footprints Module301 (GPIO) and Module302 (HSS). Both imported footprints
-contain the *same* two unnumbered mechanical NPTH pads at identical positions,
+contain the same two unnumbered NPTH pads at identical positions but DIFFERENT drill diameters (2.7 vs 3.0 mm),
 resulting in [holes_co_located] x2 in native KiCad DRC.
 
 Keep Module301 physical drill definitions. Remove the redundant *non-electrical*
 NPTH objects only from Module302 AND the project-local HSS footprint library.
+Official CM5 module mounting uses four M2.5 hardware holes. The 2.7 mm GPIO holes are kept.
 Do not edit any signal pad, network, track, copper zone or board outline.
 """
 from pathlib import Path
@@ -34,8 +35,19 @@ def detail(p):
     return (xy(p.GetPosition()),xy(p.GetSize()),xy(p.GetDrillSize()),int(p.GetAttribute()))
 print("Module301 candidate NPTH:",sorted(map(detail,pa)))
 print("Module302 candidate NPTH:",sorted(map(detail,pb)))
-if sorted(map(detail,pa))!=sorted(map(detail,pb)):
-    raise SystemExit("Duplicated holes are not physically identical; abort")
+# Both logical CM5 halves reproduce the same two mounting positions, but the
+# board-embedded drill diameters DIFFER: GPIO uses 2.7 mm, HSS uses 3.0 mm.
+# The official CM5 drawing specifies M2.5 mounting hardware. Retain the
+# explicit 2.7 mm M2.5 clearance holes from GPIO; remove redundant 3.0 mm HSS
+# drills, avoiding contradictory drilling data at the exact same XY points.
+pa_sorted=sorted(map(detail,pa))
+pb_sorted=sorted(map(detail,pb))
+if [x[0] for x in pa_sorted]!=[x[0] for x in pb_sorted]:
+    raise SystemExit("Holes are not at the same physical positions; abort")
+if any(x[1]!=(2.7,2.7) or x[2]!=(2.7,2.7) for x in pa_sorted):
+    raise SystemExit("Expected M2.5-compatible 2.7 mm GPIO clearance holes")
+if any(x[1]!=(3.0,3.0) or x[2]!=(3.0,3.0) for x in pb_sorted):
+    raise SystemExit("Expected redundant 3.0 mm HSS drill objects")
 for p in pb:
     c.Remove(p)
 print("Removed 2 coincident non-electrical NPTHs from Module302, retained their physical copies in Module301")
