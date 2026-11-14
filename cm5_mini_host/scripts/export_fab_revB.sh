@@ -13,7 +13,7 @@ kicad-cli pcb export gerbers \
   --layers F.Cu,In1.Cu,In2.Cu,In3.Cu,In4.Cu,B.Cu,F.Mask,B.Mask,F.SilkS,B.SilkS,F.Paste,B.Paste,Edge.Cuts \
   --check-zones "$BOARD"
 kicad-cli pcb export drill \
-  --format excellon --excellon-units mm --drill-origin absolute \
+  --format excellon --excellon-units mm --drill-origin absolute --excellon-separate-th \
   --generate-report --report-path "$OUT/audit/drill_report.rpt" \
   --output "$OUT/gerber_drill/" "$BOARD"
 kicad-cli pcb export pos \
