@@ -39,7 +39,7 @@ jobs:
           def metrics(fn):
               text=Path(fn).read_text(errors="replace")
               violations=re.findall(r'^\s+Rule:.*;\s*error\s*$',text,re.M)
-              um=re.search(r'\*\* Found (\d+) Unconnected pads \*\*',text)
+              um=re.search(r'\*\* Found (\d+) unconnected pads \*\*',text)
               pm=re.search(r'\*\* Found (\d+) Footprint errors \*\*',text)
               if um is None or pm is None:
                   raise SystemExit('Cannot parse DRC report; refuse to accept candidate')
