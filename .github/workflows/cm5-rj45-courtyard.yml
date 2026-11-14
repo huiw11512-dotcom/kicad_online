@@ -1,0 +1,77 @@
+name: Trial manufacturer-shaped RJ45 courtyard with DRC gate
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'cm5_mini_host/scripts/reshape_rj45_courtyard.py'
+      - '.github/workflows/cm5-rj45-courtyard.yml'
+permissions:
+  contents: write
+jobs:
+  trial:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: minihost-revA
+          persist-credentials: true
+      - name: Install KiCad
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository -y ppa:kicad/kicad-10.0-releases
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends kicad kicad-footprints kicad-symbols kicad-templates python3
+      - name: Record mechanical DRC baseline
+        run: |
+          mkdir -p reports
+          (cd cm5_mini_host && kicad-cli pcb drc CM5_MINIMA_3.kicad_pcb --schematic-parity -o ../reports/drc_before.rpt) || true
+      - name: Apply narrowed, solder-pad-aware 12-edge F.CrtYd
+        run: /usr/bin/python3 cm5_mini_host/scripts/reshape_rj45_courtyard.py
+      - name: Check native board DRC again
+        run: |
+          (cd cm5_mini_host && kicad-cli pcb drc CM5_MINIMA_3.kicad_pcb --schematic-parity -o ../reports/drc_after.rpt) || true
+      - name: Require fewer hard PCB errors, same pads and zero unrouted
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          def metrics(fn):
+              text=Path(fn).read_text(errors="replace")
+              violations=re.findall(r'^\s+Rule:.*;\s*error\s*$',text,re.M)
+              um=re.search(r'\*\* Found (\d+) Unconnected pads \*\*',text)
+              pm=re.search(r'\*\* Found (\d+) Footprint errors \*\*',text)
+              if um is None or pm is None:
+                  raise SystemExit('Cannot parse DRC report; refuse to accept candidate')
+              return len(violations),int(um.group(1)),int(pm.group(1)),text
+          pre=metrics('reports/drc_before.rpt')
+          post=metrics('reports/drc_after.rpt')
+          print("Hard DRC, unrouted, parity:",pre[:3],"->",post[:3])
+          pre_overlap=pre[3].count('[courtyards_overlap]:')
+          post_overlap=post[3].count('[courtyards_overlap]:')
+          print('Courtyard overlaps:',pre_overlap,'->',post_overlap)
+          Path('cm5_mini_host/RJ45_COURTYARD_RESHAPE_AUDIT.md').write_text(
+              f"# RJ45 manufacturer-shape courtyard trial\n\nBefore hard/unrouted/parity: {pre[:3]}\n\nAfter: {post[:3]}\n\n"
+              f"Courtyard overlaps: {pre_overlap} → {post_overlap}.\n\n"
+              "The new RJ45 F.CrtYd follows Kycon's 17.6mm body width with 0.25mm edge clearance, "
+              "plus local pockets for two shield solder tabs 15/16 and clearance for 14 signal solder lands. "
+              "Neither PCB copper, connector pad geometry, routing, drills, mask or Edge.Cuts was modified. "
+              "Exact enclosure fit and RJ45 mechanical standoff remain mandatory.\n\n"
+              "Manufacturer drawing: https://www.kycon.com/Pub_Eng_Draw/GLPLX-SMT-188S7-QQ-YG.pdf\n",encoding='utf-8')
+          if pre[:3]!=(4,0,0) or post[0]>2 or post[1]!=0 or post[2]!=0 or post_overlap>=pre_overlap:
+              raise SystemExit('ABORT: no validated 4→≤2 hard error reduction without new connectivity issues')
+          if '[courtyard_not_closed]:' in post[3] or '[courtyard_overlap]:' in post[3]:
+              raise SystemExit('ABORT: malformed courtyard or unresolved courtyard overlap')
+          PY
+      - name: Commit only checked mechanical geometry (no board-edge modifications)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add cm5_mini_host/CM5_MINIMA_3.kicad_pcb cm5_mini_host/Samacsys.pretty/GLPLXSMT188S7QQYG.kicad_mod cm5_mini_host/RJ45_COURTYARD_RESHAPE_AUDIT.md
+          git commit -m "Match RJ45 courtyard to actual body and shield-pad wings"
+          git push origin HEAD:minihost-revA
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cm5-rj45-courtyard-drc-trial
+          path: reports/
