@@ -65,9 +65,9 @@ jobs:
           import re,sys
           erc=Path('reports/erc.rpt').read_text(errors='replace') if Path('reports/erc.rpt').exists() else ''
           drc=Path('reports/drc.rpt').read_text(errors='replace') if Path('reports/drc.rpt').exists() else ''
-          m=re.search(r'ERC messages:\\s*\\d+\\s+Errors\\s+(\\d+)',erc)
+          m=re.search(r'ERC messages:\s*\d+\s+Errors\s+(\d+)',erc)
           errors=int(m.group(1)) if m else 9999
-          drc_errors=len(re.findall(r';\\s*error\\s*$',drc,re.M))
+          drc_errors=len(re.findall(r';\s*error\s*$',drc,re.M))
           print('Schematic ERC errors:',errors,'PCB DRC errors:',drc_errors)
           if errors or drc_errors:
               sys.exit('BLOCKED: Fix or explicitly review reported errors before fabrication release')
