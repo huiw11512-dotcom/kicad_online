@@ -20,8 +20,8 @@ for f in k:
     ref=f.Reference()
     x=mm(ref.GetTextSize().x);y=mm(ref.GetTextSize().y)
     thick=mm(ref.GetTextThickness())
-    if x>0.01 or y>0.01 or thick>0.01:
-        raise RuntimeError(f"{f.GetReference()}: not a near-zero-size dummy ({x},{y},{thick} mm)")
+    if x>0.01 or y>0.01:
+        raise RuntimeError(f"{f.GetReference()}: not a near-zero-size dummy ({x},{y} mm text, stored pen {thick} mm)")
     if len(f.Pads())!=0:
         raise RuntimeError(f"{f.GetReference()}: contains electrical pads")
     graphics=sum(1 for _ in f.GraphicalItems())
