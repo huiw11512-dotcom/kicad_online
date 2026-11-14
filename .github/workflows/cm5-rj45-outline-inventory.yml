@@ -1,0 +1,25 @@
+name: Inventory exact RJ45 Edge.Cuts geometry (no edits)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'cm5_mini_host/scripts/audit_rj45_outline_primitives.py'
+      - '.github/workflows/cm5-rj45-outline-inventory.yml'
+permissions:
+  contents: write
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: minihost-revA
+      - name: Inventory primitives
+        run: python3 cm5_mini_host/scripts/audit_rj45_outline_primitives.py
+      - name: Commit geometry audit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add cm5_mini_host/RJ45_EDGE_PRIMITIVE_INVENTORY.md
+          git commit -m "Record exact native KiCad RJ45 cutout primitives for manufacturer review"
+          git push origin HEAD:minihost-revA
