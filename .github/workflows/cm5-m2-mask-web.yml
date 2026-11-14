@@ -57,7 +57,7 @@ jobs:
           print('Before:',a,'After:',b)
           if (a['erc'],a['hard'],a['parity'],a['unconnected'])!=(0,2,0,0) or (b['erc'],b['hard'],b['parity'],b['unconnected'])!=(0,2,0,0):
               raise SystemExit("Electrical DRC/parity regression, block change")
-          if a['mask']!=54 or b['mask']!=0 or b['total']>=a['total']-54:
+          if a['mask']!=54 or b['mask']!=0 or b['total']>a['total']-54:
               raise SystemExit("M2 mask correction failed to resolve 54 bridges")
           Path('cm5_mini_host/J701_MASK_BRIDGE_AUDIT.md').write_text(
               f"# J701 M.2 copper-preserving mask expansion correction\n\nBefore: {a}\n\nAfter: {b}\n\n"
