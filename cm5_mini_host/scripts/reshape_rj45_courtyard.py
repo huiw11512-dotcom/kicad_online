@@ -104,9 +104,9 @@ def replace_courtyard(src,expected_type):
 \t\t(layer "F.CrtYd")
 \t\t(uuid "{uuid.uuid4()}")
 \t)''')
-    idx=body.find("\n\t(fp_line")
-    if idx<0:raise ValueError("No footprint graphic shapes found for courtyard insertion")
-    body=body[:idx]+"\n".join(strokes)+body[idx:]
+    # Board instance may have only the 4 original Courtyard graphics.
+    # Appending before the footprint closing paren is valid KiCad and retains every pad.
+    body=body[:-1]+"\n"+"\n".join(strokes)+"\n)"
     s=s[:pos]+body+s[end:]
     src.write_text(s,encoding="utf-8")
     print("Replaced 4 old F.CrtYd segments with 12 pad-aware polygon segments in",src)
