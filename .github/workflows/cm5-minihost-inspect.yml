@@ -31,7 +31,7 @@ jobs:
           from pathlib import Path
           import re
           s=Path('reports/cm5.net').read_text(errors='replace')
-          toks=re.findall(r'\\s*(\\(|\\)|"(?:\\\\.|[^"\\\\])*"|[^\\s()]+)',s)
+          toks=re.findall(r'\s*(\(|\)|"(?:\\.|[^"\\])*"|[^\s()]+)',s)
           i=0
           def parse():
               global i
@@ -45,8 +45,7 @@ jobs:
           root=parse()
           def walk(x):
               if isinstance(x,list):
-                  if x and x[0]=='net':
-                      yield x
+                  if x and x[0]=='net': yield x
                   for c in x: yield from walk(c)
           def val(x,key):
               for c in x:
@@ -61,9 +60,10 @@ jobs:
                       if isinstance(c,list) and c and c[0]=='node':
                           nodes.append(f"{val(c,'ref')}.{val(c,'pin')}")
                   out.append(f"{name}: "+", ".join(nodes))
-          Path('reports/usb_power_netlist.txt').write_text("\\n".join(out),encoding='utf-8')
-          print("\\n".join(out))
-          PY      - uses: actions/upload-artifact@v4
+          Path('reports/usb_power_netlist.txt').write_text("\n".join(out),encoding='utf-8')
+          print("\n".join(out))
+          PY
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: cm5-minihost-diagnostics
