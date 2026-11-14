@@ -63,7 +63,9 @@ for ref in reps:
       f"- Changed individual pad-number groups: **{len(set(r[0] for r in rows))}**",
       f"- Difference category is determined only from pad geometry; actual part datasheet and assembly height still need review",
       ""]
-    if len(rows)>100:raise SystemExit(f"Implausible {ref} difference volume")
+    if len(rows)>100:
+        lines.append(f"**Caution:** {len(rows)} pad-level comparisons differ from the library for {ref}; only the first 20 are displayed. This can indicate a different coordinate frame or an alternate footprint revision. Do not assume these are all independent copper errors. Compare connector orientation and physical manufacturer pin map before editing.\n")
+        rows=rows[:20]
     lines+=["| Pad | Board x,y (mm) | Library x,y (mm) | Board size / drill (mm) | Library size / drill (mm) | Notes |",
             "|---|---|---|---|---|---|"]
     fmt=lambda p,which:"—" if p is None else (
