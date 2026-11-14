@@ -1182,6 +1182,7 @@
 		(property "Reference" "kibuzzard-6773BA89"
 			(at 0 -3.684385 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "77f3afe6-e0bc-4cb1-be9e-3c1340721862")
 			(effects
 				(font
@@ -1678,6 +1679,7 @@
 		(property "Reference" "kibuzzard-6773C222"
 			(at 0 -3.809946 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "b94ff43e-eba0-4836-a3c3-eb03134d9628")
 			(effects
 				(font
@@ -3812,6 +3814,7 @@
 		(property "Reference" "kibuzzard-67CC6BD3"
 			(at 0 -3.559397 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "d111a9e2-3c47-45bf-a7e1-23d4c6af02ca")
 			(effects
 				(font
@@ -3909,6 +3912,7 @@
 		(property "Reference" "kibuzzard-675DA866"
 			(at 0 -3.948715 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "feba2559-380e-46d3-9981-aa489972507b")
 			(effects
 				(font
@@ -4722,6 +4726,7 @@
 		(property "Reference" "kibuzzard-6773C2D7"
 			(at 0 -3.558253 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "0af89fc8-2609-4c03-bb41-5f0103dee549")
 			(effects
 				(font
@@ -4938,6 +4943,7 @@
 		(property "Reference" "kibuzzard-675EDCA4"
 			(at 0 -3.804319 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "1529f42b-b37f-476e-92ed-7e1c42c77394")
 			(effects
 				(font
@@ -5458,6 +5464,7 @@
 		(property "Reference" "kibuzzard-6772DA33"
 			(at 0 -3.884624 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "9ebffc53-0a8c-4a5f-906b-6a8a36313b0c")
 			(effects
 				(font
@@ -5727,6 +5734,7 @@
 		(property "Reference" "kibuzzard-67CC6BA6"
 			(at 0 -3.743303 270)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "f5e9823f-aa94-4d83-894c-7c71fe4aae63")
 			(effects
 				(font
@@ -6322,6 +6330,7 @@
 		(property "Reference" "kibuzzard-6773B9CA"
 			(at 0 -3.558825 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "9efdeba1-3b2d-4bec-b187-17b67ff238ec")
 			(effects
 				(font
@@ -8712,6 +8721,7 @@
 		(property "Reference" "kibuzzard-67EBEF55"
 			(at 0 -6.510017 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "0b51fd8e-2d7a-4602-9a80-85fb5d7385dd")
 			(effects
 				(font
@@ -9466,6 +9476,7 @@
 		(property "Reference" "kibuzzard-67EBB9C1"
 			(at 0 -8.707323 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "0770c6f5-e6c5-4a59-92ad-86081908f511")
 			(effects
 				(font
@@ -11389,6 +11400,7 @@
 		(property "Reference" "kibuzzard-675DA850"
 			(at 0 -3.934981 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "2a03c8e0-cd31-4582-9928-067b647fcf26")
 			(effects
 				(font
@@ -12445,6 +12457,7 @@
 		(property "Reference" "kibuzzard-6773C376"
 			(at 0 -3.682955 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "ad3d0616-b1b5-4de8-bd9b-31b9ebdcae03")
 			(effects
 				(font
@@ -14322,6 +14335,7 @@
 		(property "Reference" "kibuzzard-675EDCB9"
 			(at 0 -3.802888 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "420670ce-76ef-412d-87b2-75c1ea31d87d")
 			(effects
 				(font
@@ -15048,6 +15062,7 @@
 		(property "Reference" "kibuzzard-6772D327"
 			(at 0 -3.668649 90)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "4ca87f0a-e1e1-4ffe-8c72-7dcb017fd94e")
 			(effects
 				(font
@@ -15686,6 +15701,7 @@
 		(property "Reference" "kibuzzard-675DA838"
 			(at 0 -3.941848 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "1852b1a8-5abd-4a48-bb70-ca1d1da8f1db")
 			(effects
 				(font
@@ -21015,6 +21031,7 @@
 		(property "Reference" "kibuzzard-6773B9F7"
 			(at 0 -3.681524 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "212eb26c-d0c7-44e5-b8bb-8686e5e3de9d")
 			(effects
 				(font
@@ -21806,6 +21823,7 @@
 		(property "Reference" "kibuzzard-67CC6D9E"
 			(at 0 3.559397 180)
 			(layer "B.SilkS")
+			(hide yes)
 			(uuid "2be5959e-9da7-48e2-b931-b145efc8f862")
 			(effects
 				(font
@@ -24007,6 +24025,7 @@
 		(property "Reference" "kibuzzard-67EBF14E"
 			(at 0 3.78665 180)
 			(layer "B.SilkS")
+			(hide yes)
 			(uuid "9ae94624-649e-4cb3-9bd6-b2326e001bd2")
 			(effects
 				(font
@@ -25273,6 +25292,7 @@
 		(property "Reference" "kibuzzard-67CC7445"
 			(at 0 4.614953 0)
 			(layer "B.SilkS")
+			(hide yes)
 			(uuid "ba9c18b7-2acd-4bdb-ae42-8d7aba9b02b7")
 			(effects
 				(font
@@ -25686,6 +25706,7 @@
 		(property "Reference" "kibuzzard-67CC6D94"
 			(at 0 3.556536 180)
 			(layer "B.SilkS")
+			(hide yes)
 			(uuid "fec06da1-df94-4506-b4e2-e7c0047c7d13")
 			(effects
 				(font
@@ -25795,6 +25816,7 @@
 		(property "Reference" "kibuzzard-67EBD221"
 			(at 0 3.553675 90)
 			(layer "B.SilkS")
+			(hide yes)
 			(uuid "e77d3529-2ff1-4cf9-84b8-358373f23ec3")
 			(effects
 				(font
@@ -25875,6 +25897,7 @@
 		(property "Reference" "kibuzzard-67EBAC4C"
 			(at 0 3.802888 180)
 			(layer "B.SilkS")
+			(hide yes)
 			(uuid "32defa47-b857-4b81-8e8d-a68fb8dd3341")
 			(effects
 				(font
@@ -26349,6 +26372,7 @@
 		(property "Reference" "kibuzzard-67EBF015"
 			(at 0 4.185268 270)
 			(layer "B.SilkS")
+			(hide yes)
 			(uuid "16f5aaf7-83b0-480c-bc6c-18e7db8397c2")
 			(effects
 				(font
@@ -26509,6 +26533,7 @@
 		(property "Reference" "kibuzzard-67795592"
 			(at 0 3.800742 0)
 			(layer "B.SilkS")
+			(hide yes)
 			(uuid "81af470a-276f-4ca2-a8b1-3fcbef9f4bc2")
 			(effects
 				(font
@@ -26717,6 +26742,7 @@
 		(property "Reference" "kibuzzard-67EBD21C"
 			(at 0 3.558253 180)
 			(layer "B.SilkS")
+			(hide yes)
 			(uuid "b59da7da-931f-4737-9eef-d172de5f747d")
 			(effects
 				(font
@@ -27386,6 +27412,7 @@
 		(property "Reference" "kibuzzard-67EBF0A0"
 			(at 0 5.45284 0)
 			(layer "B.SilkS")
+			(hide yes)
 			(uuid "bfe41a69-be1d-458d-8fbd-d620d1dde2ff")
 			(effects
 				(font
@@ -28262,7 +28289,6 @@
 		(clearance 0.127)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
-		
 		(fp_line
 			(start 34.94 32.9)
 			(end 32.06 32.9)
@@ -28303,7 +28329,6 @@
 			(layer "B.SilkS")
 			(uuid "a930017c-7a92-4bed-861e-c10813f2b368")
 		)
-		
 		(fp_line
 			(start 32.06 31.9)
 			(end 32.06 32.9)
@@ -28324,12 +28349,6 @@
 			(layer "B.SilkS")
 			(uuid "8da0f788-1dc3-4c68-926a-d2f3f13e0ade")
 		)
-		
-		
-		
-		
-		
-		
 		(fp_line
 			(start 35.39 32.9)
 			(end 31.61 32.9)
