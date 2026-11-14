@@ -9,7 +9,9 @@ if not re.search(r'\*\* Found 0 DRC violations \*\*',drc):raise SystemExit("BLOC
 if not re.search(r'\*\* Found 0 unconnected pads \*\*',drc):raise SystemExit("BLOCKED: unconnected pads remain")
 if not re.search(r'ERC messages:\s*0\s+Errors\s+0\s+Warnings\s+0',erc):
     raise SystemExit("BLOCKED: ERC not zero")
-gerber=sorted((out/"gerber_drill").glob("*.gbr"))
+# KiCad emits Protel extensions by default (gtl/gbl/g1..g4/gts/gbs/gto/gbo/gtp/gbp/gm1).
+gerber_ext={".gtl",".gbl",".g1",".g2",".g3",".g4",".gts",".gbs",".gto",".gbo",".gtp",".gbp",".gm1",".gbr"}
+gerber=sorted(p for p in (out/"gerber_drill").iterdir() if p.suffix.lower() in gerber_ext)
 drills=sorted((out/"gerber_drill").glob("*.drl"))
 copper=["F_Cu","In1_Cu","In2_Cu","In3_Cu","In4_Cu","B_Cu"]
 missing=[c for c in copper if not any(c in p.name for p in gerber)]
