@@ -1,0 +1,83 @@
+name: Apply 500mA USB2 power budget variant with EDA checks
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'cm5_mini_host/scripts/limit_usb_power_500ma.py'
+      - '.github/workflows/cm5-limit-usb-power.yml'
+permissions:
+  contents: write
+jobs:
+  revise:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: minihost-revA
+          persist-credentials: true
+      - name: Install KiCad 10 and stock libs
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository -y ppa:kicad/kicad-10.0-releases
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends kicad kicad-footprints kicad-symbols kicad-templates python3
+      - name: Run baseline ERC and DRC
+        run: |
+          mkdir -p reports
+          (cd cm5_mini_host && kicad-cli sch erc CM5_MINIMA_3.kicad_sch -o ../reports/erc_before.rpt) || true
+          (cd cm5_mini_host && kicad-cli pcb drc CM5_MINIMA_3.kicad_pcb --schematic-parity -o ../reports/drc_before.rpt) || true
+      - name: Change only three power-limit resistors
+        run: /usr/bin/python3 cm5_mini_host/scripts/limit_usb_power_500ma.py
+      - name: Verify updated schematic and PCB
+        run: |
+          (cd cm5_mini_host && kicad-cli sch erc CM5_MINIMA_3.kicad_sch -o ../reports/erc_after.rpt) || true
+          (cd cm5_mini_host && kicad-cli pcb drc CM5_MINIMA_3.kicad_pcb --schematic-parity -o ../reports/drc_after.rpt) || true
+          kicad-cli sch export netlist cm5_mini_host/CM5_MINIMA_3.kicad_sch -o reports/changed.net
+      - name: Validate zero electrical regression and documented current limit
+        run: |
+          python3 - <<'PY'
+          import re, math
+          from pathlib import Path
+          def metrics(e,d):
+              erc=Path(e).read_text(errors="replace")
+              drc=Path(d).read_text(errors="replace")
+              a=re.search(r'ERC messages:\s*\d+\s+Errors\s+(\d+)',erc)
+              b=re.search(r'\*\* Found (\d+) Footprint errors \*\*',drc)
+              if not a or not b:raise SystemExit('Missing / unparseable KiCad report')
+              hard=len(re.findall(r'^\s+Rule:[^\n]*;\s*error\s*$',drc,re.M))
+              u=re.search(r'\*\* Found (\d+) Unconnected pads \*\*',drc)
+              return int(a.group(1)),hard,int(b.group(1)),int(u.group(1)) if u else 0
+          before=metrics('reports/erc_before.rpt','reports/drc_before.rpt')
+          after=metrics('reports/erc_after.rpt','reports/drc_after.rpt')
+          print('ERC errors, hard DRC, footprint parity, unrouted:',before,'->',after)
+          if after[0]>before[0] or after[1]>before[1] or after[2]>before[2] or after[3]>before[3]:
+              raise SystemExit('ABORT: design rule or electrical regression')
+          net=Path('reports/changed.net').read_text(errors='replace')
+          import re
+          for ref, val in [('R701','39k'),('R702','56k'),('R703','56k')]:
+              if not re.search(r'\(ref "'+ref+r'"\)\s*\(value "'+val+r'"\)',net):
+                  raise SystemExit(f'Netlist {ref} value not updated correctly')
+          limits=[coeff/39**exp/1000 for coeff,exp in [(28955,1.075),(30321,1.055),(31033,1.031)]]
+          Path('cm5_mini_host/USB_POWER_500MA_AUDIT.md').write_text(
+            "# Default-current USB2 host power variant\n\n"
+            "**Implementation:** R702=R703=56kΩ from +5V to CC1/CC2 (USB Type-C source advertises default USB current, i.e. 500mA for the USB2 interface); R701=39kΩ from AP22653 ILIM to GND.\n\n"
+            f"Estimated AP22653 current-limit min/typ/max at 39k (Diodes best-fit equation): {limits[0]:.3f}/{limits[1]:.3f}/{limits[2]:.3f} A, excluding external resistor tolerance.\n\n"
+            f"KiCad ERC/hard DRC/footprint parity/unrouted: {before} -> {after}.\n\n"
+            "**Design allocation:** 5V/500mA at the USB-C host port = 2.5W. This allocation is not an assurance of CM5 and SSD peak load. Full-system power and thermals still require measurement.\n\n"
+            "**Caveat:** a fixed Rp pair is not a complete USB-C source-controller implementation; review attach/detach, VBUS_EN timing and inrush against source requirements. AP22653 limit is protective, not a guarantee of available power.\n\n"
+            "Datasheets: https://www.diodes.com/datasheet/download/AP3441.pdf , https://www.diodes.com/part/view/AP22653 ; CC Rp reference https://www.st.com/resource/en/technical_article/ta0357-overview-of-usb-typec-and-power-delivery-technologies-stmicroelectronics.pdf .\n",encoding='utf-8')
+          print("Computed AP22653 programmed current-limit bounds:",limits)
+          PY
+      - name: Commit changed resistor values and audit to Rev.A
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add cm5_mini_host/USB.kicad_sch cm5_mini_host/CM5_MINIMA_3.kicad_pcb cm5_mini_host/USB_POWER_500MA_AUDIT.md
+          git commit -m "Make MiniHost USB2 host a 500mA default-current source"
+          git push origin HEAD:minihost-revA
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cm5-usb-power-current-limit-review
+          path: reports/
