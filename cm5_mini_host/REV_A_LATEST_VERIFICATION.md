@@ -33,6 +33,8 @@ The latest `drc.rpt` contains exactly 73 warnings:
 
 Earlier dangling-via and isolated-copper findings are not present in this latest DRC report. The 49 footprint warnings are not equivalent to 49 broken nets; they indicate embedded-vs-library footprint differences and require per-part pad/drill review.
 
+A read-only KiCad 10 variant audit found **three library IDs used with different embedded pad geometries**: `EasyEDA:DFN2510A-10_L2.5-W1.0-P0.50-BL` (D401/D402 vs D403), `Package_TO_SOT_SMD:SOT-416` (D101/D502 vs D701), and `Resistor_SMD:R_0402_1005Metric` (most 0402 resistors vs R702/R703). This is why the bulk library-snapshot attempt was stopped by a guard rather than overwriting one geometry with another. No PCB geometry was changed by that failed attempt. See [FOOTPRINT_VARIANT_CONFLICTS.md](FOOTPRINT_VARIANT_CONFLICTS.md) and the read-only audit [run 43608869216](https://github.com/huiw11512-dotcom/kicad_online/actions/runs/43608869216).
+
 ## 3. Remaining schematic ERC warnings — exact report breakdown
 
 | Warning type | Count | Next action |
