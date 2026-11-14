@@ -22190,7 +22190,7 @@
 				(width 0.12)
 				(type solid)
 			)
-			(layer "B.SilkS")
+			(layer "B.Fab")
 			(uuid "65c7911f-e8e0-4970-8c0d-de4ea3751820")
 		)
 		(fp_arc
