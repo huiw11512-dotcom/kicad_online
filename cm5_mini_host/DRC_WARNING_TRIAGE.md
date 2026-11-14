@@ -15,6 +15,12 @@ Native KiCad 10.0.8 on GitHub Actions now reports **85 total PCB DRC violations 
 | `isolated_copper` | 1 warning | GND isolated pour near (74.99,20.22) mm; inspect zone island and high-speed return continuity before removing |
 | **Total** | **85** | **2 hard, 83 warnings** |
 
+## Additional discovered **functional** risk (corrected, with land-pattern signoff pending)
+
+The U602 vendor item originally was an inverting SOT23-5 SN74LVC1G14 despite the schematic's open-drain noninverting 74LVC1G07 symbol and SOT353 PCB. The actual LED R605/D605 5V source and nPWR_LED input supports the open-drain sink variant. We corrected to Diodes `74LVC1G07SE-7` (C67531) in board and schematic with KiCad parity intact. [Electrical correction audit](U602_BOM_CORRECTION_AUDIT.md). **Exact SOT353 manufacturer land pattern and prototype LED behavior are still separate engineering gates.**
+
+The 50 library warnings have been classified by [native copper pad data](FOOTPRINT_MISMATCH_PAD_AUDIT.md). [High-priority actual 8-component pad delta report](EIGHT_FOOTPRINT_PAD_DELTA.md) includes **U602 pad geometry**, C702 minor pad difference, U703 pad shape, and U1/Module301 flipped-coordinate caveat; not all 50 correspond to incompatible copper pads.
+
 ## Measured reductions (independently checked and committed)
 
 | Native project edit | Before → After total | No change to |
