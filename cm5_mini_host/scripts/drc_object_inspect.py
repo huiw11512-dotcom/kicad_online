@@ -40,6 +40,15 @@ for fp in sorted(b.GetFootprints(),key=lambda f:f.GetReference()):
         except: attr="?"
         lines.append(f"- Pad {num!r} net={p.GetNetname()!r} pos={xy(p.GetPosition())} size={xy(p.GetSize())} drill={drill} attr={attr}")
     lines.append("")
+lines += ["","## Edge.Cuts geometry near J1"]
+for d in b.GetDrawings():
+    try:
+        if d.GetLayer()!=pcbnew.Edge_Cuts: continue
+        if hasattr(d,"GetStart") and hasattr(d,"GetEnd"):
+            lines.append(f"- {xy(d.GetStart())} -> {xy(d.GetEnd())} shape={d.GetShape()}")
+        else:
+            lines.append(f"- drawing {type(d).__name__}: {str(d)[:200]}")
+    except Exception as e: lines.append(f"- edge item note: {e}")
 lines += ["","## Pad attribute enum"]
 for k in dir(pcbnew):
     if k.startswith("PAD_ATTRIB_"): lines.append(f"- {k}={getattr(pcbnew,k)}")
