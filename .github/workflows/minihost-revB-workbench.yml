@@ -28,6 +28,14 @@ jobs:
           cp /usr/share/kicad/template/fp-lib-table "$HOME/.config/kicad/10.0/fp-lib-table"
           cp /usr/share/kicad/template/sym-lib-table "$HOME/.config/kicad/10.0/sym-lib-table"
           kicad-cli version
+      - name: Normalize embedded schematic symbols and passive contacts
+        run: python3 cm5_mini_host/scripts/snapshot_embedded_symbols.py
+      - name: Remove audited orphan wire and DNP placeholder link
+        run: |
+          python3 cm5_mini_host/scripts/clean_orphan_wire_revB.py
+          python3 cm5_mini_host/scripts/clear_dnp_m303_footprint.py
+      - name: Snapshot exact board-embedded footprint geometry
+        run: python3 cm5_mini_host/scripts/snapshot_embedded_footprints_revB.py
       - name: Run ERC, DRC and export netlist
         shell: bash
         run: |
