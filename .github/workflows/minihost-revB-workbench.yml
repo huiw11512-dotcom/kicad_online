@@ -47,6 +47,8 @@ jobs:
         run: python3 cm5_mini_host/scripts/verify_existing_gnd_planes_revB.py
       - name: Snapshot exact board-embedded footprint geometry
         run: python3 cm5_mini_host/scripts/snapshot_embedded_footprints_revB.py
+      - name: Set proposed JLC06161H-3313 controlled stackup
+        run: python3 cm5_mini_host/scripts/set_jlc3313_stackup_revB.py
       - name: Run ERC, DRC and export netlist
         shell: bash
         run: |
