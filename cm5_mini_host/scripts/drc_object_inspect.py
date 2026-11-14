@@ -67,5 +67,21 @@ try:
         except Exception as e: lines.append(f"- {name}: {e}")
 except Exception as e: lines.append(str(e))
 lines += ["","## Footprint save APIs",str([x for x in dir(pcbnew) if "Footprint" in x and "Save" in x])]
+for f in ["/usr/share/kicad/template/fp-lib-table","/usr/share/kicad/template/sym-lib-table"]:
+    lines.append(f"- template {f}: {Path(f).exists()}")
+for nick in sorted(nicks):
+    lines.append(f"- footprint library {nick}: stock={(Path('/usr/share/kicad/footprints')/(nick+'.pretty')).exists()}")
+try:
+    sample=next(fp for fp in b.GetFootprints() if str(fp.GetFPID().GetLibNickname()) in {"EasyEDA","Samacsys","_pico"})
+    testlib=out/"FootprintExportTest.pretty"
+    pcbnew.FootprintLibCreate(str(testlib))
+    pcbnew.FootprintSave(str(testlib),sample)
+    saved=list(testlib.glob("*.kicad_mod"))
+    lines.append(f"- FootprintSave test: {len(saved)} file(s), "+(saved[0].name if saved else "none"))
+    if saved:
+        raw=saved[0].read_text(errors="replace")
+        lines.append(f"- Saved footprint contains net assignments: {'(net ' in raw}")
+except Exception as e:
+    lines.append(f"- FootprintSave test failed: {type(e).__name__}: {e}")
 (out/"footprint_inventory.md").write_text("\n".join(lines),encoding="utf-8")
 print("\n".join(lines))
