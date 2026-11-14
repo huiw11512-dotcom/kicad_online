@@ -56,6 +56,10 @@ jobs:
           python3 cm5_mini_host/scripts/usb_route_inventory.py
           python3 cm5_mini_host/scripts/verify_usb_parity.py
           python3 cm5_mini_host/scripts/audit_footprint_variants.py cm5_mini_host/CM5_MINIMA_3.kicad_pcb > reports/footprint_variants.txt
+      - name: Export board artwork for mechanical and silkscreen review
+        run: |
+          mkdir -p reports/board-svg
+          kicad-cli pcb export svg --mode-multi --output reports/board-svg --layers F.Cu,B.Cu,F.SilkS,B.SilkS,Edge.Cuts --fit-page-to-board --exclude-drawing-sheet --check-zones cm5_mini_host/CM5_MINIMA_3.kicad_pcb
       - name: Hard-error gate
         if: always()
         run: |
