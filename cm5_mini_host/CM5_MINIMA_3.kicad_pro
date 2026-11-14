@@ -26,14 +26,14 @@
         },
         "fab_line_width": 0.1,
         "fab_text_italic": false,
-        "fab_text_size_h": 1.0,
-        "fab_text_size_v": 1.0,
+        "fab_text_size_h": 1,
+        "fab_text_size_v": 1,
         "fab_text_thickness": 0.15,
         "fab_text_upright": false,
         "other_line_width": 0.1,
         "other_text_italic": false,
-        "other_text_size_h": 1.0,
-        "other_text_size_v": 1.0,
+        "other_text_size_h": 1,
+        "other_text_size_v": 1,
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
@@ -43,8 +43,8 @@
         },
         "silk_line_width": 0.1,
         "silk_text_italic": false,
-        "silk_text_size_h": 1.0,
-        "silk_text_size_v": 1.0,
+        "silk_text_size_h": 1,
+        "silk_text_size_v": 1,
         "silk_text_thickness": 0.1,
         "silk_text_upright": false,
         "zones": {
@@ -53,9 +53,9 @@
       },
       "diff_pair_dimensions": [
         {
-          "gap": 0.0,
-          "via_gap": 0.0,
-          "width": 0.0
+          "gap": 0,
+          "via_gap": 0,
+          "width": 0
         }
       ],
       "drc_exclusions": [],
@@ -124,23 +124,23 @@
       },
       "rules": {
         "max_error": 0.005,
-        "min_clearance": 0.0,
-        "min_connection": 0.0,
+        "min_clearance": 0,
+        "min_connection": 0,
         "min_copper_edge_clearance": 0.372,
-        "min_groove_width": 0.0,
+        "min_groove_width": 0,
         "min_hole_clearance": 0.2,
         "min_hole_to_hole": 0.25,
         "min_microvia_diameter": 0.2,
         "min_microvia_drill": 0.1,
         "min_resolved_spokes": 1,
-        "min_silk_clearance": 0.0,
+        "min_silk_clearance": 0,
         "min_text_height": 0.8,
         "min_text_thickness": 0.08,
         "min_through_hole_diameter": 0.3,
-        "min_track_width": 0.0,
+        "min_track_width": 0,
         "min_via_annular_width": 0.075,
         "min_via_diameter": 0.45,
-        "solder_mask_to_copper_clearance": 0.0,
+        "solder_mask_to_copper_clearance": 0,
         "use_height_for_length_calcs": true
       },
       "teardrop_options": [
@@ -156,10 +156,10 @@
         {
           "td_allow_use_two_tracks": true,
           "td_curve_segcount": 0,
-          "td_height_ratio": 1.0,
+          "td_height_ratio": 1,
           "td_length_ratio": 0.5,
-          "td_maxheight": 2.0,
-          "td_maxlen": 1.0,
+          "td_maxheight": 2,
+          "td_maxlen": 1,
           "td_on_pad_in_zone": false,
           "td_target_name": "td_round_shape",
           "td_width_to_size_filter_ratio": 0.9
@@ -167,10 +167,10 @@
         {
           "td_allow_use_two_tracks": true,
           "td_curve_segcount": 0,
-          "td_height_ratio": 1.0,
+          "td_height_ratio": 1,
           "td_length_ratio": 0.5,
-          "td_maxheight": 2.0,
-          "td_maxlen": 1.0,
+          "td_maxheight": 2,
+          "td_maxlen": 1,
           "td_on_pad_in_zone": false,
           "td_target_name": "td_rect_shape",
           "td_width_to_size_filter_ratio": 0.9
@@ -178,17 +178,17 @@
         {
           "td_allow_use_two_tracks": true,
           "td_curve_segcount": 0,
-          "td_height_ratio": 1.0,
+          "td_height_ratio": 1,
           "td_length_ratio": 0.5,
-          "td_maxheight": 2.0,
-          "td_maxlen": 1.0,
+          "td_maxheight": 2,
+          "td_maxlen": 1,
           "td_on_pad_in_zone": false,
           "td_target_name": "td_track_end",
           "td_width_to_size_filter_ratio": 0.9
         }
       ],
       "track_widths": [
-        0.0,
+        0,
         0.2,
         0.25,
         0.3,
@@ -202,15 +202,15 @@
         "diff_pair_defaults": {
           "corner_radius_percentage": 80,
           "corner_style": 1,
-          "max_amplitude": 1.0,
+          "max_amplitude": 1,
           "min_amplitude": 0.2,
           "single_sided": false,
-          "spacing": 1.0
+          "spacing": 1
         },
         "diff_pair_skew_defaults": {
           "corner_radius_percentage": 80,
           "corner_style": 1,
-          "max_amplitude": 1.0,
+          "max_amplitude": 1,
           "min_amplitude": 0.2,
           "single_sided": false,
           "spacing": 0.6
@@ -218,7 +218,7 @@
         "single_track_defaults": {
           "corner_radius_percentage": 80,
           "corner_style": 1,
-          "max_amplitude": 1.0,
+          "max_amplitude": 1,
           "min_amplitude": 0.2,
           "single_sided": false,
           "spacing": 0.6
@@ -226,8 +226,8 @@
       },
       "via_dimensions": [
         {
-          "diameter": 0.0,
-          "drill": 0.0
+          "diameter": 0,
+          "drill": 0
         }
       ],
       "zones_allow_external_fillets": false
@@ -248,9 +248,35 @@
     "equivalence_files": []
   },
   "erc": {
-    "erc_exclusions": [],
+    "erc_exclusions": [
+      {
+        "marker": {
+          "error_type": "ERCET_PIN_NOT_DRIVEN",
+          "position": {
+            "x_nm": "147320000",
+            "y_nm": "195580000"
+          },
+          "items": [
+            {
+              "value": "096768fc-da02-4ac7-9033-3f351931643c"
+            }
+          ],
+          "sheet_specific_path": {
+            "path": [
+              {
+                "value": "b33e81d6-18a9-4b9d-a239-76a7c253462f"
+              },
+              {
+                "value": "45540f0b-d892-4f71-86ad-b9f245bcefda"
+              }
+            ]
+          }
+        },
+        "comment": "Intentional nRPIBOOT input: CM5 pin 93 has an internal 10 kΩ pull-up to CM5_3.3V; SW101 only shorts it to GND for USB boot. No external logic driver is required (CM5 datasheet §4.2, pin 93)."
+      }
+    ],
     "meta": {
-      "version": 0
+      "version": 1
     },
     "pin_map": [
       [
@@ -865,12 +891,12 @@
       "sort_asc": true,
       "sort_field": "Value"
     },
-    "connection_grid_size": 50.0,
+    "connection_grid_size": 50,
     "drawing": {
-      "dashed_lines_dash_length_ratio": 12.0,
-      "dashed_lines_gap_length_ratio": 3.0,
-      "default_line_thickness": 6.0,
-      "default_text_size": 50.0,
+      "dashed_lines_dash_length_ratio": 12,
+      "dashed_lines_gap_length_ratio": 3,
+      "default_line_thickness": 6,
+      "default_text_size": 50,
       "field_names": [],
       "intersheets_ref_own_page": false,
       "intersheets_ref_prefix": "",
@@ -884,7 +910,7 @@
       "operating_point_overlay_v_precision": 3,
       "operating_point_overlay_v_range": "~V",
       "overbar_offset_ratio": 1.23,
-      "pin_symbol_size": 25.0,
+      "pin_symbol_size": 25,
       "text_offset_ratio": 0.15
     },
     "legacy_lib_dir": "",
