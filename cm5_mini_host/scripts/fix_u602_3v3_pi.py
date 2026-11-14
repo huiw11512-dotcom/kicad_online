@@ -25,7 +25,6 @@ block=s[start:end]
 if '(lib_id "power:+5V")' not in block or '(property "Value" "+5V"' not in block:
     raise SystemExit("U602 VCC power symbol is no longer +5V; manual review required")
 if '(at 76.2 22.86 0)' not in block:raise SystemExit("U602 VCC coordinate changed")
-block=block.replace('(lib_id "power:+5V")','(lib_id "power:+3V3_PI")',1)
 block=block.replace('(property "Value" "+5V"','(property "Value" "+3V3_PI"',1)
 block=block.replace('Power symbol creates a global label with name \\"+5V\\"','Power symbol creates a global label with name \\"+3V3_PI\\"',1)
 p.write_text(s[:start]+block+s[end:],encoding="utf-8")
