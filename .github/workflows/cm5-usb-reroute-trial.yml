@@ -38,7 +38,7 @@ jobs:
           def metrics(path):
               txt=Path(path).read_text(errors='replace')
               hard=len(re.findall(r'^\\s+Rule:[^\\n]*;\\s*error\\s*$',txt,re.M))
-              m=re.search(r'Found (\\d+) unconnected items',txt)
+              m=re.search(r'Found (\\d+) unconnected pads',txt)
               return hard,int(m.group(1)) if m else 999
           before=metrics('reports/usb_before_drc.rpt')
           after=metrics('reports/usb_after_drc.rpt')
