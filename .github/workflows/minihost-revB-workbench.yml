@@ -36,6 +36,8 @@ jobs:
         run: |
           python3 cm5_mini_host/scripts/clean_orphan_wire_revB.py
           python3 cm5_mini_host/scripts/clear_dnp_m303_footprint.py
+      - name: Clean clipped and overlapping silkscreen graphics
+        run: python3 cm5_mini_host/scripts/silk_drc_cleanup_revB.py
       - name: Snapshot exact board-embedded footprint geometry
         run: python3 cm5_mini_host/scripts/snapshot_embedded_footprints_revB.py
       - name: Run ERC, DRC and export netlist
