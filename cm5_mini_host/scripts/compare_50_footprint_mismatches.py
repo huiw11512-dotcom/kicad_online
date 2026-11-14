@@ -43,10 +43,12 @@ def pad_geom(fp):
         ))
     return sorted(res),complete
 def pad_process(fp):
+    def norm(v):
+        return ("unset",0) if v is None else ("set",int(v))
     vals=[]
     for p in fp.Pads():
-        vals.append((str(p.GetNumber()),int(p.GetLocalSolderMaskMargin()),
-                     int(p.GetLocalSolderPasteMargin())))
+        vals.append((str(p.GetNumber()),norm(p.GetLocalSolderMaskMargin()),
+                     norm(p.GetLocalSolderPasteMargin())))
     return sorted(vals)
 rows=[]
 for ref in refs:
