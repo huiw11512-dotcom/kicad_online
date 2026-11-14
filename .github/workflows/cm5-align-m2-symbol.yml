@@ -1,0 +1,76 @@
+name: Verify and apply M2 connector symbol variant alignment
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'cm5_mini_host/scripts/align_m2_symbol.py'
+      - '.github/workflows/cm5-align-m2-symbol.yml'
+permissions:
+  contents: write
+jobs:
+  align:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: minihost-revA
+          persist-credentials: true
+      - name: Install KiCad 10
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository -y ppa:kicad/kicad-10.0-releases
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends kicad kicad-symbols kicad-footprints kicad-templates python3
+      - name: Baseline ERC and DRC
+        shell: bash
+        run: |
+          mkdir -p reports
+          (cd cm5_mini_host && kicad-cli sch erc CM5_MINIMA_3.kicad_sch -o ../reports/erc_before.rpt) || true
+          (cd cm5_mini_host && kicad-cli pcb drc CM5_MINIMA_3.kicad_pcb --schematic-parity -o ../reports/drc_before.rpt) || true
+      - name: Remove only obsolete M1..M4 socket symbol pins
+        run: python3 cm5_mini_host/scripts/align_m2_symbol.py
+      - name: Check ERC and DRC again
+        shell: bash
+        run: |
+          (cd cm5_mini_host && kicad-cli sch erc CM5_MINIMA_3.kicad_sch -o ../reports/erc_after.rpt) || true
+          (cd cm5_mini_host && kicad-cli pcb drc CM5_MINIMA_3.kicad_pcb --schematic-parity -o ../reports/drc_after.rpt) || true
+      - name: Validate error and footprint-parity reductions before accepting
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          def metrics(erc,drc):
+              e=Path(erc).read_text(errors="replace")
+              d=Path(drc).read_text(errors="replace")
+              x=re.search(r'ERC messages:\s*\d+\s+Errors\s+(\d+)',e)
+              if not x:raise SystemExit('Cannot parse ERC report')
+              y=re.search(r'\*\* Found (\d+) Footprint errors \*\*',d)
+              if not y:raise SystemExit('Cannot parse footprint parity report')
+              hard=len(re.findall(r'^\s+Rule:[^\n]*;\s*error\s*$',d,re.M))
+              u=re.search(r'\*\* Found (\d+) Unconnected pads \*\*',d)
+              return int(x.group(1)),hard,int(y.group(1)),int(u.group(1)) if u else None
+          before=metrics('reports/erc_before.rpt','reports/drc_before.rpt')
+          after=metrics('reports/erc_after.rpt','reports/drc_after.rpt')
+          print('ERC, hard PCB DRC, footprint parity, unconnected:',before,'->',after)
+          Path('cm5_mini_host/M2_SYMBOL_VARIANT_AUDIT.md').write_text(
+            f"# M.2 socket symbol variant audit\n\nBefore (ERC, hard PCB DRC, footprint parity, unconnected): {before}\n\n"
+            f"After: {after}\n\nOnly the four nonexistent mechanical pad pins M1–M4 were removed from the cached CM5IO:Bus_M.2_Socket_M schematic symbol and its J701 instance. "
+            f"No PCB copper, SSD grounds, shield pins S1/S2, or separate mounting holes M701/M702 were changed.\n"
+            f"The decorative REF** logo remains a deliberate PCB-only footprint and may still be flagged by schematic parity.\n",encoding='utf-8')
+          if after[0]>before[0] or after[1]>before[1] or after[2]>=before[2] or (after[3] is not None and after[3]!=0):
+              raise SystemExit('ABORT: ERC, DRC, parity or connectivity did not improve safely')
+          PY
+      - name: Commit validated schematic and audit only
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add cm5_mini_host/PCIe-M2.kicad_sch cm5_mini_host/M2_SYMBOL_VARIANT_AUDIT.md
+          git commit -m "Align M2 socket symbol with installed 2230/2242 footprint pad map"
+          git push origin HEAD:minihost-revA
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cm5-m2-symbol-parity-review
+          path: reports/
