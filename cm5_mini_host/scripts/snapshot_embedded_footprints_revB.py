@@ -8,7 +8,7 @@ root=Path("cm5_mini_host")
 board_path=root/"CM5_MINIMA_3.kicad_pcb"
 want={"CM5IO","EasyEDA","Samacsys","_pico","Package_TO_SOT_SMD","Resistor_SMD",
       "Connector_JST","Capacitor_SMD","Inductor_SMD","Crystal",
-      "Capacitor_Tantalum_SMD","Package_LGA"}
+      "Capacitor_Tantalum_SMD","Package_LGA","Package_DFN_QFN","TestPoint"}
 board=pcbnew.LoadBoard(str(board_path))
 
 def pad_sig(fp):
