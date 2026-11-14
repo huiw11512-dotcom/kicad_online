@@ -15,7 +15,7 @@ def xy(v):
 lines=["# Footprint inventory and DRC object diagnostics","",f"KiCad {pcbnew.Version()}",f"Board: {src.name}",""]
 nicks=set()
 for fp in sorted(b.GetFootprints(),key=lambda f:f.GetReference()):
-    try: nick=fp.GetFPID().GetLibNickname(); name=fp.GetFPID().GetLibItemName()
+    try: nick=str(fp.GetFPID().GetLibNickname()); name=str(fp.GetFPID().GetLibItemName())
     except: nick=""; name=""
     nicks.add(nick)
     try: bb=fp.GetBoundingBox(True,True); box=f"{xy(bb.GetOrigin())}..{xy(bb.GetEnd())}"
