@@ -108,9 +108,11 @@ jobs:
         run: |
           set -euo pipefail
           NAME="minihost-revB-candidate"
-          if git ls-remote --exit-code --heads origin "$NAME" >/dev/null 2>&1; then
-            echo "Candidate branch exists; preserving previous approved candidate."
-            exit 0
+          EXPECTED="302b717b3cb74cae05f492e1a40e526ba4df8836"
+          CURRENT="$(git ls-remote origin "refs/heads/$NAME" | awk '{print $1}')"
+          if [ -n "$CURRENT" ] && [ "$CURRENT" != "$EXPECTED" ]; then
+            echo "BLOCKED: candidate branch was modified independently; not overwriting."
+            exit 1
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -120,7 +122,11 @@ jobs:
           git switch -c "$NAME"
           git add -A cm5_mini_host/
           git commit -m "Publish Rev.B KiCad source candidate after native ERC/DRC and fab-gate [skip ci]"
-          git push origin "HEAD:refs/heads/$NAME"
+          if [ -z "$CURRENT" ]; then
+            git push origin "HEAD:refs/heads/$NAME"
+          else
+            git push --force-with-lease="refs/heads/$NAME:$EXPECTED" origin "HEAD:refs/heads/$NAME"
+          fi
           echo "Candidate branch URL: https://github.com/huiw11512-dotcom/kicad_online/tree/$NAME/cm5_mini_host"
       - name: Upload native reports
         if: always()
