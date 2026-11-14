@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="70 15 76 72" width="1140" height="1080" role="img" aria-labelledby="title desc">
+<title id="title">CM5 MiniHost Rev.A RJ45 Mechanical Conflict Map</title>
+<desc id="desc">Measured KiCad PCB J1 RJ45 shell pads 15 and 16 near Edge.Cuts notch. J601 fan connector and H102 mounting hole have courtyard overlaps with J1. This engineering visualization uses measured positions; it is not Gerber geometry.</desc>
+<rect x="70" y="15" width="76" height="72" fill="#fafbfe"/>
+<path d="M 76.016 25.599 L 78.215 27.795 L 78.361 28.121 L 78.37 28.241 L 89.284 28.241 L 89.484 28.441 L 89.484 43.834 L 89.284 44.034 L 78.37 44.034 L 78.361 74.706" fill="none" stroke="#132d44" stroke-width=".22" stroke-linejoin="round"/>
+<path d="M 76.016 25.599 L 80.109 20.947 L 81.581 22.441 L 85.142 23.93 L 126.133 23.93" fill="none" stroke="#132d44" stroke-width=".18" stroke-dasharray=".35,.25"/>
+<rect x="75.897" y="24.9" width="24.379" height="22.5" rx=".4" fill="#e1ecff" fill-opacity=".4" stroke="#3573b7" stroke-width=".20" stroke-dasharray=".45,.27"/>
+<rect x="82.946" y="25.45" width="2.1" height="3.1" fill="#d48940" fill-opacity=".65" stroke="#b85f0b" stroke-width=".20"/>
+<rect x="82.946" y="43.75" width="2.1" height="3.1" fill="#d48940" fill-opacity=".65" stroke="#b85f0b" stroke-width=".20"/>
+<rect x="97.025" y="45.925" width="5.25" height="7.85" fill="#d7eddf" fill-opacity=".72" stroke="#17854d" stroke-width=".2" stroke-dasharray=".3,.23"/>
+<circle cx="78.15" cy="23.35" r="2.7" fill="#eecbd0" fill-opacity=".65" stroke="#bd3e4a" stroke-width=".22" stroke-dasharray=".3,.23"/>
+<circle cx="78.15" cy="23.35" r="1.35" fill="none" stroke="#bd3e4a" stroke-width=".12"/>
+<circle cx="83.996" cy="27" r=".19" fill="#862f05"/>
+<circle cx="83.996" cy="45.3" r=".19" fill="#862f05"/>
+<path d="M 85 26 L 103.2 22.0 L 107 22" stroke="#9c5a17" stroke-width=".17" fill="none"/>
+<path d="M 85 45 L 103.2 33 L 107 33" stroke="#9c5a17" stroke-width=".17" fill="none"/>
+<path d="M 101 47 L 106 45 L 107 45" stroke="#147549" stroke-width=".17" fill="none"/>
+<path d="M 80 23 L 103 17.5 L 107 17.5" stroke="#b33648" stroke-width=".17" fill="none"/>
+<g font-family="Arial,sans-serif" font-size="1.6" fill="#243247">
+<text x="72" y="85" font-size="1.2">Geometry derived from KiCad pad locations and broad footprint bounding boxes (mm). NOT a manufacturing/assembly drawing.</text>
+<text x="75.2" y="49.5" font-size="1.45">RJ45 J1 bounding box</text>
+<text x="107" y="18" font-size="1.55" fill="#b33648">H102 mounting hole</text>
+<text x="107" y="20.0" font-size="1.1">center (78.15,23.35)</text>
+<text x="107" y="22.5" font-size="1.55" fill="#9c5a17">J1 pad 16 / upper notch</text>
+<text x="107" y="24.5" font-size="1.12">edge clearance 0.1914 mm</text>
+<text x="107" y="33.5" font-size="1.55" fill="#9c5a17">J1 pad 15 / lower notch</text>
+<text x="107" y="35.5" font-size="1.12">edge clearance 0.2164 mm</text>
+<text x="107" y="45.5" font-size="1.55" fill="#147549">J601 fan connector</text>
+<text x="107" y="47.5" font-size="1.12">courtyard overlap with J1</text>
+<text x="107" y="53" font-size="1.12">J1 nominal envelope</text>
+<text x="107" y="55" font-size="1.12">x 75.897..100.276</text>
+<text x="107" y="57" font-size="1.12">y 24.9..47.4</text>
+<text x="107" y="62" font-size="1.12">Current edge rule: ≥0.372 mm</text>
+<text x="107" y="64.0" font-size="1.12">Only board-design review can</text>
+<text x="107" y="66.0" font-size="1.12">decide solder land/overhang.</text>
+<text x="107" y="71" font-size="1.12">Official Kycon A4 (2025)</text>
+<text x="107" y="73" font-size="1.12">footprint drawing required.</text>
+<text x="107" y="78" font-size="1.12">No PCB copper changed</text>
+<text x="107" y="80" font-size="1.12">by this visualization.</text>
+</g>
+</svg>
