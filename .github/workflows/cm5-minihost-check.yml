@@ -39,6 +39,10 @@ jobs:
         shell: bash
         run: |
           /usr/bin/python3 cm5_mini_host/scripts/pcb_audit.py cm5_mini_host/CM5_MINIMA_3.kicad_pcb reports
+      - name: Export measured USB physical route and viewer
+        shell: bash
+        run: |
+          /usr/bin/python3 cm5_mini_host/scripts/usb_route_inventory.py
       - name: Summarize reports — do not confuse CI green with DRC clean
         shell: bash
         run: |
