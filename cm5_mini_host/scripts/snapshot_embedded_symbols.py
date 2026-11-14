@@ -39,31 +39,56 @@ passive={"MK-11C04-G013","TS-1010A-B","SM02B-SRSS-TB(LF)(SN)"}
 libs=defaultdict(dict)
 pin_fixes=[]
 for path in files:
-    src=path.read_text(encoding="utf-8")
+    original=path.read_text(encoding="utf-8")
+    src=original
+    cache_defs={}
     for m in reversed(list(re.finditer(r"\(lib_symbols\b",src))):
         start=m.start(); end=expr_end(src,start); rebuilt=[]
         for a,b,expr in children(src,start,end):
             sm=re.match(r'\(symbol\s+"([^"]+)"',expr)
-            if not sm or ":" not in sm.group(1):
+            if not sm:
                 rebuilt.append(expr); continue
-            full=sm.group(1); nick,name=full.split(":",1)
-            if name in passive:
+            cache_name=sm.group(1)
+            if cache_name in passive:
                 n=expr.count("(pin unspecified line")
                 if n:
                     expr=expr.replace("(pin unspecified line","(pin passive line")
-                    pin_fixes.append((path.name,nick,name,n))
-            cache_expr=expr
-            library_expr=cache_expr.replace(f'(symbol "{full}"',f'(symbol "{name}"',1)
-            digest=hashlib.sha256(library_expr.encode()).hexdigest()
-            old=libs[nick].get(name)
-            if old and hashlib.sha256(old.encode()).hexdigest()!=digest:
-                raise SystemExit(f"Conflicting cached symbol definitions: {nick}:{name}")
-            libs[nick][name]=library_expr
-            # Keep the fully-qualified LIB_ID in the schematic cache so symbol
-            # instances retain their real pin mapping and hierarchical connectivity.
-            rebuilt.append(cache_expr)
+                    pin_fixes.append((path.name,"embedded",cache_name,n))
+            cache_defs[cache_name]=expr
+            if ":" in cache_name:
+                nick,name=cache_name.split(":",1)
+                library_expr=expr.replace(f'(symbol "{cache_name}"',f'(symbol "{name}"',1)
+                digest=hashlib.sha256(library_expr.encode()).hexdigest()
+                old=libs[nick].get(name)
+                if old and hashlib.sha256(old.encode()).hexdigest()!=digest:
+                    raise SystemExit(f"Conflicting cached symbol definitions: {nick}:{name}")
+                libs[nick][name]=library_expr
+            # Keep the cached symbol's original name in the schematic.
+            rebuilt.append(expr)
         new="(lib_symbols\n"+"\n".join("\t\t"+x.replace("\n","\n\t\t") for x in rebuilt)+"\n\t)"
         src=src[:start]+new+src[end:]
+
+    # Legacy symbols can have an unqualified cache name and a separate lib_name alias.
+    for im in re.finditer(r'\(lib_id "([^"]+)"\)',original):
+        libid=im.group(1)
+        if ":" not in libid: continue
+        nick,name=libid.split(":",1)
+        inst_start=original.rfind("\n\t(symbol",0,im.start())+2
+        if inst_start<2: continue
+        inst_end=expr_end(original,inst_start)
+        instance=original[inst_start:inst_end]
+        lm=re.search(r'\(lib_name "([^"]+)"\)',instance)
+        if not lm: continue
+        cache_name=lm.group(1)
+        cached=cache_defs.get(cache_name)
+        if cached is None: continue
+        library_expr=cached.replace(f'(symbol "{cache_name}"',f'(symbol "{name}"',1)
+        digest=hashlib.sha256(library_expr.encode()).hexdigest()
+        old=libs[nick].get(name)
+        if old and hashlib.sha256(old.encode()).hexdigest()!=digest:
+            raise SystemExit(f"Conflicting aliased cached symbol definitions: {nick}:{name}")
+        libs[nick][name]=library_expr
+
     path.write_text(src,encoding="utf-8")
 
 out=root/"EmbeddedSymbols"; out.mkdir(exist_ok=True)
