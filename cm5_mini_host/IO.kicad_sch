@@ -6664,7 +6664,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-353_SC-70-5"
+		(property "Footprint" "CM5IO:Diodes_74LVC1G07SE7_SOT353"
 			(at 76.2 35.56 0)
 			(effects
 				(font
