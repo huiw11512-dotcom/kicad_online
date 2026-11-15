@@ -1,48 +1,32 @@
-# Linux MiniHost A1 — engineering status, 2026-11-15 (Rev 1.0)
+# Linux MiniHost A1 — Actual engineering status, 2026-11-16
 
-Authoritative architecture decisions: [A1_MASTER_BASELINE_REV1.md](A1_MASTER_BASELINE_REV1.md). This status file records implementation progress only.
+Source branch: `main`. Target: independent compact RK3568 SBC for Linux, comparable in application class to Raspberry Pi 4B.
 
-## Frozen product baseline
+## Native KiCad sheets completed as editable drafts
+- USB-C PD15V + 15V→5V main Buck: root schematic.
+- RK809-5 PMIC schematic: `A1_RK809_PMIC.kicad_sch`.
+- LPDDR4X DDR power rails: `A1_DDR_POWER.kicad_sch`.
+- 5V→3.3V pre-PMIC Buck: `A1_3V3_POWER.kicad_sch`.
+- RK3568 SoC: 17 multi-unit symbols, all 636 balls labeled: `A1_RK3568_SOC.kicad_sch`.
+- Dynamic CPU Buck: TCS4525, I2C and remote feedback: `A1_CPU_POWER.kicad_sch`.
+- 32GB eMMC 5.1: Samsung KLMBG2JETD-B041: `A1_EMMC_32GB.kicad_sch`.
+- 24MHz oscillator, boot voltage strap, UART2, Recovery key: `A1_BOOT_OSC_DEBUG.kicad_sch`.
 
-- RK3568 FCBGA636L, 4GB LPDDR4X x32 target, 32GB eMMC 5.1 target.
-- HDMI 2.0a, Gigabit Ethernet, one USB3 Host1, two USB2 Host2/3, Micro-USB USB3_OTG0 service/download, Wi-Fi/BT SDIO+UART, 40-pin GPIO.
-- USB-C PD 15V/3A; 15V-to-5V_SYS main converter target 5A.
-- Six-layer FR-4; 85 × 56 mm outline target, not yet mechanically frozen.
+## Corrected electrical points
+- RK809-5 VCC inputs receive pre-PMIC VCC3V3_SYS, not 5V_SYS.
+- RK809-5 I2C, interrupt, reset and CLK32K pull-ups receive VCC3V3_PMU (3.3V), matching RK3568 PMUIO domain; CLK32K pull-up requirements should be verified against PMIC output specs.
+- LPDDR4X SoC DDRPHY_VDDQ uses VCC_DDR_1V1; DDRPHY_VDDQL uses VCC0V6_DDR.
+- eMMC VCCQ 1.8V and NAND VCC 3.3V separated, VDDI treated as internal reference requiring bypass.
+- FLASH_VOL_SEL tied high to VCC3V3_PMU because VCCIO2 runs at 1.8V.
+- RK3568 XOUT24M includes 22Ω in series; 1M feedback from XOUT to XIN.
+- VDD_CPU_COM remains dedicated CPU remote-sense net.
 
-## Actual KiCad implementation\n\n| LPDDR4X DDR power | Page 3 added: SY8089AAAC 0.6V buck, AP2112K 1.8V LDO, TDK 2.2uH inductor, local decoupling; exact DRAM/template and current/ramp validation open |
+## Engineering gates open
+1. Confirm 4GB LPDDR4X exact device against Rockchip approved template and matching DDR initialization BIN, and complete all DQ/DQS/CA/CK/CS connections.
+2. Complete MicroSD, USB service/download, USB3/USB2 Host, HDMI, Gigabit Ethernet PHY/RJ45, Wi-Fi/BT, and 40-pin GPIO.
+3. Confirm board power capacity and all SoC/PHY/PMIC decoupling, enable, strap and sequencing.
+4. Confirm RK3568 BGA636, TCS4525 WCSP20, eMMC BGA153 and RK809 QFN68 footprint land patterns against vendor and assembler documents.
+5. Run native KiCad schematic load, ERC, full netlist comparison, PCB layout, impedance/length constraints and DRC.
+6. Assemble prototype, power sequencing bring-up, DDR memory training and boot Linux.
 
-| Block | State |
-|---|---|
-| USB-C PD input | Initial native schematic exists: HUSB238, 15V/3A request resistors, input path switch |
-| 15V to 5V_SYS | Initial native schematic exists: LM76005, 5V/5A target |
-| RK809-5 PMIC | Page 2 added and linked: 69-pin symbol, QFN68 candidate footprint, 60 placed symbols/components, pin map and BOM; rail mapping/land-pattern validation open |
-| RK3568 SoC | Not yet placed in the root schematic |
-| LPDDR4X | Not yet placed; exact part/template/BIN pairing open |
-| eMMC / MicroSD | Not yet drawn |
-| USB / HDMI / Ethernet / Wi-Fi / GPIO | Not yet drawn |
-| PCB | No placement or routing |
-| Validation | Native KiCad load, ERC, netlist, DRC and hardware bring-up not yet completed |
-
-## Work completed in this revision
-
-- Added native KiCad page `hardware/kicad/A1_RK809_PMIC.kicad_sch` as page 2 and linked it from the root sheet.\n- Added native KiCad page `hardware/kicad/A1_DDR_POWER.kicad_sch` as page 3: separate 0.6V and 1.8V LPDDR4X supplies, with VCC_DDR_1V1 from BUCK3.
-- Added RK809-5 69-pin symbol, 68+EP candidate QFN68 footprint, pin map and PMIC BOM.
-- Implemented VCC input bypass, five buck power stages represented; BUCK4 OTP-default OFF, LDO/SWOUT bypass, VDC divider, PWRON/SLEEP controls, open-drain pull-ups, RTC crystal, charge-pump bypass, BUCK4 optional stage and RESETB filter.
-- Held BUCK3 feedback divider and PMIC-to-SoC rail allocation open pending exact LPDDR4X and full EVB cross-check.
-
-- Created [A1_MASTER_BASELINE_REV1.md](A1_MASTER_BASELINE_REV1.md) as the single source of truth.
-- Resolved conflicting project notes: Rev 1 input is 15V/3A (not 9V, 12V or 20V); USB is one USB3 Host1, two USB2 Host2/3 and a dedicated Micro-USB OTG0 download/service port.
-- Confirmed from Hynetek's HUSB238 reference guide that RVSET=14kΩ requests 15V and RISET=22.6kΩ requests 3.0A.
-- Checked RK3568 package information against Datasheet Rev 2.1: FCBGA636L, 19 × 19 mm, 0.65 mm pitch.
-- Confirmed the three old work branches contain only .gitkeep; main remains the active project branch.
-
-## Open engineering gates
-
-1. SoC: validate all 636 ball names/numbers against Rockchip Datasheet Rev 2.1 and validate the BGA land pattern.
-2. DDR: close exact LPDDR4X part ↔ AVL ↔ PCB template ↔ DDR BIN compatibility.
-3. Power: verify RK809-5 output-to-SoC mapping against the complete EVB schematic; finalize BUCK3 divider from exact DRAM rail; verify all startup rails.
-4. Power integrity: verify AO4407A transient margin, add/verify input protection, and complete LM76005 ripple/DC-bias/thermal checks.
-5. Interfaces: finish pinmux, IO-bank voltage, PHY straps, USB ESD and VBUS current limits.
-6. Native validation: load in KiCad, export netlist, run ERC/DRC and visually inspect every sheet.
-
-No fabrication is authorized until these gates are closed.
+Current release: **DESIGN IN PROGRESS; DO NOT FABRICATE.** The source has not passed native KiCad ERC or hardware validation.
