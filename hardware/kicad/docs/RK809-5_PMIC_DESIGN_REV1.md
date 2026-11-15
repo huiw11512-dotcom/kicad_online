@@ -15,14 +15,12 @@ Status: native editable KiCad page committed; not a fabrication release.
 
 | Pins | Name | A1 net | Decoupling |
 |---|---|---|---|
-| 10, 11, 24, 66 | VCC2/VCC1/VCC3/VCC4 | 5V_SYS | 10uF each |
-| 22, 30, 4 | VCC5/VCC6/VCC7 | 5V_SYS | 10uF each |
-| 57, 54 | VCC8/VCC9 | 5V_SYS | 10uF each |
-| 45 | VCC_RTC | 5V_SYS | 1uF local |
+| 4, 10, 11, 22, 24, 30, 54, 57, 66 | VCC1–VCC9 | VCC3V3_SYS | Local input bypass distributed as shown on the schematic |
+| 45 | VCC_RTC | VCC3V3_SYS | Local bypass; same pre-PMIC 3.3V source |
 | 44, 48 | VCC_1P8A/VCC_1P8D | VCC_1V8 | 1uF each |
 | 33 | VCC_SPK_HP | PMIC_SPK_HP_5V | 1uH filter + 10uF/100nF |
 
-VCC_RTC is tied to the same 5V_SYS source as VCC9, meeting Rockchip's requirement that VCC_RTC be the highest PMIC supply (or within 0.3V of it) and not be powered later.
+VCC1–VCC9 and VCC_RTC are supplied from the pre-PMIC 3.3V system rail. Do not connect these pins to 5V_SYS. VCC_RTC must be above 3.0V before VDC/PWRON initiates the sequence; VCC_SPK_HP is a separate filtered audio supply and remains on 5V_SYS.
 
 ## 3. Buck power stages
 
@@ -30,15 +28,13 @@ VCC_RTC is tied to the same 5V_SYS source as VCC9, meeting Rockchip's requiremen
 |---|---:|---|---|
 | BUCK1 | 0.9V | 0.47uH, 2×47uF, output net VDD_LOGIC_0V9 | Voltage/load mapping to SoC pending |
 | BUCK2 | 0.9V | 0.47uH, 2×47uF, output net VDD_GPU_0V9 | Voltage/load mapping to SoC pending |
-| BUCK3 | 1.1V target | 0.47uH, 2×47uF, RH=37.4k/RL=100k | LPDDR4X VCC_DDR; final DRAM/template confirmation required |
+| BUCK3 | 1.1V target | 0.47uH, 2×47uF, R1=37.4k RH/R2=100k RL | LPDDR4X VDD2 1.1V; Micron 4GB x32 selected, template/BIN validation pending |
 | BUCK4 | 0.9V target, OFF | 0.47uH + 2×47uF stage populated; output VDD_NPU_0V9 | Hardware retained; OTP-default OFF |
 | BUCK5 | 1.8V | 0.47uH, 2×47uF; supplies internal 1.8V PMIC rails | 1.8V default retained |
 
 Rockchip's RK3568 guide specifies 0.47uH inductors with saturation current above 3.5A and DCR below 50mOhm (preferably below 20mOhm). It specifies more than 30uF output capacitance for BUCK1/2/3/4 and more than 33uF for BUCK5. The schematic uses 2×47uF nominal per active buck as a conservative starting point; effective capacitance under DC bias must be checked against the selected capacitor datasheet.
 
-BUCK3 uses an external divider referenced to 0.8V. The guide gives:
-`RH = (VBUCK3 - 0.8) × RL / 0.8`.
-RH/RL remain DNP/TBD until the exact LPDDR4X device and rail requirement are frozen. Do not populate guessed values.
+BUCK3 uses an external divider referenced to 0.8V. With R1=37.4kΩ (RH) and R2=100kΩ (RL), `VBUCK3 = 0.8 × (1 + 37.4/100) ≈ 1.099V`. This is the selected 1.1V VDD2 rail for Micron MT53E1G32D2FW-046 WT:C (4GB, x32, dual-die). The resistor values are now fixed; validate the memory against the Rockchip LP4X 200-ball x32 template and matching DDR BIN before release.
 
 ## 4. LDO and switch channels
 
@@ -61,7 +57,7 @@ These are the RK809-5 OTP defaults, not the final SoC rail map. Connect these ou
 
 ## 5. Startup and control
 
-- VDC divider: 100k/33k from 5V_SYS gives approximately 1.24V, above the 0.55V startup threshold and close to Rockchip's recommended 1.2V.
+- VDC divider: R9=100kΩ upper / R10=33kΩ lower from 5V_SYS gives approximately 1.24V, above the 0.55V startup threshold and close to Rockchip's recommended 1.2V. The R9/R10 BOM values have been corrected to match this divider.
 - VCC_RTC must be above 3.0V before VDC or PWRON starts the sequence.
 - After EXT_EN rises, VCC9 must already be above 3.0V within 1.5ms. A1 supplies VCC9 and VCC_RTC from the pre-existing 5V_SYS rail.
 - EXT_EN drives the external VDD_CPU regulator enable.
@@ -84,7 +80,8 @@ A1 Rev1 does not include the RK809 audio codec, headphone amplifier, microphone 
 4. Select exact 0.47uH and 1uH inductor MPNs with saturation current, DCR and temperature rise verified.
 5. Verify capacitor effective capacitance under DC bias, ESR and package size.
 6. Confirm QFN68 land pattern, EP solder paste segmentation and thermal via strategy with assembly house.
-7. Run native KiCad load, ERC and netlist export; this environment has not executed KiCad CLI.
+7. Complete the pre-PMIC 5V_SYS-to-VCC3V3_SYS 3A regulator page and verify its startup/current/thermal margins.
+8. Run native KiCad load, ERC and netlist export; this environment has not executed KiCad CLI.
 
 ## References
 
@@ -121,4 +118,4 @@ A1 Rev1 does not include the RK809 audio codec, headphone amplifier, microphone 
 | SWOUT1 | VCC_3V3 | 3.3V system rail and input to DDR 0.6V buck |
 | SWOUT2 | VCC3V3_SD | SD card 3.3V supply |
 
-LPDDR4X also requires separate VCC0V6_DDR and VCC1V8_DDR rails; these are implemented on the DDR power page, not by BUCK3.
+LPDDR4X also requires separate VCC0V6_DDR and VCC1V8_DDR rails; these are implemented on the DDR power page, not by BUCK3. Micron MT53E1G32D2FW-046 WT:C is a 32Gb/4GB, x32, 200-ball, dual-die device; verify the approved Rockchip DDR BIN/template pairing before fabrication.
