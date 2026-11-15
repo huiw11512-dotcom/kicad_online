@@ -9,7 +9,7 @@
 - The symbol is split into functional units. Pin names displayed in the symbol use the primary mux function (LPDDR4 alternative preferred when present); complete mux strings are retained in A1_SOC_BALLMAP.csv.
 - Power and ground balls are typed as power_in. All other signal balls are passive because the full mux direction is mode-dependent; this avoids false ERC direction conflicts but means ERC cannot validate signal direction.
 
-## Footprint caveat
+## Library registration\n\nThe project-local symbol library is registered as `A1_SOC` in `sym-lib-table`; the footprint library is registered as `A1_SOC` in `fp-lib-table`.\n\n## Footprint caveat
 
 - Candidate footprint uses 636 circular 0.350 mm pads on a 0.65 mm grid and the 28 × 28 ball map with 636 populated positions.
 - Rockchip Datasheet Rev 2.1 specifies package body and ball geometry, but the exact PCB land pattern / solder-mask / paste geometry still requires confirmation against the Rockchip assembly recommendation or the selected assembly house.
