@@ -111,7 +111,7 @@ for block in iter_blocks(text,"footprint"):
         "C25744":("10k","0402WGF1002TCE"),
         "C25741":("100k","0402WGF1003TCE"),
         "C25117":("470R","0402WGF4700TCE"),
-        "C15850":("10uF","CL21A106KAYNNNE"),
+        "C15850":("10u","CL21A106KAYNNNE"),
     }
     if lcsc in known_lcsc:
         expected_value,expected_mpn=known_lcsc[lcsc]
