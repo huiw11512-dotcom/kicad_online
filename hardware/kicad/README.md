@@ -4,7 +4,7 @@
 
 - `A1.kicad_pro` — KiCad project.
 - `A1.kicad_sch` — root sheet (page 1): USB-C PD input and 15V-to-5V_SYS main buck; links the RK809-5 page.
-- `A1_RK809_PMIC.kicad_sch` — PMIC and power-sequencing page (page 2).
+- `A1_RK809_PMIC.kicad_sch` — PMIC and power-sequencing page (page 2).\n- `A1_DDR_POWER.kicad_sch` — separate LPDDR4X 0.6V and 1.8V power rails (page 3).
 - `A1_CUSTOM.kicad_sym` — HUSB238, USB-C, AO4407A, LM76005, R/C/L, pushbutton and crystal symbols.
 - `A1_PMIC.kicad_sym` — RK809-5 69-pin symbol.
 - `A1_SOC.kicad_sym` — RK3568 636-ball grouped symbol.
@@ -25,7 +25,7 @@
 - VDC divider, PWRON switch, SLEEP pulldown, I2C/open-drain pull-ups, RESETB 100nF, 32.768kHz crystal, charge-pump bypass and all PMIC decoupling are represented.
 - RK809-5 output rail map now follows the Rockchip EVB reference (BUCK1=VDD_LOGIC, BUCK2=VDD_GPU, BUCK3=VCC_DDR, BUCK4=VDD_NPU, BUCK5=VCC_1V8; LDO/SWOUT rails assigned). LPDDR4X still needs separate 0.6V and 1.8V DDR rails. Buck inductors use TDK SPM5030T family; local land pattern follows TDK's recommended 1.5×2.2mm pads and 2.7mm gap.
 
-### RK3568 library
+### LPDDR4X DDR power page\n- U4 SY8089AAAC generates VCC0V6_DDR from VCC_3V3.\n- U5 AP2112K-1.8TRG1 generates VCC1V8_DDR from VCC3V3_PMU.\n- VCC_DDR_1V1 comes from RK809 BUCK3 with 37.4k/100k divider.\n- Final DRAM part/template and rail current/ramp verification remain open.\n\n## RK3568 library
 - `A1_SOC.kicad_sym` — 636-ball grouped symbol.
 - `A1_SOC.pretty/BGA-636_L19.0-W19.0-P0.65-BL.kicad_mod` — candidate 636-pad footprint.
 - `A1_SOC_BALLMAP.csv` — full ball map and mux strings.
