@@ -21,27 +21,29 @@ if len(drills)<2:raise SystemExit("BLOCKED: PTH and NPTH drills must be separate
 with (out/"assembly/BOM_Parts.csv").open(newline="",encoding="utf-8-sig") as f:
     bom=list(csv.reader(f))
 if len(bom)<15:raise SystemExit("BLOCKED: BOM unexpectedly empty")
-header=bom[0]
-mpn_idx=header.index("ManufacturerPart") if "ManufacturerPart" in header else None
-missing_mpn=[]
-if mpn_idx is not None:
-    missing_mpn=[row for row in bom[1:] if len(row)>mpn_idx and not row[mpn_idx].strip()]
-with (out/"assembly/BOM_Missing_ManufacturerPart.csv").open("w",newline="",encoding="utf-8") as fd:
-    writer=csv.writer(fd)
-    writer.writerow(header)
-    writer.writerows(missing_mpn)
+summary=json.loads((out/"assembly/bom_audit_summary.json").read_text(encoding="utf-8"))
+missing_mpn=int(summary["refs_missing_both_mpn_and_lcsc"])
+mpn_conflicts=int(summary["refs_with_known_value_or_package_conflicts"])
+if not (out/"assembly/BOM_Missing_ManufacturerPart.csv").exists():
+    raise SystemExit("BLOCKED: detailed BOM missing-part report was not generated")
+if not (out/"assembly/BOM_MPN_Conflicts.csv").exists():
+    raise SystemExit("BLOCKED: detailed BOM conflict report was not generated")
 for fn in ["Top_PickPlace.csv","Bottom_PickPlace.csv"]:
     if (out/"assembly"/fn).stat().st_size<50:
         raise SystemExit(f"BLOCKED: placement data empty {fn}")
 facts={
  "gerber_count":len(gerber),"drill_count":len(drills),
  "bom_rows":len(bom)-1,
- "bom_rows_without_mpn":len(missing_mpn),
- "assembly_bom_complete":not bool(missing_mpn),
+ "bom_refs_missing_mpn_and_lcsc":missing_mpn,
+ "bom_refs_with_value_or_package_conflicts":mpn_conflicts,
+ "assembly_bom_complete":bool(summary["assembly_bom_complete"]),
+ "bom_identifiers_catalog_verified":False,
  "copper_layers_present":copper,
  "drc_violations":0,"erc_violations":0,
- "status":"BARE_PCB_FAB_CANDIDATE_ONLY__ASSEMBLY_BOM_INCOMPLETE",
- "limits":["67 or fewer manufacturer part numbers may be unpopulated; see BOM_Missing_ManufacturerPart.csv",
+ "status":"BARE_PCB_FAB_CANDIDATE_ONLY__SMT_BOM_REVIEW_REQUIRED",
+ "limits":[f"{missing_mpn} assembly references have neither MPN nor LCSC code; see BOM_Missing_ManufacturerPart.csv",
+           f"{mpn_conflicts} assembly references contain conflicting value/package identifiers; see BOM_MPN_Conflicts.csv",
+           "all populated LCSC/MPN identifiers still require live catalog and footprint verification",
            "PCB manufacturer DFM review pending",
            "90/100 ohm impedance coupon / stackup acceptance pending",
            "USB 2.0 physical end-to-end route skew requires signoff",
