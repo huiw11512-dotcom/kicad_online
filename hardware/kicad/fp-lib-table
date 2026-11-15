@@ -4,4 +4,6 @@
   (lib (name "A1_POWER") (type "KiCad") (uri "${KIPRJMOD}/A1_POWER.pretty") (options "") (descr "Linux MiniHost A1 power footprints"))
   (lib (name "A1_CPU") (type "KiCad") (uri "${KIPRJMOD}/A1_CPU.pretty") (options "") (descr "A1 CPU regulator candidate footprints"))
   (lib (name "A1_EMMC") (type "KiCad") (uri "${KIPRJMOD}/A1_EMMC.pretty") (options "") (descr "A1 eMMC candidate footprints"))
+
+  (lib (name "A1_DDR") (type "KiCad") (uri "${KIPRJMOD}/A1_DDR.pretty") (options "") (descr "A1 LPDDR4X 200-ball DRAM footprints"))
 )
