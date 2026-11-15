@@ -1,0 +1,9 @@
+(sym_lib_table
+  (lib
+    (name "A1")
+    (type "KiCad")
+    (uri "\${KIPRJMOD}/A1_CUSTOM.kicad_sym")
+    (options "")
+    (descr "Linux SBC A1 custom symbols")
+  )
+)
