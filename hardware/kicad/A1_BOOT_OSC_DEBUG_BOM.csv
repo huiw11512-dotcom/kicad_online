@@ -4,7 +4,7 @@ Reference,Value,Footprint,Qty,Status
 "R36","1M 1%","Resistor_SMD:R_0402_1005Metric","1","candidate"
 "C75","18pF C0G 50V","Capacitor_SMD:C_0402_1005Metric","1","candidate"
 "C76","18pF C0G 50V","Capacitor_SMD:C_0402_1005Metric","1","candidate"
-"R37","10k 1%","Resistor_SMD:R_0402_1005Metric","1","candidate"
+"R37","10k 1%","Resistor_SMD:R_0402_1005Metric","1","candidate; strap pulled up to VCC3V3_PMU"
 "J2","Debug UART 3.3V","Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical","1","candidate"
 "R38","10k 1%","Resistor_SMD:R_0402_1005Metric","1","candidate"
 "R39","100R 1%","Resistor_SMD:R_0402_1005Metric","1","candidate"
