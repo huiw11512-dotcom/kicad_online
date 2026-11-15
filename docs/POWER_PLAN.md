@@ -1,125 +1,117 @@
-# A1电源架构 Rev 0.3 — 基于Rockchip RK3568 Hardware Design Guide V1.2
+# A1电源架构 Rev 0.4 — RK3568 + RK809-5 参考电源树
 
-状态：电源树框架已收敛；具体PMIC输出映射、器件值及完整原理图仍未冻结。
+状态：电源拓扑按Rockchip指南及EVB参考设计进一步明确；尚未完成逐球映射、器件值核算和KiCad电气原理图。
 
-## 1. 输入电源
+## 1. 输入电源与母线
 
-- 暂定USB-C PD输入：9V/3A（27W），作为首版整机输入目标。
-- 9V输入经同步Buck生成5V_SYS；5V_SYS为USB VBUS和各后级稳压器的输入母线。
-- 9V PD适配器必须真实支持9V/3A PDO；未协商成功时禁止按满功率运行。
-- USB-C接口需配置CC/PD控制、输入过压/浪涌保护、反灌保护和输入电流监测。
-- 5V_SYS输出能力和外设端口预算必须统一核算，不能把每个USB口的最大电流与SoC峰值功耗简单叠加后忽略输入功率上限。
-- 暂不冻结HUSB238的VSET/ISET电阻。必须按所采购版本数据手册的电阻曲线、PDO和板级限流策略计算，不能沿用未经核对的经验阻值。
+- USB-C PD输入暂定9V/3A（27W）。
+- 9V经同步Buck降为5V_SYS。
+- RK809-5工作输入范围2.7–5.5V，因此不得将9V直接接入RK809-5；PMIC输入由5V_SYS供电。
+- 5V_SYS同时供USB VBUS开关和各后级电源转换器。
+- 5V_SYS总电流预算、SoC峰值负载和USB外设预算必须以27W输入功率为上限联合核算；若需要同时支持4个USB口满载，应降低SoC负载或提升PD输入能力。
+- USB-C PD控制器具体型号、PDO、输入限流、过压和反灌保护待冻结。HUSB238仍是候选，不冻结VSET/ISET电阻。
 
-## 2. RK3568核心电源设计硬约束
+## 2. RK3568 + RK809-5参考电源树（功能映射）
 
-根据Rockchip RK3568 Hardware Design Guide V1.2：
+参考Rockchip RK3568 Hardware Design Guide V1.2 Figure 2-62，以及RK3568 EVB参考电源图：
 
-| 电源轨 | 电压/动态要求 | 官方电源能力要求 | 设计约束 |
-|---|---|---:|---|
-| VDD_CPU | DVFS，约0.8–1.2V范围需结合软件配置 | ≥4A | 独立Buck，VDD_CPU_COM接Buck FB远端反馈 |
-| VDD_GPU | DVFS | ≥2A | 独立Buck，除非使用Rockchip明确允许的合并方案 |
-| VDD_NPU | DVFS | ≥2A | 独立Buck；若首版不使用NPU，需按Rockchip要求处理供电及DTS禁用 |
-| VDD_LOGIC | 默认约0.92V，可预留DVFS | ≥2A（指南2.2.2.7） | 独立Buck |
-| PMU_VDD_LOGIC_0V9 | 0.9V | 峰值50mA | 可与PMUPLL_AVDD_0V9合并，保留原厂去耦 |
-| PMUPLL_AVDD_0V9 | 0.9V | 峰值10mA | 低噪声供电 |
-| PMUPLL_AVDD_1V8 | 1.8V | 峰值9mA | 低噪声供电 |
-| SYSPLL_AVDD_0V9 | 0.9V | 峰值30mA | 推荐低噪声LDO，PSRR@1kHz >65dB |
-| SYSPLL_AVDD_1V8 | 1.8V | 峰值18mA | 推荐低噪声LDO，PSRR@1kHz >65dB |
+| RK809-5输出 | 参考分配 | A1决策 |
+|---|---|---|
+| BUCK1（VCC1，2.5A max） | VDD_LOGIC | 按原厂默认电压、动态调压和电容要求实现 |
+| BUCK2（VCC2，2.5A max） | VDD_GPU | 按原厂DVFS要求实现 |
+| BUCK3（VCC3，1.5A max） | VCC_DDR | FB3外部分压必须按实际LPDDR4X电压设置；LPDDR4X模式按指南另配置VCC0V6_DDR |
+| BUCK4（VCC4，1.5A max） | VDD_NPU | A1首版不启用NPU时，按官方未使用模块处理并在DTS禁用；不可把1.5A输出当作满足≥2A替代Buck要求 |
+| LDO1 | VDDA0V9_IMAGE | 未使用Image PHY时按原厂建议关闭/处理 |
+| LDO2 | VDDA0V9 | 参考原厂模拟电源分配 |
+| LDO3 | VDDA0V9_PMU | PMU低噪声电源 |
+| LDO4 | Audio codec VDDIO | A1首版不使用RK809音频Codec时，按官方未用引脚规则处理 |
+| LDO5 | VCCIO_SD / SDMMC0 IO | 参考EVB分配；若MicroSD采用3.3V IO，需确保Bank和DTS匹配 |
+| LDO6 | VCC3V3_PMU | PMUIO1/PMUIO2的3.3V域，需结合PMUIO2最终配置 |
+| LDO7 | VCCA_1V8 | PMUPLL_AVDD_1V8等参考电源 |
+| LDO8 | VCCA1V8_PMU | PMU 1.8V域 |
+| LDO9 | VCCA1V8_IMAGE | 未使用Image PHY时按原厂建议关闭/处理 |
+| BUCK5 / Switch1 | VCC_3V3、VCC_1V8的系统电源路径 | 依Figure 2-62及完整EVB原理图确认具体网络和开关连接 |
+| Switch2 | VCC3V3_SD / MicroSD卡电源 | 按MicroSD卡电源控制需求决定是否采用 |
 
-注意：指南2.2.2.7给出VDD_LOGIC电源能力≥2A；后面的离散电源替代方案章节给出≥1.5A的替代选型描述。A1优先按≥2A的更严格要求设计，待Rockchip对应参考原理图确认。
+注意：以上是原厂参考电源树功能分配，不是已经完成的A1逐脚电路。所有LDO的VCC5/VCC6/VCC7输入分配、Switch1/2供电、BUCK5及VCC8/VCC9/VCC_RTC连接，必须对照完整RK809-5参考原理图核对后再绘制。
 
-## 3. VDD_CPU Buck
+## 3. RK3568主要电源轨与容量
 
-- 采用独立同步Buck，支持I2C或PWM动态调压，优先沿用Rockchip参考设计。
+Rockchip指南V1.2：
+- VDD_CPU：独立Buck，输出能力≥4A，动态调压；VDD_CPU_COM接Buck FB远端反馈；精度±1.5%；10%至80%负载跃迁斜率1A/µs，纹波±3%；总输出电容>135µF。
+- VDD_GPU：Buck能力≥2A；峰值约1.2A；精度±1.5%；总输出电容>90µF。
+- VDD_NPU：指南要求Buck能力≥2A；峰值约1A。A1首版禁用NPU，需同时在电源树和DTS明确处理。
+- VDD_LOGIC：指南2.2.2.7要求Buck能力≥2A；峰值约1.2A；总输出电容>90µF。参考RK809-5 BUCK1 2.5A。
+- PMU_VDD_LOGIC_0V9：峰值50mA，可与PMUPLL_AVDD_0V9合并。
+- SYSPLL/PMUPLL模拟电源：优先低噪声LDO，PSRR@1kHz >65dB。
+
+Rockchip离散电源章节另允许GPU与NPU在特定功耗场景下共用≥3A动态Buck；A1不采用该合并方案作为默认设计。
+
+## 4. LPDDR4X电源
+
+RK3568 LPDDR4X模式下：
+- DDRPHY_VDDQ = 1.1V。
+- DDRPHY_VDDQL = 0.6V。
+- RK3568 VCC_DDR与VCC0V6_DDR为两组供电网络。
+- LPDDR4X ZQ电阻：240Ω、1%接VCC0V6_DDR。
+- Rockchip RK809-5方案需同步调整BUCK3 FB3（Pin 27）分压，使VCC_DDR匹配所选DRAM。
+- Rockchip参考设计包含LPDDR4/LPDDR4X兼容电路，LPDDR4X时R3804不装，绿色框内元件需装配。
+- LPDDR4X待机自刷新时，1.8V供电必须保持。
+- SoC VCC_DDR/VCC0V6_DDR去耦按指南Figure 2-51及PCB Figure 3-34至3-37布置。
+- Micron颗粒VDD1/VDD2/VDDQ必须按完整料号数据手册逐一核对，不能直接把SoC PHY 1.1V/0.6V当成DRAM电源脚定义。
+
+DDR颗粒、模板和BIN未完成配对，因此VCC_DDR/0.6V电源具体器件及分压暂不冻结。
+
+## 5. CPU Buck
+
+TCS4525_WT作为候选，需与Rockchip参考方案核对：
+- 输入电压来自5V_SYS。
+- 输出动态调压范围按RK3568指南和DVFS软件配置确定。
 - 输出能力≥4A。
-- 输出精度±1.5%。
-- 负载从最大电流10%跃迁至80%，变化斜率1A/µs，纹波要求±3%以内。
-- VDD_CPU总电容必须大于135µF。
-- VDD_CPU_COM必须连接至Buck反馈端，按原厂参考电路布置Kelvin采样。
-- TCS4525系列仅作为候选；必须核对具体后缀、输入范围、输出电压范围、I2C地址、动态响应、补偿及封装散热后才可冻结。
-- 不允许仅凭“5A额定电流”判断其满足CPU电源要求。
+- 反馈接VDD_CPU_COM。
+- 输入电容、输出电容、电感饱和电流、补偿和散热按TCS4525正式数据手册及参考原理图设计。
+- 不因器件标称5A就直接认定满足动态响应与热设计要求。
 
-## 4. GPU、NPU和LOGIC
+## 6. RK809-5关键限制
 
-- VDD_GPU峰值可达1.2A，Buck输出能力≥2A，精度±1.5%，瞬态和纹波按指南执行；总电容>90µF。
-- VDD_NPU峰值可达1A，Buck输出能力≥2A，精度±1.5%；是否上电必须与Linux设备树和实际功能一致。
-- VDD_LOGIC峰值可达1.2A，Buck输出能力≥2A，精度±1.5%；总电容>90µF。
-- 不将RK809-5 BUCK3/BUCK4等1.5A通道直接指定为上述电源，除非官方完整电源树明确允许且负载/动态要求通过验证。
-
-## 5. LPDDR4X电源
-
-LPDDR4X模式下，RK3568有独立的VCC_DDR与VCC0V6_DDR供电网络，不能把SoC DDR PHY供电和DRAM供电按名称混为一谈。
-
-- Micron颗粒的VDD1/VDD2/VDDQ按确切订货型号数据手册核对。
-- RK3568 DDRPHY_VDDQ、DDRPHY_VDDQL按Rockchip LPDDR4X专用参考电路供电。
-- Rockchip指南指出单颗LPDDR4X方案可评估1A等级DDR DC/DC；实际仍需按颗粒峰值电流、SoC PHY负载及纹波预算复核。
-- LPDDR4X的1.8V电源在待机自刷新条件下需保持供电。
-- RK3568 VCC_DDR/VCC0V6_DDR去耦电容数量和位置必须遵循原厂图2-51、PCB图3-34至图3-37，不得任意删减。
-- DDR颗粒与模板/BIN尚未匹配，因此本节电压轨和器件值未冻结。
-
-## 6. RK809-5角色与限制
-
-Rockchip指南V1.2说明RK809-5：
-- 输入范围2.7–5.5V。
-- BUCK1/2：各最大2.5A。
-- BUCK3/4：各最大1.5A。
-- BUCK5：最大2.5A。
-- LDO1/2、LDO4–LDO9：各最大400mA。
-- LDO3：最大100mA。
-- Switch1/2：各最大2.1A。
-- 封装QFN68，7×7mm。
-
-关键注意事项：
-- RK809-5的上电时序已固化，不可修改，也不可与RK809-1/-2/-3的时序混用。
-- VCC_RTC必须先于或同时于其他电源供电；建议与VCC9同源。
-- VCC9上电后必须高于3.0V，否则PMIC会自动关机。
-- VDC启动门限>0.55V，推荐约1.2V；EXT_EN拉高后，VCC9必须在1.5ms内达到3.0V。
-- VCC_RTC需>3.0V。
+- 输入范围2.7–5.5V；VCC_RTC需为最高电压电源或满足Vmax-0.3V，推荐与VCC9同源。
+- VCC_RTC先于或同时于其他供电上电。
+- VCC9上电后需高于3.0V；VDC启动门限>0.55V，推荐约1.2V；EXT_EN拉高后VCC9需在1.5ms内达到3.0V。
+- RK809-5上电时序固化，不可修改，不可与RK809-1/-2/-3混用。
 - PWRON按键启动需拉低超过500ms。
-- 32.768kHz晶体负载电容按晶体CL计算，指南推荐22pF，且不低于18pF。
-- RESETB需保留100nF电容。
-- SDA/SCL/INT/CLK32K/RESETB为开漏输出，需要合适上拉。
-- 若不使用Fuel Gauge，BATDIV、SNSP、SNSN按指南接地处理。
-- BUCK1/2输入电容>10µF，输出电容>30µF。
-- BUCK3输入电容>10µF，输出电容>30µF；输出由外部分压设定，VBUCK3参考电压0.8V，阻值按目标DDR电压计算。
-- BUCK4输入电容>10µF，输出电容>30µF。
-- BUCK5输入电容>10µF，输出电容>33µF。
+- 32.768kHz晶体负载电容按晶体CL计算，指南推荐22pF且不低于18pF。
+- RESETB保留100nF电容；SDA/SCL/INT/CLK32K/RESETB开漏信号需正确上拉。
+- 不使用Fuel Gauge时，BATDIV、SNSP、SNSN按指南接地。
+- BUCK1/2输入电容>10µF、输出电容>30µF。
+- BUCK3输入电容>10µF、输出电容>30µF；FB3参考电压0.8V，分压按VCC_DDR目标计算。
+- BUCK4输入电容>10µF、输出电容>30µF。
+- BUCK5输入电容>10µF、输出电容>33µF。
 - 电感参考0.47µH，饱和电流>3.5A，DCR<50mΩ，优先<20mΩ。
 
-## 7. RK809-5电源分配策略
+## 7. IO Bank电源
 
-当前只冻结芯片角色和硬约束，不在没有完整图2-62原厂电源树的情况下臆测BUCK/LDO到SoC电源轨的一一映射。
+- PMUIO0固定1.8V，PMUIO1固定3.3V；PMUIO2与VCCIO1、VCCIO3–VCCIO7必须与DTS配置一致。
+- VCCIO2是Flash IO域，1.8V时FLASH_VOL_SEL拉高，3.3V时拉低。
+- A1计划使用eMMC、SDMMC0、SDMMC2、GMAC0、UART/I2C，所有IO Bank需根据最终PinMux统一定电压。
+- USB3 PHY、MULTI_PHY、HDMI PHY模拟电源按原厂低噪声LDO/磁珠/去耦网络实现。
+- 不使用的PHY电源可按指南关闭，但对应DTS节点必须禁用。
 
-下一步需要对照RK3568 EVB原理图和RK809-5完整参考电路，形成如下逐项分配表：
-- PMIC输出脚与输入供电脚
-- 输出电压/默认值/动态范围
-- 负载峰值与连续电流
-- 目标SoC电源球位/外围负载
-- 上电序号
-- 电感/反馈/输入输出电容
-- I2C地址和软件电源配置
+## 8. 原理图下一步
 
-## 8. IO与模拟电源域
-
-- PMUIO0固定1.8V，PMUIO1固定3.3V；PMUIO2及VCCIO1、VCCIO3–VCCIO7需硬件供电与DTS配置一致。
-- VCCIO2为Flash IO域，必须与FLASH_VOL_SEL状态匹配；1.8V时FLASH_VOL_SEL拉高，3.3V时拉低。
-- USB3 PHY、MULTI_PHY和HDMI PHY模拟电源按Rockchip指南推荐的低噪声LDO、磁珠和去耦网络实现。
-- 不使用的PHY电源可以按指南关闭，但对应DTS节点必须禁用，避免内核初始化卡住。
-
-## 9. 原理图冻结条件
-
-1. 获取并逐页核对RK3568 EVB原理图和RK809-5参考设计。
-2. 完成全部SoC电源球位—网络名—电源芯片输出映射。
-3. 完成各Buck负载/动态响应/电感/补偿/电容计算。
-4. 完成LPDDR4X颗粒、DDR模板和BIN配对。
-5. 完成IO Bank与DTS电压域一致性表。
-6. 检查启动、关机、掉电和复位时序。
-7. 完成电源原理图ERC及交叉检查后，才允许冻结SoC核心电源页。
+1. 获取Rockchip RK3568 EVB完整RK809-5原理图，逐项核对Figure 2-62的VCC1–VCC9、LDO输入和Switch网络。
+2. 逐球核对RK3568所有电源球位和网络名。
+3. 计算9V→5V_SYS输入功率、5V负载和各后级稳压器的热耗散。
+4. 完成CPU/GPU/Logic/DDR Buck外围元件值与电源完整性核算。
+5. 完成PMIC上电、复位、晶振、I2C及电源键电路。
+6. KiCad绘制并完成ERC后再进入SoC信号页。
 
 ## 参考资料
 
-- Rockchip RK3568 Hardware Design Guide V1.2, Sections 2.2.2–2.2.3, Figures 2-43–2-63.
+- Rockchip RK3568 Hardware Design Guide V1.2, Sections 2.1.7.5, 2.2.2–2.2.3, Figures 2-28–2-63.
   https://dl.xkwy2018.com/downloads/RK3568/RK356X/Hardware/Rockchip_RK3568_Hardware_Design_Guide_V1.2_EN.pdf
+- RK3568 EVB User Guide V1.2, Power Diagram.
+  https://dl.xkwy2018.com/downloads/RK3568/RK356X/Hardware/Rockchip_RK3568_EVB_User_Guide_V1.2_EN.pdf
 - RK809 Datasheet Rev 2.5.
   https://www.boardcon.com/download/Rockchip_RK809_Datasheet_V2.5-20250407.pdf
+- RK3568 public reference design index (schematic and PCB review references):
+  https://github.com/hqnicolas/RK3568-hardware-design
