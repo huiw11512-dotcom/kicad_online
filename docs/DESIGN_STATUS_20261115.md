@@ -9,7 +9,7 @@ Authoritative architecture decisions: [A1_MASTER_BASELINE_REV1.md](A1_MASTER_BAS
 - USB-C PD 15V/3A; 15V-to-5V_SYS main converter target 5A.
 - Six-layer FR-4; 85 × 56 mm outline target, not yet mechanically frozen.
 
-## Actual KiCad implementation
+## Actual KiCad implementation\n\n| LPDDR4X DDR power | Page 3 added: SY8089AAAC 0.6V buck, AP2112K 1.8V LDO, TDK 2.2uH inductor, local decoupling; exact DRAM/template and current/ramp validation open |
 
 | Block | State |
 |---|---|
@@ -25,7 +25,7 @@ Authoritative architecture decisions: [A1_MASTER_BASELINE_REV1.md](A1_MASTER_BAS
 
 ## Work completed in this revision
 
-- Added native KiCad page `hardware/kicad/A1_RK809_PMIC.kicad_sch` as page 2 and linked it from the root sheet.
+- Added native KiCad page `hardware/kicad/A1_RK809_PMIC.kicad_sch` as page 2 and linked it from the root sheet.\n- Added native KiCad page `hardware/kicad/A1_DDR_POWER.kicad_sch` as page 3: separate 0.6V and 1.8V LPDDR4X supplies, with VCC_DDR_1V1 from BUCK3.
 - Added RK809-5 69-pin symbol, 68+EP candidate QFN68 footprint, pin map and PMIC BOM.
 - Implemented VCC input bypass, five buck power stages represented; BUCK4 OTP-default OFF, LDO/SWOUT bypass, VDC divider, PWRON/SLEEP controls, open-drain pull-ups, RTC crystal, charge-pump bypass, BUCK4 optional stage and RESETB filter.
 - Held BUCK3 feedback divider and PMIC-to-SoC rail allocation open pending exact LPDDR4X and full EVB cross-check.
