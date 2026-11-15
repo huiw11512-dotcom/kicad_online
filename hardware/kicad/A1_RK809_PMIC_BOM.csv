@@ -46,16 +46,16 @@ L3,0.47uH / TDK SPM5030T-R47M-HZ,A1_PMIC:TDK_SPM5030T_5.2x5.0mm,1,TDK SPM5030T-R
 L4,0.47uH / TDK SPM5030T-R47M-HZ,A1_PMIC:TDK_SPM5030T_5.2x5.0mm,1,TDK SPM5030T-R47M-HZ,"Selected; Isat 11A typ, DCR 5.39mOhm max"
 L5,1.0uH / TDK SPM5030T-1R0M-HZ,A1_PMIC:TDK_SPM5030T_5.2x5.0mm,1,TDK SPM5030T-1R0M-HZ,"Selected; Isat 8A typ, DCR 11.5mOhm max"
 L6,0.47uH / TDK SPM5030T-R47M-HZ,A1_PMIC:TDK_SPM5030T_5.2x5.0mm,1,TDK SPM5030T-R47M-HZ,"Selected; Isat 11A typ, DCR 5.39mOhm max"
-R1,TBD_RH (DDR VDD dependent),Resistor_SMD:R_0603_1608Metric,1,TBD,TBD - do not populate until DRAM rail is frozen
-R2,TBD_RL (DDR VDD dependent),Resistor_SMD:R_0603_1608Metric,1,TBD,TBD - do not populate until DRAM rail is frozen
+R1,37.4k 1% 0603 (BUCK3 FB3 upper RH),Resistor_SMD:R_0603_1608Metric,1,TBD,Selected; with R2=100k sets VCC_DDR_1V1 about 1.10V
+R2,100k 1% 0603 (BUCK3 FB3 lower RL),Resistor_SMD:R_0603_1608Metric,1,TBD,Selected; with R1=37.4k sets VCC_DDR_1V1 about 1.10V
 R3,4.7k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
 R4,4.7k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
 R5,10k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
 R6,10k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
 R7,10k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
 R8,100k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
-R9,37.4k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Selected value for 1.1V VCC_DDR; verify with final DRAM
-R10,100k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Selected value for 1.1V VCC_DDR; verify with final DRAM
+R9,100k 1% 0603 (VDC upper),Resistor_SMD:R_0603_1608Metric,1,TBD,Selected; upper leg of 5V_SYS to PMIC_VDC_SENSE divider
+R10,33k 1% 0603 (VDC lower),Resistor_SMD:R_0603_1608Metric,1,TBD,Selected; lower leg gives PMIC_VDC_SENSE about 1.24V from 5V_SYS
 SW1,Omron B3U-1000P momentary,Button_Switch_SMD:SW_SPST_B3U-1000P,1,B3U-1000P,Selected
 U3,RK809-5,A1_PMIC:RK809_QFN-68-1EP_7x7mm_P0.35mm_EP5.49x5.49mm,1,RK809-5,Selected; footprint land pattern verification pending
 Y1,32.768kHz / Epson Q13FC13500004 / CL=12.5pF,Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm,1,Q13FC13500004,"Selected; +/-20ppm, 12.5pF"
