@@ -10,7 +10,7 @@
 | REF-004 | RK3588 Package Pin Length | V1.0，2021-12-28 | BGA逃线与封装引脚长度分析 | 待取得并解析 |
 | REF-005 | RK3588 Methods for Processing Unused Pins | V1.1，2022-09-15 | NC/未用球处理 | 待取得并审查 |
 | REF-006 | RK3588 Power Consumption Test Report | V1.1，2022-08-29 | 功耗估算和电源容量设计输入 | 待取得并分析 |
-| REF-007 | Rockchip Support List DDR | V2.55 | LPDDR4X颗粒兼容性筛选 | 待取得并核对更新版本 |
+| REF-007 | Rockchip Solutions DDR SDRAM Support List | Ver3.00，2025-08-08（公开镜像） | LPDDR4X颗粒兼容性筛选、状态与应用备注 | 已检索，需向FAE确认原始版本 |
 | REF-008 | eMMC Support List | Ver1.72，2023-01-29 | eMMC兼容性筛选 | 待取得并核对更新版本 |
 | REF-009 | RK806 Datasheet | V1.2，2022-10-08 | PMIC引脚、寄存器和电气参数 | 待取得 |
 | REF-010 | RK860 Datasheet | V1.5，2022-11-01 | 辅助电源方案评估 | 待取得 |
