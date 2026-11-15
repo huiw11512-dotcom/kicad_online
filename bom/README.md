@@ -1,7 +1,7 @@
 # A1 BOM规则
 
 BOM按以下模块管理：
-1. SoC：RK3568 FCBGA636L
+1. SoC：RK3568 FCBGA636L，19×19mm；LCSC候选C2938930（库存/价格需下单前复核）
 2. PMIC/电源：RK809-5、VDD_CPU Buck、USB-C PD、5V/3V3电源
 3. DDR：4GB LPDDR4X，完整料号待Rockchip支持清单确认
 4. 存储：32GB eMMC、MicroSD卡座
