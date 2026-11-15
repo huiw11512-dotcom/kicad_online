@@ -19,4 +19,4 @@ AP6275系列模块候选，Wi-Fi走SDIO，Bluetooth走UART，天线按模块射�
 USB-C PD协商9V输入，主Buck产生5V_SYS；RK809-5及独立CPU Buck按官方电源树产生SoC各路电压。
 
 ## 机械
-外形目标85×56mm，SoC顶部预留散热片，USB/HDMI/RJ45沿板边排布，40-pin GPIO位于长边。最终板框以连接器实物、天线净空和散热器装配为准。
+外形目标85×56mm，SoC顶部预留散热片，USB/Micro-HDMI/RJ45沿板边排布，40-pin GPIO位于长边。最终板框以连接器实物、天线净空和散热器装配为准。

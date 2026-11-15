@@ -2,7 +2,7 @@
 
 | 接口 | 数量 | 实现 |
 |---|---:|---|
-| HDMI 2.0a | 1 | SoC HDMI TX，Type-A |
+| HDMI 2.0a | 1 | SoC HDMI TX，Micro-HDMI Type-D |
 | USB 3.0 Type-A | 2 | 1 × USB3 Host + 1 × USB3 DRD固定Host |
 | USB 2.0 Type-A | 2 | 2 × USB2 Host |
 | RJ45 Gigabit | 1 | GMAC RGMII + RTL8211F-CG |
