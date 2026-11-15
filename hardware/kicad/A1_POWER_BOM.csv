@@ -1,0 +1,25 @@
+<PARSED TEXT FOR SHEET: 1 / 1 TABS
+TAB NAME: A1_POWER_BOM.csv>
+index,Ref,Value,Manufacturer / Part,Footprint,Status / notes
+0,J1,USB-C receptacle 16P,Select exact USB-C 16P sink receptacle,Connector_USB:USB_C_Receptacle_USB2.0_16P,Pin IDs A1/A4... verify chosen connector drawing and footprint pad mapping
+1,U1,HUSB238_003DD,Hynetek HUSB238_003DD,Package_DFN_QFN:DFN-10-1EP_3x3mm_P0.5mm_EP1.7x2.4mm,VSET=14k requests 15V; ISET=22.6k caps 3A; confirm exact OTP/order code
+2,R1,14k 1% 0603,Generic,Resistor_SMD:R_0603_1608Metric,HUSB238 VSET
+3,R2,22.6k 1% 0603,Generic,Resistor_SMD:R_0603_1608Metric,HUSB238 ISET
+4,R3,5.1k 1% 0603,Generic,Resistor_SMD:R_0603_1608Metric,HUSB238 GATE series resistor
+5,R4,49.9k 1% 0603,Generic,Resistor_SMD:R_0603_1608Metric,PMOS gate pull-up to VBUS
+6,C1,1uF 35V X7R 0603,Generic,Capacitor_SMD:C_0603_1608Metric,HUSB238 VIN bypass
+7,Q1,AO4407A,Alpha & Omega AO4407A,Package_SO:SO-8_3.9x4.9mm_P1.27mm,"P-MOS; verify exact pinout, Rds(on), thermal, and 30V VDS margin"
+8,U2,LM76005RNPR,Texas Instruments LM76005RNPR,TBD: WQFN RNP 30-pin 6x4mm,5V/5A synchronous buck; exact land pattern must be sourced/verified
+9,"C2,C3",4.7uF 50V X7R 1210,Generic,Capacitor_SMD:C_1210_3225Metric,Input ceramic bulk; verify effective capacitance under 15V DC bias
+10,C4,47nF 50V X7R 0603,Generic,Capacitor_SMD:C_0603_1608Metric,High-frequency input bypass
+11,C5,470nF 10V X7R 0603,Generic,Capacitor_SMD:C_0603_1608Metric,BOOT-SW bootstrap capacitor
+12,C6,2.2uF 10V X7R 0603,Generic,Capacitor_SMD:C_0603_1608Metric,VCC bypass
+13,C7,1uF 10V X7R 0603,Generic,Capacitor_SMD:C_0603_1608Metric,BIAS bypass
+14,"C8,C9,C10",47uF 10V X7R 1210,Generic,Capacitor_SMD:C_1210_3225Metric,3x47uF output bank per TI example; DC-bias derating must be checked
+15,C11,47pF C0G 0603,Generic,Capacitor_SMD:C_0603_1608Metric,Feed-forward capacitor across RFBT
+16,R5,100k 1% 0603,Generic,Resistor_SMD:R_0603_1608Metric,FB upper divider
+17,R6,24.9k 1% 0603,Generic,Resistor_SMD:R_0603_1608Metric,FB lower divider; sets 5V nominal
+18,R7,732k 1% 0603,Generic,Resistor_SMD:R_0603_1608Metric,EN divider top; VIN rising threshold approx 10.0V
+19,R8,100k 1% 0603,Generic,Resistor_SMD:R_0603_1608Metric,EN divider bottom
+20,R9,10k 1% 0603,Generic,Resistor_SMD:R_0603_1608Metric,PGOOD pull-up to 5V_SYS
+21,L1,"6.8uH, Isat >=8A","Select shielded power inductor, low DCR",TBD,TI 5V/5A design example; choose Isat >8A and verify DCR/thermal
