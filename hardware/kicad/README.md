@@ -20,10 +20,10 @@
 ### Page 2 — RK809-5 PMIC
 - U3 RK809-5 QFN68, all 68 pins plus exposed pad represented.
 - All PMIC pins have a named net or explicit no-connect marker.
-- Four active buck stages are represented with 0.47uH inductors and nominal 2×47uF output capacitors.
+- Five buck stages represented; BUCK4 hardware populated but OTP-default OFF are represented with 0.47uH inductors and nominal 2×47uF output capacitors.
 - BUCK3 feedback divider is explicitly TBD until the LPDDR4X rail is finalized.
-- VDC divider, PWRON switch, SLEEP pulldown, I2C/open-drain pull-ups, RESETB 100nF, 32.768kHz crystal and decoupling are represented.
-- RK809-5 output-to-RK3568 rail allocation remains open pending full EVB schematic verification and exact DDR selection.
+- VDC divider, PWRON switch, SLEEP pulldown, I2C/open-drain pull-ups, RESETB 100nF, 32.768kHz crystal, charge-pump bypass and all PMIC decoupling are represented.
+- RK809-5 output-to-RK3568 rail allocation remains open pending full EVB schematic verification and exact DDR selection. Buck inductors use TDK SPM5030T family; exact local land pattern included.
 
 ### RK3568 library
 - `A1_SOC.kicad_sym` — 636-ball grouped symbol.
