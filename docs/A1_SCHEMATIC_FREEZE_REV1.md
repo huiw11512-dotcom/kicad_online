@@ -19,18 +19,18 @@
 | 扩展存储 | 1×MicroSD，4-bit |
 | 显示 | 1×HDMI 2.0a |
 | 有线网络 | 1×Gigabit Ethernet，RGMII PHY + MagJack |
-| USB | 2×USB3.0 Type-A + 1×USB2.0 Type-A；USB3 DRD固定Host |
+| USB | 1×USB3.x Type-A Host1 + 2×USB2.0 Type-A Host2/3 + 1×Micro-USB USB3_OTG0 service/download |
 | 无线 | 1个焊接式Wi-Fi/BT模块，SDIO + UART；模块型号待接口/供货核验 |
 | GPIO | 40-pin 2.54mm排针；只引出已确认的3.3V GPIO/I2C/SPI/UART/PWM，保留5V/GND |
 | 调试 | 1×3-pin 3.3V UART，1×MaskROM/Recovery按键 |
-| 电源输入 | USB-C PD，目标12V/3A（36W）；PD协商失败时不启动满载模式 |
+| 电源输入 | USB-C PD，目标15V/3A（45W）；PD协商失败时不启动满载模式 |
 | PCB | 6层FR-4，1.6mm初始目标，板厂阻抗计算后冻结 |
 | 不做 | M.2/NVMe、SATA、PCIe插槽、音频Codec、摄像头接口、LCD/DSI、第二网口、PoE |
 
 ## 3. 电源总体架构（电气冻结前的拓扑）
 
-1. USB-C PD Sink接收12V/3A合同；输入保护、反灌/过流保护后形成12V_IN。
-2. 12V_IN经主Buck形成5V_SYS（设计目标6A等级，实际按36W输入预算降额）。
+1. USB-C PD Sink接收15V/3A合同；输入保护、反灌/过流保护后形成15V_IN。
+2. 15V_IN经主Buck形成5V_SYS（设计目标6A等级，实际按36W输入预算降额）。
 3. RK809-5仅由5V_SYS供电；绝不将12V直接接入RK809-5。
 4. VDD_CPU使用独立动态调压Buck，能力不低于Rockchip要求；TCS4525仅作为候选，必须完成数据手册与EVB电路核对。
 5. RK809-5的BUCK/LDO/SW输出按RK3568 EVB V1.2完整电源图逐网映射，不得根据简化框图猜接。
@@ -43,14 +43,14 @@
 | Sheet | 页名 | 必须完整包含 |
 |---|---|---|
 | 01 | USB-C_PD_INPUT | Type-C receptacle、CC/PD sink、12V输入保护、保险/电子保险、输入电容、VBUS/CC ESD、PD状态/故障指示 |
-| 02 | MAIN_POWER | 12V→5V主Buck、5V_SYS电源树、输入/输出电容、反馈、软启动、PG、使能、测试点、热/电流预算 |
+| 02 | MAIN_POWER | 15V→5V主Buck、5V_SYS电源树、输入/输出电容、反馈、软启动、PG、使能、测试点、热/电流预算 |
 | 03 | RK809_PMIC | RK809-5完整引脚、全部Buck/LDO/SW外围、VCCx输入分配、I2C、INT、PWRON、RESETB、32k晶体、RTC、电池/未用引脚处理 |
 | 04 | CPU_GPU_LOGIC_POWER | CPU动态Buck、GPU/Logic/NPU所需电源、FB远端采样、补偿/电感/电容、PG/EN、SoC电源轨网络 |
 | 05 | RK3568_SOC | 636-ball SoC、全部电源/地球、24MHz、32.768kHz（如需）、Reset、Boot straps、UART调试、I2C、JTAG/测试点 |
 | 06 | LPDDR4X_4GB | 颗粒、完整DQ/CA/CK/DQS映射、ZQ、RESET、ODT、全部DRAM电源与去耦；严格复制匹配Rockchip DDR模板的拓扑约束，不复制其他整板 |
 | 07 | EMMC_MICROSD | eMMC 8-bit、RST、CLK、CMD、DATA、STROBE、VCC/VCCQ、MicroSD 4-bit、卡座检测、ESD |
 | 08 | GIGABIT_ETHERNET | RGMII、PHY strap、25MHz时钟、MDC/MDIO、RESET、RSET、磁性器件/RJ45、LED、ESD |
-| 09 | USB3_USB2 | USB3 Host/DRD PHY、差分线、Type-A连接器、VBUS限流开关、OC/EN、ESD、USB2端口 |
+| 09 | USB3_USB2 | USB3_HOST1、USB2_HOST2/3及USB3_OTG0 Micro-USB下载口、差分线、Type-A连接器、VBUS限流开关、OC/EN、ESD、USB2端口 |
 | 10 | HDMI | HDMI TX差分对、DDC、HPD、CEC、+5V source、ESD、共模/滤波按原厂方案 |
 | 11 | WIFI_BT_GPIO | SDIO、UART、模块电源、天线净空/连接器、40-pin排针、按键、风扇接口、状态LED |
 | 12 | TEST_RECOVERY | MaskROM/Recovery、启动模式选择、UART、JTAG测试点、关键电源测试点、生产测试焊盘 |
@@ -71,7 +71,7 @@
 - 逐引脚参考RK3568 EVB完整电源原理图，而非只抄Power Tree框图。
 - 确认VCC1–VCC9、VCC_RTC、各LDO输入脚、BUCK5、SW1/SW2、外部Buck及全部PG/EN网络。
 - RK809-5固化上电顺序必须保持。
-- 9V/12V输入只进入外部主Buck，PMIC由合规5V供电。
+- 15V输入只进入外部主Buck，PMIC由合规5V供电。
 
 ## 6. 全部页的统一交付标准
 
