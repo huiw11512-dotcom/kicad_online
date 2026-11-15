@@ -25,9 +25,10 @@ set_layer(3,0.1088,"2116",4.16)
 set_layer(4,0.55,"Core",4.6)
 set_layer(5,0.0994,"3313",4.1)
 s=s[:m.start()]+stack+s[m.end():]
-old='(thickness 1.5584)'
-if s.count(old)!=1:raise SystemExit("Previous provisional 1.5584mm thickness missing or altered")
-s=s.replace(old,'(thickness 1.6)',1)
+old_options=['(thickness 1.5296)','(thickness 1.5584)']
+matches=[x for x in old_options if s.count(x)==1]
+if len(matches)!=1:raise SystemExit(f"Expected one known source board thickness; found {[(x,s.count(x)) for x in old_options]}")
+s=s.replace(matches[0],'(thickness 1.6)',1)
 p.write_text(s,encoding="utf-8")
 (root/"JLC06161H_3313_STACKUP_REV_B.md").write_text(
     "# Rev.B proposed fabrication stackup\n\n"
