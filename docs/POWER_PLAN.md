@@ -35,7 +35,26 @@
 
 注意：以上是原厂参考电源树功能分配，不是已经完成的A1逐脚电路。所有LDO的VCC5/VCC6/VCC7输入分配、Switch1/2供电、BUCK5及VCC8/VCC9/VCC_RTC连接，必须对照完整RK809-5参考原理图核对后再绘制。
 
-## 3. RK3568主要电源轨与容量
+## 2A. 外部电源支路与参考实现
+
+公开的RK3568 LPDDR4 32-bit参考原理图（96Boards CE schematic）提供了一个可交叉核对的RK809-5实现示例：
+- 外部Buck为VDD_CPU供电，参考设计能力6A；RK3568指南要求至少4A。
+- BUCK1→VDD_LOGIC（0.9V）。
+- BUCK2→VDD_GPU（0.9V）。
+- BUCK3→VDD_DDR，FB3可调。
+- BUCK4→VDD_NPU，参考设计默认关闭。
+- LDO2→VDDA_0V9；LDO3→VDDA0V9_PMU。
+- LDO5→VCCIO_SD；LDO6→VCC3V3_PMU。
+- LDO7→VCCA_1V8；LDO8→VCCA1V8_PMU。
+- BUCK5→VCC_1V8；SW1→VCC_3V3；SW2→VCC3V3_SD。
+- 外部Buck生成VCC3V3_SYS；外部LDO用于该参考设计的VCC2V5_DDR。
+
+该参考图采用LPDDR4配置，不能将其中的VCC2V5_DDR直接移植到A1的LPDDR4X方案。LPDDR4X必须按Rockchip Figure 2-29及LPDDR4X模板改为相应1.8V/1.1V/0.6V供电结构，并按具体颗粒核对。
+
+参考资料：96Boards BEIQI CE RK3568 LPDDR4 schematic，Power Diagram/Power Sequence。
+https://www.96boards.org/documentation/consumer/tb-96ai-3586ce/hardware-docs/files/tb-96ai-3586ce-schematics.pdf
+
+
 
 Rockchip指南V1.2：
 - VDD_CPU：独立Buck，输出能力≥4A，动态调压；VDD_CPU_COM接Buck FB远端反馈；精度±1.5%；10%至80%负载跃迁斜率1A/µs，纹波±3%；总输出电容>135µF。
