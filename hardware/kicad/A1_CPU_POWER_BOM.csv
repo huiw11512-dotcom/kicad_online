@@ -1,0 +1,13 @@
+Reference,Value,Footprint,Qty,MPN,Status
+"U8","TCS4525_WT","A1_CPU:WCSP-20_1.96x1.56mm_P0.4mm","1","TBD","Design candidate"
+"L9","0.47uH TDK SPM5030T-R47M-HZ","A1_PMIC:TDK_SPM5030T_5.2x5.0mm","1","TBD","Design candidate"
+"C57","22uF 10V X7R 1206","Capacitor_SMD:C_1206_3216Metric","1","TBD","Design candidate"
+"C58","22uF 10V X7R 1206","Capacitor_SMD:C_1206_3216Metric","1","TBD","Design candidate"
+"C59","22uF 6.3V X7R 1206","Capacitor_SMD:C_1206_3216Metric","1","TBD","Design candidate"
+"C60","22uF 6.3V X7R 1206","Capacitor_SMD:C_1206_3216Metric","1","TBD","Design candidate"
+"C61","22uF 6.3V X7R 1206","Capacitor_SMD:C_1206_3216Metric","1","TBD","Design candidate"
+"C62","22uF 6.3V X7R 1206","Capacitor_SMD:C_1206_3216Metric","1","TBD","Design candidate"
+"C63","100nF 10V X7R 0603","Capacitor_SMD:C_0603_1608Metric","1","TBD","Design candidate"
+"R20","100k 1%","Resistor_SMD:R_0603_1608Metric","1","TBD","Design candidate"
+"R21","100k 1%","Resistor_SMD:R_0603_1608Metric","1","TBD","Design candidate"
+"C64","100nF 10V X7R 0603","Capacitor_SMD:C_0603_1608Metric","1","TBD","Design candidate"
