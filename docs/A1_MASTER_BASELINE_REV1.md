@@ -19,7 +19,7 @@ Performance note: RK3568 uses four Cortex-A55 cores; Raspberry Pi 4B uses Cortex
 | RAM | 4 GB LPDDR4X, 32-bit | Capacity frozen; exact part/template/BIN pairing open |
 | Boot storage | 32 GB eMMC 5.1, 8-bit | Capacity/interface frozen; exact part open |
 | Removable storage | MicroSD, SDMMC0 4-bit | Interface frozen |
-| PMIC | RK809-5 | Selected; full EVB rail-by-rail implementation open |
+| PMIC | RK809-5 | Selected; input rail and BUCK3/VDC dividers corrected; remaining EVB rail mapping open |
 | CPU rail | Separate dynamic Buck, ≥4 A design capability | Architecture frozen; exact regulator and compensation open |
 | Display | 1 × HDMI 2.0a | Frozen |
 | Ethernet | 1 × Gigabit Ethernet, GMAC0 RGMII + external PHY | Frozen; exact PHY/strap/clock details open |
@@ -30,6 +30,7 @@ Performance note: RK3568 uses four Cortex-A55 cores; Raspberry Pi 4B uses Cortex
 | Debug | 3-pin 3.3 V UART + Recovery/MaskROM access | Frozen |
 | Input | USB-C PD 15 V / 3 A (45 W) | Frozen for Rev 1 |
 | Main rail | 15 V_IN → 5 V_SYS, 5 A maximum converter target | Topology frozen; power/thermal validation open |
+| Pre-PMIC rail | 5 V_SYS → VCC3V3_SYS, 3.3 V / 3 A, TPS62132RGTT | Schematic page added; full-load thermal/transient validation open |
 | PCB | 6-layer FR-4, 1.6 mm starting thickness | Starting target; stackup/impedance must be confirmed with fabricator |
 | Outline | 85 × 56 mm target | Mechanical target only; freeze after connector and DDR placement |
 
@@ -49,12 +50,12 @@ This deliberately prioritizes reliable recovery and a simple first board over ma
 1. USB-C PD Sink negotiates 15 V / 3 A. HUSB238 remains the selected controller candidate.
 2. HUSB238 resistor targets from Hynetek's reference-design guide: RVSET = 14 kΩ for 15 V; RISET = 22.6 kΩ for 3.0 A.
 3. Protected 15 V_IN feeds the main synchronous Buck.
-4. LM76005 is the current 5 V / 5 A converter candidate. 5 V_SYS is the source for RK809-5 and the downstream regulators/loads.
+4. LM76005 is the current 5 V / 5 A converter candidate. 5V_SYS feeds the pre-PMIC 3.3V buck, speaker supply and other 5V loads. VCC3V3_SYS is the supply for RK809 VCC1-VCC9 and VCC_RTC.
 5. The 5 V converter's 5 A output limit is the binding board-level power limit (25 W nominal), not the 45 W PD contract. The power budget must include conversion losses, SoC/DDR/PHY, Wi-Fi, HDMI, and up to 1.9 A USB VBUS. USB ports must be current-limited and total load managed.
-6. RK809-5 input is 2.7–5.5 V; it must only receive 5 V_SYS, never 15 V_IN.
+6. RK809-5 VCC1-VCC9 and VCC_RTC use VCC3V3_SYS (3.3V); VCC_SPK_HP retains a separate filtered 5V_SYS supply. Never connect 15V_IN to the PMIC.
 7. VDD_CPU uses an independent dynamic Buck with ≥4 A capability and remote feedback to VDD_CPU_COM.
 8. RK809-5 rails and fixed power-on sequence must follow the complete RK3568 EVB reference schematic and the RK3568 Hardware Design Guide, not a simplified block diagram.
-9. LPDDR4X SoC PHY rails and DRAM VDD1/VDD2/VDDQ are separate networks. Values are set only after the exact DRAM part and Rockchip template are paired.
+9. LPDDR4X SoC PHY rails and DRAM VDD1/VDD2/VDDQ are separate networks. Micron MT53E1G32D2FW-046 WT:C is selected as the 4GB x32 candidate; final rail/BIN/template pairing remains a hard gate.
 
 ### Existing input-stage review flags
 
@@ -67,8 +68,8 @@ This deliberately prioritizes reliable recovery and a simple first board over ma
 ### LPDDR4X
 
 - Target: 4 GB, 32-bit.
-- Candidate: Micron MT53E1G32D2FW-046 WT:C, not yet approved for A1.
-- Must close all of: exact ordering code and datasheet revision, package ball map, Rockchip AVL row/application note, exact PCB template, exact DDR initialization BIN/version, WDQS requirement, SoC-to-DRAM DQ/DQS/CA/CK/CS mapping, and rail mapping.
+- Selected candidate: Micron MT53E1G32D2FW-046 WT:C; 32Gb/4GB, x32, 200-ball TFBGA, two-die package, 1.1V/0.6V IO.
+- Must close all of: Rockchip AVL row/application note, exact PCB template, exact DDR initialization BIN/version, WDQS requirement, SoC-to-DRAM DQ/DQS/CA/CK/CS mapping, and rail mapping. The Rockchip table lists LP4X 200-ball x32 templates, but exact MPN-to-BIN compatibility is not yet proven.
 - If the single x32 candidate cannot be proven compatible, switch to a Rockchip-supported two-device x16 organization. Do not force an unverified device into a convenient template.
 
 ### eMMC / MicroSD
@@ -81,16 +82,17 @@ This deliberately prioritizes reliable recovery and a simple first board over ma
 
 1. USB-C_PD_INPUT — receptacle, HUSB238, input protection, PD status, input test points.
 2. MAIN_POWER — 15 V to 5 V_SYS Buck, feedback, EN/PGOOD, protection, current/thermal budget.
-3. RK809_PMIC — complete RK809-5 pinout, all Buck/LDO/SW rails, VCC input domains, RTC, crystal, I2C, PWRON, RESETB and unused-pin handling.
-4. CPU_GPU_LOGIC_POWER — CPU dynamic Buck, feedback, GPU/logic/DDR-related power rails, sequencing and decoupling.
-5. RK3568_SOC — all 636 balls, power/ground, clocks, reset, boot straps, UART, I2C and service/download signals.
-6. LPDDR4X_4GB — exact matched DRAM device and complete bus/power wiring.
-7. EMMC_MICROSD — eMMC 8-bit and MicroSD 4-bit.
-8. GIGABIT_ETHERNET — RGMII, PHY, clock, straps, magnetics/RJ45 and ESD.
-9. USB3_USB2 — one USB3 Host, two USB2 Host ports, VBUS switches and ESD.
-10. HDMI — HDMI TX, DDC, HPD, CEC, +5 V and ESD.
-11. WIFI_BT_GPIO — combo module, antenna keepout, 40-pin header, LEDs and buttons.
-12. TEST_RECOVERY — UART, MaskROM/Recovery, JTAG/test pads and rail test points.\n13. DDR_POWER — separate LPDDR4X VCC0V6_DDR buck and VCC1V8_DDR LDO; VCC_DDR_1V1 from RK809 BUCK3.
+3. 3V3_POWER — 5V_SYS to pre-PMIC VCC3V3_SYS 3.3V/3A buck.
+4. RK809_PMIC — complete RK809-5 pinout, all Buck/LDO/SW rails, VCC input domains, RTC, crystal, I2C, PWRON, RESETB and unused-pin handling.
+5. CPU_GPU_LOGIC_POWER — CPU dynamic Buck, feedback, GPU/logic/DDR-related power rails, sequencing and decoupling.
+6. RK3568_SOC — all 636 balls, power/ground, clocks, reset, boot straps, UART, I2C and service/download signals.
+7. LPDDR4X_4GB — exact matched DRAM device and complete bus/power wiring.
+8. EMMC_MICROSD — eMMC 8-bit and MicroSD 4-bit.
+9. GIGABIT_ETHERNET — RGMII, PHY, clock, straps, magnetics/RJ45 and ESD.
+10. USB3_USB2 — one USB3 Host, two USB2 Host ports, VBUS switches and ESD.
+11. HDMI — HDMI TX, DDC, HPD, CEC, +5 V and ESD.
+12. WIFI_BT_GPIO — combo module, antenna keepout, 40-pin header, LEDs and buttons.
+13. TEST_RECOVERY — UART, MaskROM/Recovery, JTAG/test pads and rail test points.\n13. DDR_POWER — separate LPDDR4X VCC0V6_DDR buck and VCC1V8_DDR LDO; VCC_DDR_1V1 from RK809 BUCK3.
 
 ## 6. Hard gates before fabrication
 
@@ -112,8 +114,9 @@ No board fabrication is authorized until all gates are closed and the native KiC
 
 ## 8. Current implementation status
 
-- Native KiCad root schematic contains the USB-C PD input and 15 V to 5 V main Buck prototype, and links the RK809-5 PMIC page 2.
-- RK809-5 has a complete 69-pin symbol and 68+EP candidate footprint; its output map follows the Rockchip EVB reference.\n- LPDDR4X power page adds separate 0.6V and 1.8V regulators; exact DRAM part/template and current/ramp checks remain open.
+- Native KiCad root schematic contains the USB-C PD input, 15 V to 5 V main Buck prototype, RK809-5 PMIC page 2, DDR_POWER page 3 and pre-PMIC 3V3_POWER page 4.
+- RK809-5 has a complete 69-pin symbol and 68+EP candidate footprint; VCC1-VCC9/VCC_RTC now use VCC3V3_SYS. BUCK3 FB3 and VDC divider values are corrected in schematic/BOM.\n- LPDDR4X power page adds separate 0.6V and 1.8V regulators; Micron 4GB x32 part selected, exact Rockchip template/BIN and current/ramp checks remain open.
+- Pre-PMIC 3.3V page uses TPS62132RGTT, 2.2uH APV inductor and specified LCSC capacitors; 3A thermal and transient validation remain open.
 - RK3568 symbol library exists, but the SoC has not yet been placed in the root schematic. LPDDR4X, eMMC and external interfaces are not yet drawn.
 - The project has not passed native KiCad load, ERC, netlist export, visual review, PCB DRC or hardware bring-up.
 - This baseline resolves architecture conflicts; it does not represent a completed schematic or fabrication-ready design.
