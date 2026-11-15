@@ -1,0 +1,11 @@
+<PARSED TEXT FOR SHEET: 1 / 1 TABS
+TAB NAME: A1_PD_INPUT_BOM.csv>
+index,Ref,Value,Manufacturer part,Footprint,Notes
+0,J1,USB-C receptacle 16P,Generic USB-C 16P,Connector_USB:USB_C_Receptacle_USB2.0_16P,Confirm exact manufacturer drawing and pad numbering
+1,U1,HUSB238_003DD,Hynetek HUSB238_003DD,Package_DFN_QFN:DFN-10-1EP_3x3mm_P0.5mm_EP1.7x2.4mm,DFN-10L; pin 11 exposed GND pad
+2,R1,14k 1%,Generic,Resistor_SMD:R_0603_1608Metric,VSET requests 15V
+3,R2,22.6k 1%,Generic,Resistor_SMD:R_0603_1608Metric,ISET requests 3A
+4,R3,5.1k 1%,Generic,Resistor_SMD:R_0603_1608Metric,Series GATE resistor per Hynetek typical application
+5,R4,49.9k 1%,Generic,Resistor_SMD:R_0603_1608Metric,Gate pull-up to VBUS per Hynetek typical application
+6,C1,1uF 35V X7R,Generic,Capacitor_SMD:C_0603_1608Metric,Place adjacent to VIN/GND
+7,Q1,AO4407A,Alpha & Omega AO4407A,Package_SO:SO-8_3.9x4.9mm_P1.27mm,SO-8 P-channel; verify exact pin mapping against datasheet
