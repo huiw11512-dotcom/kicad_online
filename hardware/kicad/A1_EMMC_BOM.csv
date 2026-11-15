@@ -1,0 +1,11 @@
+Reference,Value,Footprint,Qty,MPN,LCSC,Status
+"U9","KLMBG2JETD-B041","A1_EMMC:FBGA-153_11.5x13mm_P0.5mm_CANDIDATE","1","KLMBG2JETD-B041","C5821038","Candidate; package pin map requires vendor cross-check"
+"C70","10uF 6.3V X7R 0805","Capacitor_SMD:C_0805_2012Metric","1","TBD","TBD","Candidate; package pin map requires vendor cross-check"
+"C71","100nF 10V X7R 0603","Capacitor_SMD:C_0603_1608Metric","1","TBD","TBD","Candidate; package pin map requires vendor cross-check"
+"C72","4.7uF 6.3V X7R 0603","Capacitor_SMD:C_0603_1608Metric","1","TBD","TBD","Candidate; package pin map requires vendor cross-check"
+"C73","100nF 10V X7R 0603","Capacitor_SMD:C_0603_1608Metric","1","TBD","TBD","Candidate; package pin map requires vendor cross-check"
+"C74","1uF 6.3V X7R 0603","Capacitor_SMD:C_0603_1608Metric","1","TBD","TBD","Candidate; package pin map requires vendor cross-check"
+"R31","22R 1%","Resistor_SMD:R_0603_1608Metric","1","TBD","TBD","Candidate; package pin map requires vendor cross-check"
+"R32","10k 1%","Resistor_SMD:R_0603_1608Metric","1","TBD","TBD","Candidate; package pin map requires vendor cross-check"
+"R33","10k 1%","Resistor_SMD:R_0603_1608Metric","1","TBD","TBD","Candidate; package pin map requires vendor cross-check"
+"R34","10k 1%","Resistor_SMD:R_0603_1608Metric","1","TBD","TBD","Candidate; package pin map requires vendor cross-check"
