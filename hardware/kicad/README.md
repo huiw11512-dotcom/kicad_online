@@ -38,7 +38,7 @@ Local symbol tables are `sym-lib-table`; local footprint tables are `fp-lib-tabl
 
 - Eight hierarchical child schematic files are linked from the root sheet.
 - All eight child pages pass source-level balanced S-expression checks.
-- U7 RK3568 has 17 units and exactly 636 ball labels; all are recorded in `A1_RK3568_PINNETS.csv`.
+- U7 RK3568 has 17 units and 636 ball positions represented (630 net labels + 6 NC markers); all balls are recorded in `A1_RK3568_PINNETS.csv`.
 - U8 TCS4525 symbol and candidate footprint: 20 balls each.
 - U9 eMMC symbol and candidate footprint: 153 balls each.
 - U10 DRAM footprint: 200 pads; pin map: 200 ball rows.
