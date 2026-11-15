@@ -3,7 +3,7 @@
 | ID | 项目 | 待确认 | 关闭条件 |
 |---|---|---|---|
 | OI-001 | RK3568 | 完整订货型号、价格、交期、渠道 | 可追溯报价 |
-| OI-002 | LPDDR4X | Rockchip批准料号、32Gb x32组织、封装 | 颗粒/模板/BIN匹配 |
+| OI-002 | LPDDR4X | MT53E512M32D1ZW-046B WT:B的Rockchip AVL条目、D200P132模板、匹配DDR BIN及WDQS要求 | Rockchip/FAE确认完整颗粒/模板/BIN组合 |
 | OI-003 | eMMC | 32GB完整料号、HS200能力、供货 | 数据手册/采购确认 |
 | OI-004 | RK809-5 | 供货、QFN68 land pattern、EVB rail mapping、BUCK3 divider | PMIC输出与SoC电源树逐项核对，封装经板厂确认 |
 | OI-005 | VDD_CPU | TCS4525及电感/反馈网络 | 原厂电源树核验 |
