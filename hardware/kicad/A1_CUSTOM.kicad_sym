@@ -1,5 +1,5 @@
 (kicad_symbol_lib (version 20231120) (generator "kicad_symbol_editor")
-(symbol "A1:HUSB238" (pin_names (offset 0.5)) (in_bom yes) (on_board yes)
+(symbol "HUSB238" (pin_names (offset 0.5)) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 -12.7 0) (effects (font (size 1 1))))
       (property "Value" "HUSB238" (at 0 12.7 0) (effects (font (size 1 1))))
       (symbol "HUSB238_0_1"
@@ -29,7 +29,7 @@
       (name "GND" (effects (font (size 1 1))))
       (number "11" (effects (font (size 1 1))))))
     )
-(symbol "A1:USB_C_16P" (pin_names (offset 0.5)) (in_bom yes) (on_board yes)
+(symbol "USB_C_16P" (pin_names (offset 0.5)) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 -15.239999999999998 0) (effects (font (size 1 1))))
       (property "Value" "USB_C_16P" (at 0 15.239999999999998 0) (effects (font (size 1 1))))
       (symbol "USB_C_16P_0_1"
@@ -69,7 +69,7 @@
       (name "GND" (effects (font (size 1 1))))
       (number "B1" (effects (font (size 1 1))))))
     )
-(symbol "A1:R" (pin_names (offset 0.5)) (in_bom yes) (on_board yes)
+(symbol "R" (pin_names (offset 0.5)) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 -6.35 0) (effects (font (size 1 1))))
       (property "Value" "R" (at 0 6.35 0) (effects (font (size 1 1))))
       (symbol "R_0_1"
@@ -81,7 +81,7 @@
       (name "2" (effects (font (size 1 1))))
       (number "2" (effects (font (size 1 1))))))
     )
-(symbol "A1:C" (pin_names (offset 0.5)) (in_bom yes) (on_board yes)
+(symbol "C" (pin_names (offset 0.5)) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 -5.08 0) (effects (font (size 1 1))))
       (property "Value" "C" (at 0 5.08 0) (effects (font (size 1 1))))
       (symbol "C_0_1"
@@ -93,7 +93,7 @@
       (name "2" (effects (font (size 1 1))))
       (number "2" (effects (font (size 1 1))))))
     )
-(symbol "A1:AO4407A" (pin_names (offset 0.5)) (in_bom yes) (on_board yes)
+(symbol "AO4407A" (pin_names (offset 0.5)) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 -7.62 0) (effects (font (size 1 1))))
       (property "Value" "AO4407A" (at 0 7.62 0) (effects (font (size 1 1))))
       (symbol "AO4407A_0_1"
