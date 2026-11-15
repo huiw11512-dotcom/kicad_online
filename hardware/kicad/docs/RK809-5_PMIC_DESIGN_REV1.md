@@ -98,6 +98,6 @@ A1 Rev1 does not include the RK809 audio codec, headphone amplifier, microphone 
 
 - BUCK1/2/3/4/5: TDK SPM5030T-R47M-HZ, 0.47uH, Isat 11A typ, Itemp 14A typ, DCR 5.39mOhm max, 5.2×5.0×3.0mm.
 - Speaker/charge-pump supply filter: TDK SPM5030T-1R0M-HZ, 1.0uH, Isat 8A typ, Itemp 10.4A typ, DCR 11.5mOhm max.
-- Local footprint `A1_PMIC:TDK_SPM5030T_5.2x5.0mm` uses TDK's recommended two-pad land pattern: 1.5×2.2mm pads, 2.7mm gap.
+- Local footprint `A1_PMIC:TDK_SPM5030T_5.2x5.0mm` uses TDK's recommended two-pad land pattern: 1.5×2.2mm pads, 2.7mm gap. Datasheet: https://product.tdk.com/en/system/files/dam/doc/product/inductor/inductor/smd/catalog/inductor_automotive_power_spm5030-hz_en.pdf
 - Crystal: Epson Q13FC13500004, FC-135, 32.768kHz, CL=12.5pF, ±20ppm, 3.2×1.5mm.
 - Power key: Omron B3U-1000P, momentary SMD tact switch.
