@@ -1,6 +1,6 @@
 (footprint "ESD5341N_DFN1006-2L" (version 20250114) (generator "openai-kicad-generator") (layer "F.Cu")
- (descr "ESD5341N DFN1006-2L low-capacitance ESD protector; verify vendor land pattern before release.")
- (tags "ESD5341N DFN1006-2L 0.6pF")
+ (descr "TECH PUBLIC ESD5341N DFN1006-2L, LCSC C3021106; 0.35pF typical per LCSC product data. Verify exact supplier datasheet and land pattern before release.")
+ (tags "ESD5341N DFN1006-2L 0.35pF_typ")
  (property "Reference" "D**" (at 0 -1.0 0) (layer "F.SilkS") (effects (font (size 0.6 0.6) (thickness 0.1))))
  (property "Value" "ESD5341N" (at 0 1.0 0) (layer "F.Fab") (effects (font (size 0.6 0.6) (thickness 0.1))))
  (attr smd)
