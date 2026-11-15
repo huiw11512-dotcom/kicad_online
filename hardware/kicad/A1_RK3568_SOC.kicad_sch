@@ -724,7 +724,7 @@
     )
   )
   )
-  (text "A1 — RK3568 FCBGA636, 17 symbol units / 636 distinct ball labels" (at 100 35 0) (effects (font (size 2.0 2.0)) (justify left bottom)) (uuid "a7000000-0000-4000-8000-00000000050c"))
+  (text "A1 — RK3568 FCBGA636, 17 symbol units / 636 ball positions (630 nets + 6 NC)" (at 100 35 0) (effects (font (size 2.0 2.0)) (justify left bottom)) (uuid "a7000000-0000-4000-8000-00000000050c"))
   (text "NETS ARE PRELIMINARY: many pins still need external passives and interface sheets; check A1_RK3568_PINNETS.csv before routing." (at 100 48 0) (effects (font (size 1.2 1.2)) (justify left bottom)) (uuid "a7000000-0000-4000-8000-00000000050d"))
   (symbol
     (lib_id "A1_SOC:RK3568")
