@@ -1,7 +1,7 @@
 # A1 Rev1 — 已核实的电气实现决策
 
 日期：2026-11-15
-状态：架构/接口决策。不是已完成KiCad原理图。
+状态：架构/接口决策。不是已完成KiCad原理图。与[A1_MASTER_BASELINE_REV1.md](A1_MASTER_BASELINE_REV1.md)冲突时，以主基线为准。
 
 ## 1. 重要更正：USB控制器资源
 
@@ -24,16 +24,16 @@ RK3568不是“任意组合两个USB3+两个USB2”。原厂指南2.3.4说明：
 
 ## 2. 输入电源决策
 
-A1首版目标改为USB-C PD 20V/3A（60W），不是12V/3A。
-理由：36W输入在同时承担SoC动态负载、DDR、PHY及USB VBUS时余量偏紧。20V/3A可降低输入线缆电流并增加功率余量。
+A1 Rev 1输入冻结为USB-C PD 15V/3A（45W），与当前KiCad输入级一致。
+选择15V/3A的原因：与现有HUSB238电路及LM76005输入设计匹配，45W PD合同对5V/5A（25W）主Buck有输入余量；不得把45W合同误认为5V_SYS可输出45W。
 
 电源链：
-USB-C PD Sink → 输入保险/电子保险及TVS/反灌保护 → 20V_IN → 5V_SYS同步Buck → RK809-5及后级DC/DC。
-RK809-5工作输入为2.7–5.5V，不允许20V直接进入PMIC。
+USB-C PD Sink → 输入保险/电子保险及TVS/反灌保护 → 15V_IN → 5V_SYS同步Buck → RK809-5及后级DC/DC。
+RK809-5工作输入为2.7–5.5V，不允许15V直接进入PMIC。
 
 USB VBUS总电流预算暂定1.9A（USB3 Host1 0.9A + 两个USB2 Host各0.5A），每口独立限流。Service Micro-USB为Device下载接口，不向主机反向供电；VBUS只作检测并按原厂推荐电路处理。
 
-PD Sink器件必须明确支持20V/3A PDO、输入额定电压、CC状态及过压保护。HUSB238仍是候选器件，需按具体数据手册和目标适配器PDO核对后才能冻结阻容配置。
+PD Sink器件必须明确支持15V/3A PDO、输入额定电压、CC状态及过压保护。HUSB238当前阻值：RVSET=14kΩ请求15V，RISET=22.6kΩ请求3.0A（Hynetek参考设计电阻表）；仍须按芯片版本和目标适配器PDO实测确认。
 
 ## 3. eMMC启动与Recovery
 
@@ -71,7 +71,7 @@ PD Sink器件必须明确支持20V/3A PDO、输入额定电压、CC状态及过�
 - 1×4GB LPDDR4X目标
 - 1×Wi-Fi/BT combo module
 - 1×40-pin GPIO header
-- 1×USB-C PD 20V/3A input
+- 1×USB-C PD 15V/3A input
 - 6-layer PCB
 
 ## 7. 依据
