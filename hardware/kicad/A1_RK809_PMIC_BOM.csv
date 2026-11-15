@@ -1,5 +1,5 @@
 Reference,Value,Footprint,Qty,MPN,Status
-Reference,Value,Footprint,Qty,MPN,Status
+U3,"RK809-5","A1_PMIC:RK809_QFN-68-1EP_7x7mm_P0.35mm_EP5.49x5.49mm",1,"RK809-5","Selected; footprint land pattern verification pending"
 L1,"0.47uH, Isat >=4A, DCR <20mOhm","Inductor_SMD:L_4.0x4.0mm",1,"TBD","Candidate"
 L2,"0.47uH, Isat >=4A, DCR <20mOhm","Inductor_SMD:L_4.0x4.0mm",1,"TBD","Candidate"
 L3,"0.47uH, Isat >=4A, DCR <20mOhm","Inductor_SMD:L_4.0x4.0mm",1,"TBD","Candidate"
