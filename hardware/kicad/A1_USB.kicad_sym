@@ -35,4 +35,16 @@
     (pin passive line (at 15.24 -10.16 180) (length 5.08) (name "SHIELD" (effects (font (size 0.85 0.85)))) (number "10" (effects (font (size 0.75 0.75)))))
   )
 )
+(symbol "C_H"
+ (pin_names (offset 0.508)) (in_bom yes) (on_board yes)
+ (property "Reference" "C" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
+ (property "Value" "C_H" (at 0 -3.81 0) (effects (font (size 1 1))))
+ (property "Footprint" "Capacitor_SMD:C_0201_0603Metric" (at 0 -6.35 0) (effects (font (size 1 1)) (hide yes)))
+ (symbol "C_H_0_1"
+  (polyline (pts (xy -1.27 -2.54) (xy -1.27 2.54)) (stroke (width 0.254) (type default)) (fill (type none)))
+  (polyline (pts (xy 1.27 -2.54) (xy 1.27 2.54)) (stroke (width 0.254) (type default)) (fill (type none))))
+ (symbol "C_H_1_1"
+  (pin passive line (at -5.08 0 0) (length 3.81) (name "1" (effects (font (size 0.85 0.85)))) (number "1" (effects (font (size 0.75 0.75)))))
+  (pin passive line (at 5.08 0 180) (length 3.81) (name "2" (effects (font (size 0.85 0.85)))) (number "2" (effects (font (size 0.75 0.75))))))
+)
 )
