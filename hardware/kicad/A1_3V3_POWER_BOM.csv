@@ -1,0 +1,8 @@
+Reference,Value,Footprint,Qty,MPN,LCSC_Part,Status,Design_Note
+U6,"TPS62132RGTT fixed 3.3V 3A buck",Package_DFN_QFN:VQFN-16-1EP_3x3mm_P0.5mm_EP1.65x1.65mm,1,TPS62132RGTT,C2070674,Selected,"TI 3V-17V input; fixed 3.3V; 2.5MHz; VQFN-16-EP 3x3. Pin 5 FB to AGND; DEF=GND; FSW=GND; SS/TR=3.3nF; PG unused."
+L8,"2.2uH APV ANR5040T2R2M; Irms 4.3A; Isat 5.6A",A1_POWER:APV_ANR5040_5x5mm,1,ANR5040T2R2M,C7427127,Selected,"APV ANR5040 5x5x4.0mm. Land pattern from APV ANR series datasheet: pads 2.3x1.4mm, center spacing 4.2mm."
+C52,"10uF 25V X5R 0805",Capacitor_SMD:C_0805_2012Metric,1,CL21A106KAYNNNE,C15850,Selected,"5V_SYS input bulk bypass; place adjacent to PVIN."
+C53,"100nF 16V X7R 0603",Capacitor_SMD:C_0603_1608Metric,1,CC0603KRX7R7BB104,C108079,Selected,"Local AVIN high-frequency bypass; place adjacent to AVIN/AGND."
+C54,"22uF 10V X7R 1206",Capacitor_SMD:C_1206_3216Metric,1,TCC1206X7R226M100HT,C7393991,Selected,"Output bulk capacitor; check effective capacitance at 3.3V DC bias."
+C55,"22uF 10V X7R 1206",Capacitor_SMD:C_1206_3216Metric,1,TCC1206X7R226M100HT,C7393991,Selected,"Output bulk capacitor in parallel with C54; check effective capacitance at 3.3V DC bias."
+C56,"3.3nF 50V X7R 0603",Capacitor_SMD:C_0603_1608Metric,1,CC0603KRX7R9BB332,C107088,Selected,"TPS62132 soft-start capacitor from SS/TR to GND."
