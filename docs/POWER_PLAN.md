@@ -167,3 +167,6 @@ TCS4525_WT作为候选，需与Rockchip参考方案核对：
 - VCC1V8_DDR: AP2112K-1.8TRG1 LDO from VCC3V3_PMU, 1uF input and 4.7uF+100nF output.
 - Sequence intent: 1.8V stage2, 1.1V stage3, 0.6V stage4. Verify against the final DRAM datasheet and Rockchip DDR template.
 - The 1.8V LDO is upstream-limited by RK809 LDO6 (400mA); budget PMUIO and DDR VDD1 together.
+
+
+PMIC pull-up correction (2026-11-16): R3/R4/R5/R6/R7 source is VCC3V3_PMU for 3.3V PMUIO; do not pull the 3.3V PMIC I2C bus up to the 1.8V rail.
