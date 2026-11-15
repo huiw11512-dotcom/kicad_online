@@ -1,38 +1,37 @@
-# Linux SBC A1
+# Linux MiniHost A1
 
-自主设计ARM64 Linux单板计算机，产品定位和使用场景参考Raspberry Pi 4B。RK3568 SoC、LPDDR4X、eMMC、PMIC、网络PHY、无线模块和全部外部接口直接集成在同一块PCB上；不是CM5载板，不复制第三方SBC工程。
+自主设计RK3568 ARM64 Linux SBC。目标是树莓派4B级别的应用场景和接口便利性，整板集成SoC、LPDDR4X、eMMC、PMIC、网络PHY、无线模块及外部接口；不是CM5载板，也不复制第三方SBC工程。
 
-## Rev 0.1基线
+## Rev 1.0硬件基线
 
-| 模块 | 选型/目标 |
+| 模块 | 决策 |
 |---|---|
-| SoC | Rockchip RK3568，FCBGA636L |
-| CPU/GPU | 4 × Cortex-A55，最高2.0GHz；Mali-G52 |
-| RAM | 4GB LPDDR4X，32-bit |
+| SoC | Rockchip RK3568，FCBGA636L，19 × 19 mm |
+| CPU/GPU | 4 × Cortex-A55；Mali-G52 |
+| RAM | 4GB LPDDR4X，32-bit；颗粒/模板/BIN匹配待闭环 |
 | 存储 | 32GB eMMC 5.1 + MicroSD |
-| PMIC | RK809-5 + 独立VDD_CPU Buck |
+| PMIC | RK809-5 + 独立VDD_CPU动态Buck |
 | 显示 | 1 × HDMI 2.0a |
-| 网络 | 1 × Gigabit Ethernet，RTL8211F-CG候选 |
-| USB | 2 × USB 3.0 Host + 2 × USB 2.0 Host |
-| 无线 | AP6275系列Wi-Fi/BT模块候选，SDIO + UART |
-| GPIO | 40-pin兼容排针 |
-| 电源 | USB-C PD，9V/3A目标，转换为5V_SYS |
-| 调试 | UART、Power/Reset/Recovery |
-| PCB | 6层、1.6mm FR-4起步 |
-| 外形 | 85 × 56mm目标，布局验证后冻结 |
+| 网络 | 1 × Gigabit Ethernet，GMAC0 RGMII + 外置PHY |
+| USB | 1 × USB3.x Host + 2 × USB2.0 Host |
+| 下载调试 | 1 × Micro-USB，连接USB3_OTG0_DP/DM，保留MaskROM/Loader/ADB |
+| 无线 | 焊接式Wi-Fi/BT combo模块，SDIO + UART |
+| GPIO | 40-pin、2.54 mm排针 |
+| 电源 | USB-C PD 15V/3A（45W）→ 5V_SYS |
+| PCB | 6层FR-4，1.6 mm起步；85 × 56 mm外形目标 |
 
-## 性能边界
+RK3568采用Cortex-A55，树莓派4B采用Cortex-A72；本项目对标的是整机功能和使用场景，不宣称CPU跑分相同。
 
-RK3568是四核Cortex-A55，树莓派4B采用四核Cortex-A72。A1以Pi 4B的整机功能和应用场景为参照，不宣称CPU基准性能相同。若跑分必须达到Pi 4B，再评估更高一级SoC。
+## 工程状态
 
-## 设计规则
+- 当前KiCad原生原理图仅有USB-C PD输入及15V→5V主Buck初步电路。
+- RK3568、RK809-5、LPDDR4X、eMMC、USB/HDMI/以太网/Wi-Fi等尚未完成原理图。
+- DDR颗粒与Rockchip模板/BIN、SoC封装球位、PMIC完整电源树仍是投板前硬门槛。
+- 当前工程未完成KiCad原生ERC/网表检查、PCB布局布线或硬件启动验证，不可投板。
 
-- SoC、DDR、PMIC、电源、存储和接口全部自主集成。
-- 使用Rockchip数据手册、硬件设计指南、DDR模板和启动配置作为设计约束。
-- DDR颗粒必须匹配Rockchip支持清单、PCB模板和DDR初始化BIN。
-- 首版不做M.2 NVMe、双网口、MIPI摄像头、PoE、SATA和复杂音频。
-- 不得在DDR/供电/阻抗尚未核验时投板。
+## 设计入口
 
-## 当前状态
-
-RK3568为首选；4GB LPDDR4X、32GB eMMC容量已定，具体料号待核；RK809-5为PMIC首选；原理图和PCB尚未完成。
+- [A1 Rev1唯一硬件基线](docs/A1_MASTER_BASELINE_REV1.md)
+- [当前工程状态](docs/DESIGN_STATUS_20261115.md)
+- [一次性原理图分页计划](docs/A1_SCHEMATIC_FREEZE_REV1.md)
+- [电源设计计划](docs/POWER_PLAN.md)
