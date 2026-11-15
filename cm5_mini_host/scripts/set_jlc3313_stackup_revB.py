@@ -25,21 +25,28 @@ set_layer(3,0.1088,"2116",4.16)
 set_layer(4,0.55,"Core",4.6)
 set_layer(5,0.0994,"3313",4.1)
 s=s[:m.start()]+stack+s[m.end():]
-old='(thickness 1.5296)'
 old='(thickness 1.5584)'
 if s.count(old)!=1:raise SystemExit("Previous provisional 1.5584mm thickness missing or altered")
 s=s.replace(old,'(thickness 1.6)',1)
 p.write_text(s,encoding="utf-8")
 (root/"JLC06161H_3313_STACKUP_REV_B.md").write_text(
     "# Rev.B proposed fabrication stackup\n\n"
-    "Factory: JLCPCB. Nominal finished board thickness **1.6 mm**, 6 copper layers; "
-    "manufacturer reference **JLC06161H-3313** (1 oz finished external copper, 0.5 oz internal copper). "
-    "KiCad calculated dielectric/mask/copper sum is 1.5584 mm, a pressed-up nominal value before manufacturing tolerance. "
-    "Outer L1-L2 and L5-L6 prepreg 3313, 0.0994 mm each, dielectric estimate 4.1; "
-    "L2-L3 and L4-L5 cores 0.55 mm NP-155F each, dielectric estimate 4.6; "
-    "L3-L4 prepreg 2116, 0.1088 mm, dielectric estimate 4.16. "
-    "External copper 0.035 mm, internal copper 0.0152 mm each, soldermask 0.01 mm each. "
-    "Stackup values are from the JLCPCB published impedance stackup family, not a factory-approved controlled-impedance order. "
-    "Do not mark the high-speed 90/100 ohm routing as compliant until manufacturer DFM/impedance analysis accepts the actual line widths, spacings and via/pad launches.\n\n"
+    "Factory reference: **JLCPCB JLC06161H-3313**, six copper layers, nominal finished thickness **1.6 mm**, outer copper 1 oz and inner copper 0.5 oz.\n\n"
+    "| From top | Layer/material | Thickness |\n"
+    "|---|---|---:|\n"
+    "| L1 | External copper | 0.035 mm |\n"
+    "| Dielectric | 3313 prepreg | 0.0994 mm |\n"
+    "| L2 | Internal copper | 0.0152 mm |\n"
+    "| Dielectric | Core, Dk 4.6 | 0.55 mm |\n"
+    "| L3 | Internal copper | 0.0152 mm |\n"
+    "| Dielectric | 2116 prepreg | 0.1088 mm |\n"
+    "| L4 | Internal copper | 0.0152 mm |\n"
+    "| Dielectric | Core, Dk 4.6 | 0.55 mm |\n"
+    "| L5 | Internal copper | 0.0152 mm |\n"
+    "| Dielectric | 3313 prepreg | 0.0994 mm |\n"
+    "| L6 | External copper | 0.035 mm |\n\n"
+    "JLCPCB publishes Dk values of 4.1 for 3313 prepreg, 4.16 for 2116 prepreg and 4.6 for core. Its impedance page specifies solder-mask dielectric constant 3.8, 1.2 mil coating above substrate, 0.6 mil above copper traces and 1.2 mil between traces.\n\n"
+    "**Important:** this selects a real published factory stackup; it does not constitute an impedance sign-off. The actual USB 90-ohm and any other controlled-impedance geometries still require the manufacturer's calculator/field-solver using the final copper weights, solder mask, reference plane and trace geometry, followed by factory confirmation. Do not claim controlled impedance until JLCPCB accepts the order's impedance settings.\n\n"
     "Reference: https://jlcpcb.com/impedance\n",encoding="utf-8")
+
 print("Updated KiCad stackup to JLCPCB published JLC06161H-3313; nominal finished thickness 1.6mm.")
