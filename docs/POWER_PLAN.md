@@ -158,3 +158,12 @@ TCS4525_WT作为候选，需与Rockchip参考方案核对：
 - LDO2 → VDDA_0V9; LDO3 → VDDA0V9_PMU; LDO5 → VCCIO_SD; LDO6 → VCC3V3_PMU; LDO7 → VCCA_1V8; LDO8 → VCCA1V8_PMU.
 - SWOUT1 → VCC_3V3; SWOUT2 → VCC3V3_SD.
 - LPDDR4X additionally needs VCC0V6_DDR and VCC1V8_DDR, implemented with separate regulators on the DDR power page.
+
+
+## LPDDR4X DDR power page
+
+- VCC_DDR_1V1: RK809 BUCK3, RH=37.4k/RL=100k.
+- VCC0V6_DDR: SY8089AAAC buck from VCC_3V3, 2.2uH TDK SPM5030T-2R2M-HZ, 10uF input and 2×22uF output.
+- VCC1V8_DDR: AP2112K-1.8TRG1 LDO from VCC3V3_PMU, 1uF input and 4.7uF+100nF output.
+- Sequence intent: 1.8V stage2, 1.1V stage3, 0.6V stage4. Verify against the final DRAM datasheet and Rockchip DDR template.
+- The 1.8V LDO is upstream-limited by RK809 LDO6 (400mA); budget PMUIO and DDR VDD1 together.
