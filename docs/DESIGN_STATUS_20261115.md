@@ -1,57 +1,43 @@
-# Linux SBC A1 — engineering status, 2026-11-15 (Rev 0.4)
+# Linux MiniHost A1 — engineering status, 2026-11-15 (Rev 1.0)
 
-## Product definition
+Authoritative architecture decisions: [A1_MASTER_BASELINE_REV1.md](A1_MASTER_BASELINE_REV1.md). This status file records implementation progress only.
 
-A compact, independently designed ARM64 Linux SBC, functionally comparable in intended use to Raspberry Pi 4B. RK3568, DRAM, PMIC, eMMC and I/O devices are mounted on one PCB. It is not a CM5 carrier and is not a copy of a third-party board.
+## Frozen product baseline
 
-## Architecture baseline
+- RK3568 FCBGA636L, 4GB LPDDR4X x32 target, 32GB eMMC 5.1 target.
+- HDMI 2.0a, Gigabit Ethernet, one USB3 Host1, two USB2 Host2/3, Micro-USB USB3_OTG0 service/download, Wi-Fi/BT SDIO+UART, 40-pin GPIO.
+- USB-C PD 15V/3A; 15V-to-5V_SYS main converter target 5A.
+- Six-layer FR-4; 85 × 56 mm outline target, not yet mechanically frozen.
 
-| Block | Baseline | Status |
-|---|---|---|
-| SoC | Rockchip RK3568 FCBGA636L | Selected; exact purchasable ordering code still to confirm |
-| RAM | 4GB LPDDR4X, x32 | Capacity fixed; Micron candidate not yet matched to exact Rockchip template/BIN |
-| Boot storage | 32GB eMMC 5.1 | Candidate class; exact datasheet and package ball map open |
-| Removable storage | MicroSD | Planned |
-| PMIC | RK809-5 | Selected architecture; rail mapping follows RK3568 EVB power tree |
-| CPU rail | Independent ≥4A dynamic Buck | TCS4525 family is candidate; exact implementation open |
-| Display | 1 × HDMI 2.0a | Planned |
-| Ethernet | 1 × Gigabit Ethernet | GMAC0 + external PHY candidate; PHY timing and package open |
-| USB | 1 × USB3 Host + 1 × USB3 DRD fixed Host + 2 × USB2 Host | Must respect Multi-PHY resources and DTS |
-| Wireless | Wi-Fi + Bluetooth module | Exact module and firmware open |
-| GPIO | 40-pin header | PinMux and voltage domains open |
-| Input | USB-C PD, 9V/3A target | 9V must first be converted to 5V; 27W system budget open |
-| PCB | 6-layer, 1.6mm starting target | Final stackup and impedance open |
-| Board size | 85 × 56mm target | Mechanical placement validation open |
+## Actual KiCad implementation
 
-## Work completed this turn
+| Block | State |
+|---|---|
+| USB-C PD input | Initial native schematic exists: HUSB238, 15V/3A request resistors, input path switch |
+| 15V to 5V_SYS | Initial native schematic exists: LM76005, 5V/5A target |
+| RK809-5 PMIC | Not yet placed in the root schematic |
+| RK3568 SoC | Not yet placed in the root schematic |
+| LPDDR4X | Not yet placed; exact part/template/BIN pairing open |
+| eMMC / MicroSD | Not yet drawn |
+| USB / HDMI / Ethernet / Wi-Fi / GPIO | Not yet drawn |
+| PCB | No placement or routing |
+| Validation | Native KiCad load, ERC, netlist, DRC and hardware bring-up not yet completed |
 
-- Reviewed Rockchip RK3568 Hardware Design Guide V1.2 sections 2.1.7.5 and 2.2.2–2.2.3.
-- Corrected the power plan: RK809-5 input is 2.7–5.5V, so 9V PD must not connect directly to PMIC.
-- Recorded the reference PMIC power-tree mapping: BUCK1→VDD_LOGIC, BUCK2→VDD_GPU, BUCK3→VCC_DDR, BUCK4→VDD_NPU; CPU uses a separate external dynamic Buck.
-- Recorded RK809-5 channel current limits, startup constraints, VCC_RTC/VCC9 requirements, FB3 setting and capacitor/inductor constraints.
-- Recorded LPDDR4X-specific SoC DDR PHY rails (1.1V and 0.6V) and the separate VCC_DDR/VCC0V6_DDR networks.
-- Explicitly excluded NPU from the first board's required feature set; the power and DTS treatment still needs to follow the unused-module guidance.
-- Updated `docs/POWER_PLAN.md` to Rev 0.4.
+## Work completed in this revision
 
-## Not completed — do not claim otherwise
+- Created [A1_MASTER_BASELINE_REV1.md](A1_MASTER_BASELINE_REV1.md) as the single source of truth.
+- Resolved conflicting project notes: Rev 1 input is 15V/3A (not 9V, 12V or 20V); USB is one USB3 Host1, two USB2 Host2/3 and a dedicated Micro-USB OTG0 download/service port.
+- Confirmed from Hynetek's HUSB238 reference guide that RVSET=14kΩ requests 15V and RISET=22.6kΩ requests 3.0A.
+- Checked RK3568 package information against Datasheet Rev 2.1: FCBGA636L, 19 × 19 mm, 0.65 mm pitch.
+- Confirmed the three old work branches contain only .gitkeep; main remains the active project branch.
 
-- No complete electrical schematic.
-- No verified RK3568 636-ball symbol/footprint library release.
-- No frozen DRAM part, topology, or DDR BIN.
-- No completed PMIC/power schematic or exact regulator component values.
-- No complete USB/HDMI/Ethernet/Wi-Fi schematics.
-- No PCB placement, routing, impedance calculation, ERC/DRC, or fabrication output.
-- No Linux boot test or hardware validation.
+## Open engineering gates
 
-## Next engineering sequence
+1. SoC: validate all 636 ball names/numbers against Rockchip Datasheet Rev 2.1 and validate the BGA land pattern.
+2. DDR: close exact LPDDR4X part ↔ AVL ↔ PCB template ↔ DDR BIN compatibility.
+3. Power: transcribe the complete RK809-5 EVB implementation; verify every PMIC input/output rail and startup sequence.
+4. Power integrity: verify AO4407A transient margin, add/verify input protection, and complete LM76005 ripple/DC-bias/thermal checks.
+5. Interfaces: finish pinmux, IO-bank voltage, PHY straps, USB ESD and VBUS current limits.
+6. Native validation: load in KiCad, export netlist, run ERC/DRC and visually inspect every sheet.
 
-1. Verify exact RK3568 package ball map and KiCad symbol/footprint.
-2. Close DRAM compatibility using exact Micron datasheet, Rockchip AVL row, template and BIN.
-3. Transcribe the complete RK3568 EVB RK809-5 power tree into a rail-by-rail A1 allocation table, including VCC5/6/7 LDO input domains, VCC8/9, Switch1/2 and external Buck rails.
-4. Close 9V-to-5V input power and total load budget.
-5. Create the hierarchical schematic and validate every power domain and pin assignment.
-6. Only after schematic review, start placement and DDR/high-speed PCB design.
-
-## Release rule
-
-No fabricated board is authorized from this status snapshot. Open items must be closed with a cited datasheet/reference-design check or measured result.
+No fabrication is authorized until these gates are closed.
