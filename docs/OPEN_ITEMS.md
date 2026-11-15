@@ -5,7 +5,7 @@
 | OI-001 | RK3588供货 | 具体订货型号、渠道、批次、价格和生命周期 | 获得可追溯报价和样品 |
 | OI-002 | 原厂资料 | 完整Datasheet、PinOut、Package Pin Length、Hardware Guide | 版本确认并归档 |
 | OI-003 | SDK | Rockchip BSP获取权限、版本、许可证及DDR初始化文件 | 获取并完成一次可复现构建 |
-| OI-004 | LPDDR4X | 8GB颗粒方案、制造商料号、颗粒组织、速度和兼容性 | 与原厂支持清单及EVB拓扑核对 |
+| OI-004 | LPDDR4X | 8GB双32Gb x32方案；Samsung K4UBE3D4AB-MGCL为候选，Micron MT53E1G32D2FW-046为备选；T/A状态与后缀需FAE确认 | 与Rockchip DDR Support List Ver3.00、EVB拓扑、DDR模板和实际供货核对 |
 | OI-005 | PMIC | 双RK806-2与单RK806-1成本/电源轨/时序比较 | 电源树评审通过 |
 | OI-006 | eMMC | 32GB候选料号、HS400、温度和供货 | 兼容性和供货核验 |
 | OI-007 | PCIe | PCIe3 x4 lane映射、参考时钟、PERST#、CLKREQ#、M.2定义 | Pinmux与原理图审查 |
