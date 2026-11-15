@@ -7,7 +7,7 @@ Source branch: `main`. Target: independent compact RK3568 SBC for Linux, compara
 - RK809-5 PMIC schematic: `A1_RK809_PMIC.kicad_sch`.
 - LPDDR4X DDR power rails: `A1_DDR_POWER.kicad_sch`.
 - 5V→3.3V pre-PMIC Buck: `A1_3V3_POWER.kicad_sch`.
-- RK3568 SoC: 17 multi-unit symbols, all 636 balls labeled: `A1_RK3568_SOC.kicad_sch`.
+- RK3568 SoC: 17 multi-unit symbols; all 636 ball positions represented (630 net labels + 6 NC markers): `A1_RK3568_SOC.kicad_sch`.
 - Dynamic CPU Buck: TCS4525, I2C and remote feedback: `A1_CPU_POWER.kicad_sch`.
 - 32GB eMMC 5.1: Samsung KLMBG2JETD-B041: `A1_EMMC_32GB.kicad_sch`.
 - 24MHz oscillator, boot voltage strap, UART2, Recovery key: `A1_BOOT_OSC_DEBUG.kicad_sch`.
