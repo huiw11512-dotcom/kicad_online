@@ -54,8 +54,8 @@ R5,10k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
 R6,10k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
 R7,10k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
 R8,100k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
-R9,100k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
-R10,33k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
+R9,37.4k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Selected value for 1.1V VCC_DDR; verify with final DRAM
+R10,100k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Selected value for 1.1V VCC_DDR; verify with final DRAM
 SW1,Omron B3U-1000P momentary,Button_Switch_SMD:SW_SPST_B3U-1000P,1,B3U-1000P,Selected
 U3,RK809-5,A1_PMIC:RK809_QFN-68-1EP_7x7mm_P0.35mm_EP5.49x5.49mm,1,RK809-5,Selected; footprint land pattern verification pending
 Y1,32.768kHz / Epson Q13FC13500004 / CL=12.5pF,Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm,1,Q13FC13500004,"Selected; +/-20ppm, 12.5pF"
