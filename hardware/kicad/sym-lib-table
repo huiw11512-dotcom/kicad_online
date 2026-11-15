@@ -11,4 +11,5 @@
   (lib (name "A1_DDR") (type "KiCad") (uri "${KIPRJMOD}/A1_DDR.kicad_sym") (options "") (descr "Linux MiniHost A1 LPDDR4X power symbols"))
   (lib (name "A1_POWER") (type "KiCad") (uri "${KIPRJMOD}/A1_POWER.kicad_sym") (options "") (descr "Linux MiniHost A1 power symbols"))
   (lib (name "A1_CPU") (type "KiCad") (uri "${KIPRJMOD}/A1_CPU.kicad_sym") (options "") (descr "A1 TCS4525 CPU regulator"))
+  (lib (name "A1_EMMC") (type "KiCad") (uri "${KIPRJMOD}/A1_EMMC.kicad_sym") (options "") (descr "A1 Samsung 32GB eMMC"))
 )
