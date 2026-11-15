@@ -18,6 +18,7 @@ Open `A1.kicad_pro`, then `A1.kicad_sch`.
 | 7 | A1_EMMC_32GB.kicad_sch | Samsung 32GB eMMC 5.1 153-pad candidate |
 | 8 | A1_BOOT_OSC_DEBUG.kicad_sch | 24MHz clock, POR, FLASH_VOL_SEL, UART2, Recovery |
 | 9 | A1_LPDDR4X_2GB.kicad_sch | Micron 2GB x32 LPDDR4X, U10, 200-ball map, R40 ZQ |
+| 10 | A1_SD_CARD.kicad_sch | TFP09-2-12B microSD socket, SDMMC0 4-bit, card detect, ESD and UHS-I VCCIO switching |
 
 ## Libraries
 
@@ -36,20 +37,22 @@ Local symbol tables are `sym-lib-table`; local footprint tables are `fp-lib-tabl
 
 ## Static audit results
 
-- Eight hierarchical child schematic files are linked from the root sheet.
-- All eight child pages pass source-level balanced S-expression checks.
-- U7 RK3568 has 17 units and 636 ball positions represented (630 net labels + 6 NC markers); all balls are recorded in `A1_RK3568_PINNETS.csv`.
+- Nine hierarchical child schematic files are linked from the root sheet.
+- All nine child pages pass source-level balanced S-expression checks.
+- U7 RK3568 has 17 units and 636 ball positions represented (629 net labels + 7 NC markers); all balls are recorded in `A1_RK3568_PINNETS.csv`.
 - U8 TCS4525 symbol and candidate footprint: 20 balls each.
 - U9 eMMC symbol and candidate footprint: 153 balls each.
 - U10 DRAM footprint: 200 pads; pin map: 200 ball rows.
 - The 67 mapped DDR signal nets are marked `DDR_BUS_MAPPED_MT53E512M32D1ZW_2GB`; six unused rank-control nets are marked `DDR_BUS_NC_SINGLE_RANK`.
-- `fp-lib-table` includes the local `A1_DDR.pretty` library.
+- `fp-lib-table` includes the local `A1_DDR.pretty` and `A1_IO.pretty` libraries. The local `A1_IO` symbol library is registered in `sym-lib-table`.
 
 Static source parsing is not an authoritative KiCad ERC/DRC. Native KiCad CLI is not available in the current execution environment, so **native KiCad load, ERC, netlist and DRC have not been run**.
 
 ## Remaining minimum Linux-boot requirements
 
 - Confirm the exact Rockchip-approved LPDDR4X MPN/template/DDR BIN pairing and WDQS requirement.
+- Confirm TFP09-2-12B sourcing (LCSC C2911421 / JLC extended C2887880), socket land pattern and ESD5341N procurement.
+- Validate SDMMC0 UHS-I voltage switching: VCCIO_SD 3.3V↔1.8V while card VDD remains 3.3V.
 - Complete MicroSD, USB download/recovery, Ethernet, display, USB Host and Wi-Fi/BT.
 - Confirm all vendor package pad and paste patterns, sourcing availability, thermal and power startup.
 - Complete PCB layout using the matched Rockchip DDR template and board-house impedance stackup.
