@@ -63,8 +63,8 @@ These are the RK809-5 OTP defaults, not the final SoC rail map. Connect these ou
 - EXT_EN drives the external VDD_CPU regulator enable.
 - PWRON is active low with an internal 17k pull-up to VCC_RTC; SW1 must hold it low for more than 500ms to trigger power-on.
 - SLEEP is held low through 100k for normal operation.
-- RESETB is open drain and has the required 100nF capacitor; its pull-up is to the 1.8V logic domain, not 5V.
-- SCL/SDA/INT/RESETB/CLK32K are treated as open-drain signals and pulled up to the 1.8V domain.
+- RESETB is open drain and has the required 100nF capacitor; its pull-up is to VCC3V3_PMU (3.3V), matching RK3568 PMUIO.
+- SCL/SDA/INT/RESETB/CLK32K are treated as open-drain signals and pulled up to VCC3V3_PMU (3.3V), matching RK3568 PMUIO.
 - RTC crystal: 32.768kHz, CL=12.5pF candidate; two 22pF load capacitors follow the Rockchip guide's recommended value. Confirm the final crystal CL and parasitic capacitance.
 - BATDIV, SNSP and SNSN are grounded because the fuel gauge is not used.
 
@@ -119,3 +119,8 @@ A1 Rev1 does not include the RK809 audio codec, headphone amplifier, microphone 
 | SWOUT2 | VCC3V3_SD | SD card 3.3V supply |
 
 LPDDR4X also requires separate VCC0V6_DDR and VCC1V8_DDR rails; these are implemented on the DDR power page, not by BUCK3. Micron MT53E1G32D2FW-046 WT:C is a 32Gb/4GB, x32, 200-ball, dual-die device; verify the approved Rockchip DDR BIN/template pairing before fabrication.
+
+
+## 2026-11-16 IO pull-up voltage correction
+
+R3/R4 (I2C0 PMIC bus), R5 (PMIC_INT_N), R6 (PMIC_RESETB_N), R7 (PMIC_CLK32K) now pull up to VCC3V3_PMU, **not** VCC_1V8. RK3568 I2C0 PMUIO and GPIO0_A3 are on 3.3V PMU banks in the selected IO-domain scheme. This follows the Rockchip EVB and Radxa RK3568 management circuit convention. Check the RK809 CLK32K output pull-up recommendation at component datasheet level before fabrication.
