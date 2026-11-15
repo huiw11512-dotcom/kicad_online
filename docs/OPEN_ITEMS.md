@@ -5,7 +5,7 @@
 | OI-001 | RK3568 | 完整订货型号、价格、交期、渠道 | 可追溯报价 |
 | OI-002 | LPDDR4X | Rockchip批准料号、32Gb x32组织、封装 | 颗粒/模板/BIN匹配 |
 | OI-003 | eMMC | 32GB完整料号、HS200能力、供货 | 数据手册/采购确认 |
-| OI-004 | RK809-5 | 供货、封装、完整参考电路 | PMIC方案冻结 |
+| OI-004 | RK809-5 | 供货、QFN68 land pattern、EVB rail mapping、BUCK3 divider | PMIC输出与SoC电源树逐项核对，封装经板厂确认 |
 | OI-005 | VDD_CPU | TCS4525及电感/反馈网络 | 原厂电源树核验 |
 | OI-006 | USB-C PD | HUSB238 15V/3A PDO与PD适配器兼容性 | 实测15V/3A协商及输入保护验证 |
 | OI-007 | Wi-Fi/BT | AP6275完整料号、天线、固件 | SDK与模块资料匹配 |
