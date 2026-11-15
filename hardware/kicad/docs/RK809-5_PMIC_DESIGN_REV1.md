@@ -19,7 +19,7 @@ Status: native editable KiCad page committed; not a fabrication release.
 | 22, 30, 4 | VCC5/VCC6/VCC7 | 5V_SYS | 10uF each |
 | 57, 54 | VCC8/VCC9 | 5V_SYS | 10uF each |
 | 45 | VCC_RTC | 5V_SYS | 1uF local |
-| 44, 48 | VCC_1P8A/VCC_1P8D | PMIC_BUCK5_1V8 | 1uF each |
+| 44, 48 | VCC_1P8A/VCC_1P8D | VCC_1V8 | 1uF each |
 | 33 | VCC_SPK_HP | PMIC_SPK_HP_5V | 1uH filter + 10uF/100nF |
 
 VCC_RTC is tied to the same 5V_SYS source as VCC9, meeting Rockchip's requirement that VCC_RTC be the highest PMIC supply (or within 0.3V of it) and not be powered later.
@@ -28,10 +28,10 @@ VCC_RTC is tied to the same 5V_SYS source as VCC9, meeting Rockchip's requiremen
 
 | Channel | Default RK809-5 setting | A1 implementation | State |
 |---|---:|---|---|
-| BUCK1 | 0.9V | 0.47uH, 2×47uF, output net PMIC_BUCK1_0V9_TBD | Voltage/load mapping to SoC pending |
-| BUCK2 | 0.9V | 0.47uH, 2×47uF, output net PMIC_BUCK2_0V9_TBD | Voltage/load mapping to SoC pending |
-| BUCK3 | external resistor setting | 0.47uH, 2×47uF, external RH/RL placeholders | Must be set from final DRAM rail |
-| BUCK4 | 0.5V, OFF | 0.47uH + 2×47uF stage populated; output reserved | Hardware retained; OTP-default OFF |
+| BUCK1 | 0.9V | 0.47uH, 2×47uF, output net VDD_LOGIC_0V9 | Voltage/load mapping to SoC pending |
+| BUCK2 | 0.9V | 0.47uH, 2×47uF, output net VDD_GPU_0V9 | Voltage/load mapping to SoC pending |
+| BUCK3 | 1.1V target | 0.47uH, 2×47uF, RH=37.4k/RL=100k | LPDDR4X VCC_DDR; final DRAM/template confirmation required |
+| BUCK4 | 0.9V target, OFF | 0.47uH + 2×47uF stage populated; output VDD_NPU_0V9 | Hardware retained; OTP-default OFF |
 | BUCK5 | 1.8V | 0.47uH, 2×47uF; supplies internal 1.8V PMIC rails | 1.8V default retained |
 
 Rockchip's RK3568 guide specifies 0.47uH inductors with saturation current above 3.5A and DCR below 50mOhm (preferably below 20mOhm). It specifies more than 30uF output capacitance for BUCK1/2/3/4 and more than 33uF for BUCK5. The schematic uses 2×47uF nominal per active buck as a conservative starting point; effective capacitance under DC bias must be checked against the selected capacitor datasheet.
@@ -57,7 +57,7 @@ The RK809-5 OTP defaults from Datasheet Rev 2.5 are retained as the initial stat
 | LDO9 | 0.6V OFF | OFF | NC |
 | SWOUT1/2 | 3.3V | 4 | 1uF each; outputs reserved |
 
-These are the RK809-5 OTP defaults, not the final SoC rail map. Do not connect these outputs to RK3568 power balls until the Rockchip EVB power tree and the selected memory configuration are checked pin-by-pin.
+These are the RK809-5 OTP defaults, not the final SoC rail map. Connect these outputs to RK3568 power balls according to the Rockchip EVB power tree, then re-check all rail voltages and IO-bank assignments against the selected memory and pinmux.
 
 ## 5. Startup and control
 
@@ -101,3 +101,24 @@ A1 Rev1 does not include the RK809 audio codec, headphone amplifier, microphone 
 - Local footprint `A1_PMIC:TDK_SPM5030T_5.2x5.0mm` uses TDK's recommended two-pad land pattern: 1.5×2.2mm pads, 2.7mm gap. Datasheet: https://product.tdk.com/en/system/files/dam/doc/product/inductor/inductor/smd/catalog/inductor_automotive_power_spm5030-hz_en.pdf
 - Crystal: Epson Q13FC13500004, FC-135, 32.768kHz, CL=12.5pF, ±20ppm, 3.2×1.5mm.
 - Power key: Omron B3U-1000P, momentary SMD tact switch.
+
+
+## Rockchip EVB rail assignment adopted for A1 (provisional)
+
+| RK809-5 output | A1 net | RK3568 / board use |
+|---|---|---|
+| BUCK1 | VDD_LOGIC_0V9 | RK3568 VDD_LOGIC 0.9V |
+| BUCK2 | VDD_GPU_0V9 | RK3568 VDD_GPU 0.9V |
+| BUCK3 | VCC_DDR_1V1 | LPDDR4X VDD2 and RK3568 DDRPHY_VDDQ 1.1V |
+| BUCK4 | VDD_NPU_0V9 | RK3568 VDD_NPU 0.9V; hardware populated, OTP default OFF |
+| BUCK5 | VCC_1V8 | RK3568 1.8V IO / PMIC internal VCC_1P8A/D |
+| LDO2 | VDDA_0V9 | RK3568 analog PHY 0.9V |
+| LDO3 | VDDA0V9_PMU | PMU analog 0.9V |
+| LDO5 | VCCIO_SD | SDMMC0 I/O rail, 3.3V default and 1.8V switchable if UHS mode is used |
+| LDO6 | VCC3V3_PMU | PMUIO1/2 and input to DDR 1.8V LDO |
+| LDO7 | VCCA_1V8 | RK3568 analog PHY 1.8V |
+| LDO8 | VCCA1V8_PMU | PMU PLL 1.8V |
+| SWOUT1 | VCC_3V3 | 3.3V system rail and input to DDR 0.6V buck |
+| SWOUT2 | VCC3V3_SD | SD card 3.3V supply |
+
+LPDDR4X also requires separate VCC0V6_DDR and VCC1V8_DDR rails; these are implemented on the DDR power page, not by BUCK3.
