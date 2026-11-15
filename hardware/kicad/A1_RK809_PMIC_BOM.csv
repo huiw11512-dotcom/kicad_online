@@ -1,54 +1,61 @@
 Reference,Value,Footprint,Qty,MPN,Status
-U3,"RK809-5","A1_PMIC:RK809_QFN-68-1EP_7x7mm_P0.35mm_EP5.49x5.49mm",1,"RK809-5","Selected; footprint land pattern verification pending"
-L1,"0.47uH, Isat >=4A, DCR <20mOhm","Inductor_SMD:L_4.0x4.0mm",1,"TBD","Candidate"
-L2,"0.47uH, Isat >=4A, DCR <20mOhm","Inductor_SMD:L_4.0x4.0mm",1,"TBD","Candidate"
-L3,"0.47uH, Isat >=4A, DCR <20mOhm","Inductor_SMD:L_4.0x4.0mm",1,"TBD","Candidate"
-L4,"0.47uH, Isat >=4A, DCR <20mOhm","Inductor_SMD:L_4.0x4.0mm",1,"TBD","Candidate"
-L5,"1.0uH, Isat >=2A, DCR <50mOhm","Inductor_SMD:L_4.0x4.0mm",1,"TBD","Candidate"
-C1,"47uF 6.3V X7R 1210","Capacitor_SMD:C_1210_3225Metric",1,"TBD","Candidate"
-C2,"47uF 6.3V X7R 1210","Capacitor_SMD:C_1210_3225Metric",1,"TBD","Candidate"
-C3,"47uF 6.3V X7R 1210","Capacitor_SMD:C_1210_3225Metric",1,"TBD","Candidate"
-C4,"47uF 6.3V X7R 1210","Capacitor_SMD:C_1210_3225Metric",1,"TBD","Candidate"
-C5,"47uF 6.3V X7R 1210","Capacitor_SMD:C_1210_3225Metric",1,"TBD","Candidate"
-C6,"47uF 6.3V X7R 1210","Capacitor_SMD:C_1210_3225Metric",1,"TBD","Candidate"
-C7,"47uF 6.3V X7R 1210","Capacitor_SMD:C_1210_3225Metric",1,"TBD","Candidate"
-C8,"47uF 6.3V X7R 1210","Capacitor_SMD:C_1210_3225Metric",1,"TBD","Candidate"
-R1,"TBD_RH (DDR VDD dependent)","Resistor_SMD:R_0603_1608Metric",1,"TBD","TBD - do not populate until DRAM rail is frozen"
-R2,"TBD_RL (DDR VDD dependent)","Resistor_SMD:R_0603_1608Metric",1,"TBD","TBD - do not populate until DRAM rail is frozen"
-C9,"10uF 10V X7R 0805","Capacitor_SMD:C_0805_2012Metric",1,"TBD","Candidate"
-C10,"10uF 10V X7R 0805","Capacitor_SMD:C_0805_2012Metric",1,"TBD","Candidate"
-C11,"10uF 10V X7R 0805","Capacitor_SMD:C_0805_2012Metric",1,"TBD","Candidate"
-C12,"10uF 10V X7R 0805","Capacitor_SMD:C_0805_2012Metric",1,"TBD","Candidate"
-C13,"10uF 10V X7R 0805","Capacitor_SMD:C_0805_2012Metric",1,"TBD","Candidate"
-C14,"10uF 10V X7R 0805","Capacitor_SMD:C_0805_2012Metric",1,"TBD","Candidate"
-C15,"10uF 10V X7R 0805","Capacitor_SMD:C_0805_2012Metric",1,"TBD","Candidate"
-C16,"10uF 10V X7R 0805","Capacitor_SMD:C_0805_2012Metric",1,"TBD","Candidate"
-C17,"10uF 10V X7R 0805","Capacitor_SMD:C_0805_2012Metric",1,"TBD","Candidate"
-C18,"1uF 6.3V X7R 0603","Capacitor_SMD:C_0603_1608Metric",1,"TBD","Candidate"
-C19,"1uF 6.3V X7R 0603","Capacitor_SMD:C_0603_1608Metric",1,"TBD","Candidate"
-C20,"1uF 6.3V X7R 0603","Capacitor_SMD:C_0603_1608Metric",1,"TBD","Candidate"
-C21,"1uF 6.3V X7R 0603","Capacitor_SMD:C_0603_1608Metric",1,"TBD","Candidate"
-C22,"1uF 6.3V X7R 0603","Capacitor_SMD:C_0603_1608Metric",1,"TBD","Candidate"
-C23,"1uF 6.3V X7R 0603","Capacitor_SMD:C_0603_1608Metric",1,"TBD","Candidate"
-C24,"1uF 6.3V X7R 0603","Capacitor_SMD:C_0603_1608Metric",1,"TBD","Candidate"
-C25,"1uF 6.3V X7R 0603","Capacitor_SMD:C_0603_1608Metric",1,"TBD","Candidate"
-C26,"1uF 6.3V X7R 0603","Capacitor_SMD:C_0603_1608Metric",1,"TBD","Candidate"
-C27,"1uF 6.3V X7R 0603","Capacitor_SMD:C_0603_1608Metric",1,"TBD","Candidate"
-C28,"1uF 6.3V X7R 0603","Capacitor_SMD:C_0603_1608Metric",1,"TBD","Candidate"
-C29,"1uF 6.3V X7R 0603","Capacitor_SMD:C_0603_1608Metric",1,"TBD","Candidate"
-R3,"4.7k 1% 0603","Resistor_SMD:R_0603_1608Metric",1,"TBD","Candidate"
-R4,"4.7k 1% 0603","Resistor_SMD:R_0603_1608Metric",1,"TBD","Candidate"
-R5,"10k 1% 0603","Resistor_SMD:R_0603_1608Metric",1,"TBD","Candidate"
-R6,"10k 1% 0603","Resistor_SMD:R_0603_1608Metric",1,"TBD","Candidate"
-R7,"10k 1% 0603","Resistor_SMD:R_0603_1608Metric",1,"TBD","Candidate"
-R8,"100k 1% 0603","Resistor_SMD:R_0603_1608Metric",1,"TBD","Candidate"
-R9,"100k 1% 0603","Resistor_SMD:R_0603_1608Metric",1,"TBD","Candidate"
-R10,"33k 1% 0603","Resistor_SMD:R_0603_1608Metric",1,"TBD","Candidate"
-C30,"100nF 16V X7R 0603","Capacitor_SMD:C_0603_1608Metric",1,"TBD","Candidate"
-C31,"100nF 16V X7R 0603","Capacitor_SMD:C_0603_1608Metric",1,"TBD","Candidate"
-Y1,"32.768kHz, CL=12.5pF, 20ppm","Crystal:Crystal_SMD_2012-2Pin_2.0x1.2mm",1,"TBD","Candidate"
-C32,"22pF C0G 0603","Capacitor_SMD:C_0603_1608Metric",1,"TBD","Candidate"
-C33,"22pF C0G 0603","Capacitor_SMD:C_0603_1608Metric",1,"TBD","Candidate"
-C34,"10uF 10V X7R 0805","Capacitor_SMD:C_0805_2012Metric",1,"TBD","Candidate"
-C35,"100nF 16V X7R 0603","Capacitor_SMD:C_0603_1608Metric",1,"TBD","Candidate"
-SW1,"TACT switch, momentary","Button_Switch_SMD:SW_SPST_TL3301AN",1,"TBD","Candidate"
+C1,47uF 6.3V X7R 1210,Capacitor_SMD:C_1210_3225Metric,1,TBD,Candidate
+C2,47uF 6.3V X7R 1210,Capacitor_SMD:C_1210_3225Metric,1,TBD,Candidate
+C3,47uF 6.3V X7R 1210,Capacitor_SMD:C_1210_3225Metric,1,TBD,Candidate
+C4,47uF 6.3V X7R 1210,Capacitor_SMD:C_1210_3225Metric,1,TBD,Candidate
+C5,47uF 6.3V X7R 1210,Capacitor_SMD:C_1210_3225Metric,1,TBD,Candidate
+C6,1uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate; LDO/switch input bypass
+C7,1uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate; LDO/switch input bypass
+C8,1uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate; LDO/switch input bypass
+C9,1uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate; LDO/switch input bypass
+C10,10uF 10V X7R 0805,Capacitor_SMD:C_0805_2012Metric,1,TBD,Candidate
+C11,10uF 10V X7R 0805,Capacitor_SMD:C_0805_2012Metric,1,TBD,Candidate
+C12,10uF 10V X7R 0805,Capacitor_SMD:C_0805_2012Metric,1,TBD,Candidate
+C13,10uF 10V X7R 0805,Capacitor_SMD:C_0805_2012Metric,1,TBD,Candidate
+C14,10uF 10V X7R 0805,Capacitor_SMD:C_0805_2012Metric,1,TBD,Candidate
+C15,10uF 10V X7R 0805,Capacitor_SMD:C_0805_2012Metric,1,TBD,Candidate
+C16,10uF 10V X7R 0805,Capacitor_SMD:C_0805_2012Metric,1,TBD,Candidate
+C17,10uF 10V X7R 0805,Capacitor_SMD:C_0805_2012Metric,1,TBD,Candidate
+C18,1uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate
+C19,1uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate
+C20,1uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate
+C21,1uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate
+C22,1uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate
+C23,1uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate
+C24,1uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate
+C25,1uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate
+C26,1uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate
+C27,1uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate
+C28,1uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate
+C29,1uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate
+C30,100nF 16V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate
+C31,100nF 16V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate
+C32,22pF C0G 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate
+C33,22pF C0G 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate
+C34,10uF 10V X7R 0805,Capacitor_SMD:C_0805_2012Metric,1,TBD,Candidate
+C35,100nF 16V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate
+C36,47uF 6.3V X7R 1210,Capacitor_SMD:C_1210_3225Metric,1,TBD,Candidate; BUCK4 output bypass
+C37,47uF 6.3V X7R 1210,Capacitor_SMD:C_1210_3225Metric,1,TBD,Candidate; BUCK4 output bypass
+C38,1uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate; VCC_CPVSS bypass
+C39,2.2uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate; CPN charge-pump cap
+C40,2.2uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate; CPP charge-pump cap
+C41,1uF 6.3V X7R 0603,Capacitor_SMD:C_0603_1608Metric,1,TBD,Candidate; VCC_CPVDD bypass
+L1,0.47uH / TDK SPM5030T-R47M-HZ,A1_PMIC:TDK_SPM5030T_5.2x5.0mm,1,TDK SPM5030T-R47M-HZ,"Selected; Isat 11A typ, DCR 5.39mOhm max"
+L2,0.47uH / TDK SPM5030T-R47M-HZ,A1_PMIC:TDK_SPM5030T_5.2x5.0mm,1,TDK SPM5030T-R47M-HZ,"Selected; Isat 11A typ, DCR 5.39mOhm max"
+L3,0.47uH / TDK SPM5030T-R47M-HZ,A1_PMIC:TDK_SPM5030T_5.2x5.0mm,1,TDK SPM5030T-R47M-HZ,"Selected; Isat 11A typ, DCR 5.39mOhm max"
+L4,0.47uH / TDK SPM5030T-R47M-HZ,A1_PMIC:TDK_SPM5030T_5.2x5.0mm,1,TDK SPM5030T-R47M-HZ,"Selected; Isat 11A typ, DCR 5.39mOhm max"
+L5,1.0uH / TDK SPM5030T-1R0M-HZ,A1_PMIC:TDK_SPM5030T_5.2x5.0mm,1,TDK SPM5030T-1R0M-HZ,"Selected; Isat 8A typ, DCR 11.5mOhm max"
+L6,0.47uH / TDK SPM5030T-R47M-HZ,A1_PMIC:TDK_SPM5030T_5.2x5.0mm,1,TDK SPM5030T-R47M-HZ,"Selected; Isat 11A typ, DCR 5.39mOhm max"
+R1,TBD_RH (DDR VDD dependent),Resistor_SMD:R_0603_1608Metric,1,TBD,TBD - do not populate until DRAM rail is frozen
+R2,TBD_RL (DDR VDD dependent),Resistor_SMD:R_0603_1608Metric,1,TBD,TBD - do not populate until DRAM rail is frozen
+R3,4.7k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
+R4,4.7k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
+R5,10k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
+R6,10k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
+R7,10k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
+R8,100k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
+R9,100k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
+R10,33k 1% 0603,Resistor_SMD:R_0603_1608Metric,1,TBD,Candidate
+SW1,Omron B3U-1000P momentary,Button_Switch_SMD:SW_SPST_B3U-1000P,1,B3U-1000P,Selected
+U3,RK809-5,A1_PMIC:RK809_QFN-68-1EP_7x7mm_P0.35mm_EP5.49x5.49mm,1,RK809-5,Selected; footprint land pattern verification pending
+Y1,32.768kHz / Epson Q13FC13500004 / CL=12.5pF,Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm,1,Q13FC13500004,"Selected; +/-20ppm, 12.5pF"
