@@ -1,46 +1,14 @@
 # 首板Bring-up计划
 
-## 0. 首板调试准备
+1. 不插CM5，限流检查USB-C 5V输入、CC协商和板上短路。
+2. 检查5V主电源是否稳定在CM5要求范围内。
+3. 检查USB-A VBUS开关、M.2 3.3V和风扇电源。
+4. 安装CM5，检查连接器方向、插合和固定。
+5. 通过UART观察启动日志。
+6. 首次从板载eMMC启动Raspberry Pi OS 64-bit。
+7. 进入系统后检查CPU、内存、eMMC和温度。
+8. 逐项测试HDMI、Ethernet、USB3和NVMe。
+9. 使用nRPIBOOT和USB2下载口验证恢复/重刷能力。
+10. 执行CPU与NVMe联合负载，记录5V输入压降和模块温度。
 
-- 预留可接触的UART TX/RX/GND。
-- 预留输入电源电流测量和关键电源轨测试点。
-- 预留PMIC I2C、Reset、Power Good和Recovery/MASKROM控制点。
-- 预留SoC JTAG或原厂要求的调试接口。
-- 预留eMMC/USB下载恢复路径。
-- BGA器件装配后安排X-Ray检查。
-
-## 1. 不装SoC阶段
-
-1. 检查PCB短路、开路、阻抗coupon和叠层。
-2. 检查输入保护和前级Buck。
-3. 逐路验证外围5V、3.3V和其他辅助电源。
-4. 验证电源使能、限流和热状态。
-
-## 2. 装SoC与PMIC阶段
-
-1. 限流电源首次上电。
-2. 逐项测量PMIC输入和输出。
-3. 检查时序、PG、Reset和待机电流。
-4. UART观察BootROM/Loader/DDR初始化输出。
-5. 若DDR初始化失败，先核查电源、时钟、Reset、颗粒焊接和DDR配置，不盲目改设备树。
-
-## 3. Linux启动阶段
-
-1. 验证DDR容量和压力测试。
-2. 验证eMMC读写、分区和系统启动。
-3. 验证USB下载、Recovery和常规Host。
-4. 验证HDMI热插拔与显示。
-5. 验证Ethernet链路、吞吐和持续运行。
-6. 验证PCIe枚举、NVMe读写和温升。
-7. 验证可选Wi-Fi/BT与MicroSD。
-
-## 4. 稳定性测试
-
-- CPU/GPU/DDR联合压力测试。
-- NVMe持续读写与掉电恢复。
-- USB多设备并发。
-- 网络持续传输。
-- 冷启动、热启动、断电重启。
-- 高低温和长时间运行。
-
-所有测试必须记录板卡版本、BOM版本、固件版本、环境温度、仪器、测试步骤和原始日志。
+首板出现启动问题时，优先检查5V压降、连接器焊接、Power Button、nRPIBOOT和UART日志，不在载板上重复设计模块内部电源。

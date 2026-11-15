@@ -1,18 +1,19 @@
 # Linux软件与启动
 
-目标：ARM64 Linux独立启动。
+A1使用CM5模块，不重新开发SoC启动链和DDR初始化。
 
-启动链需要覆盖：
-BootROM → Rockchip DDR/Loader初始化 → U-Boot → Linux Kernel → Device Tree → Root Filesystem。
+首轮软件：
+- Raspberry Pi OS 64-bit
+- Debian ARM64（按官方支持情况）
+- eMMC作为系统启动盘
+- NVMe作为数据盘/可选系统盘
 
-首轮优先使用能够合法取得、可复现构建的Rockchip BSP。官方Brief Datasheet列出Linux 5.10支持；具体SDK版本、补丁、U-Boot、Kernel和rootfs必须以实际取得的SDK Release Note为准。
+工作内容：
+1. 使用官方工具将系统镜像写入CM5 eMMC。
+2. 首次启动验证UART、HDMI和Ethernet。
+3. 配置USB、NVMe、Wi-Fi/BT和风扇。
+4. 记录Bootloader EEPROM和固件版本。
+5. 验证nRPIBOOT下载/恢复接口。
+6. 建立系统镜像备份与恢复流程。
 
-待办：
-- 确认Rockchip SDK申请与下载权限。
-- 归档rkbin/DDR初始化文件的版本和来源。
-- 确认U-Boot defconfig、Kernel defconfig和设备树基线。
-- 建立eMMC分区、Recovery和升级方案。
-- 编写本板Device Tree并记录每个外设的资源分配。
-- 保留UART调试和USB下载/恢复路径。
-
-不在未取得SDK和硬件资料前宣称Linux启动已验证。
+不需要Rockchip BSP、RKbin、DDR初始化bin或RK3588设备树。

@@ -1,58 +1,55 @@
 # Linux MiniHost A1
 
-全新自主设计的 ARM64 Linux 小主机主板。该项目从空白 KiCad 工程开始；不复制 CM5 MiniHost、KiCad Web Pilot 或其他第三方项目的原理图、PCB、封装库和布局布线。芯片厂商资料与公开参考设计仅用于核对器件接口、电源要求和设计约束。
+一块自主设计的紧凑型 ARM64 Linux 小主机载板。采用 Raspberry Pi Compute Module 5（CM5）作为计算核心，载板从空白 KiCad 工程独立设计。
 
-## 当前状态
+**本项目自主设计的是载板（Carrier Board），不是重新设计 CM5 模块内部的 SoC、LPDDR 和 eMMC。** CPU、RAM、eMMC、无线模块和核心电源管理由官方 CM5 模块提供。我们独立完成双 100-pin 连接器、供电输入、USB、HDMI、Ethernet、NVMe、调试、PCB、外壳和生产验证。
 
-- 项目阶段：A0 系统需求与架构定义
-- 主控基线：Rockchip RK3588（FCBGA1088L）
-- 目标系统：ARM64 Linux；先采用可获得且经过验证的 Rockchip BSP 启动，再评估主线内核
-- 原理图：尚未开始冻结
-- PCB：尚未开始
-- 生产文件：尚未生成
-- 投板状态：禁止投板，所有关键器件与电气参数尚待核实
+不复制 CM5 MiniHost、CM5IO 或其他第三方载板的原理图、PCB布局和布线。官方CM5数据手册、Pinout与参考资料只用于核对接口和电气约束。
 
-## A1 初始目标规格
+## A1基线
 
-| 项目 | 当前基线 | 状态 |
-|---|---|---|
-| SoC | RK3588 | 架构选定，采购/资料可得性待确认 |
-| 内存 | 8GB LPDDR4X，参考双颗粒 4GB 组织 | 颗粒型号、拓扑和时序待确认 |
-| 启动存储 | 32GB eMMC 5.1 | 颗粒型号与兼容性待确认 |
-| 扩展存储 | M.2 M-Key，PCIe 3.0 x4 NVMe | Lane、时钟、复位和电源待核实 |
-| 显示 | 1 × HDMI 输出 | 连接器、ESD、HPD/DDC待设计 |
-| USB | USB-C调试/下载；USB 3.x与USB 2.0主机端口 | 数量和PHY复用待核实 |
-| 网络 | 1 × 1GbE RJ45 | PHY、磁性器件和接口待选型 |
-| 无线 | 预留Wi-Fi/BT扩展 | 模块与总线资源待核实 |
-| 可移动存储 | MicroSD恢复/扩展 | Boot策略待确定 |
-| 输入电源 | 12V DC | 电流额定值须经功耗预算确定 |
-| 机械尺寸 | 120 × 90 mm目标 | 仅为外形目标，待接口/散热/布线评估 |
-| PCB | 10层作为首轮布线评估起点 | HDI、叠层、线宽和阻抗待板厂确认 |
+| 项目 | 当前基线 |
+|---|---|
+| 计算核心 | Raspberry Pi Compute Module 5 |
+| 候选模块料号 | CM5104032 |
+| CPU | Broadcom BCM2712，4 × Cortex-A76，2.4 GHz |
+| 内存 | 4 GB LPDDR4X |
+| 启动存储 | 32 GB eMMC |
+| 无线 | 模块集成 Wi-Fi / Bluetooth |
+| 有线网络 | 1 × Gigabit Ethernet |
+| 显示 | 1 × HDMI 2.0 |
+| USB | 2 × USB 3.0 Type-A；1 × USB 2.0 下载/维护口 |
+| 扩展 | 1 × M.2 M-Key 2230，PCIe Gen 2 x1 |
+| 电源 | USB-C 5 V / 5 A 输入 |
+| 调试 | UART测试点、Power / Reset控制 |
+| PCB | 4层优先评估；确有布线需要时再评估6层 |
+| 外形 | 约100 × 70 mm初始目标，待接口和机械核对 |
 
-以上是项目起点，不代表已经完成器件选型或电气验证。任何未标记为“已核实”的参数不得直接用于采购或投板。
+模块料号、供货和价格须在下单前核实。
 
-## 设计原则
+## 项目范围
 
-1. 从空白工程自主建立系统架构、原理图、PCB和器件库。
-2. RK3588球位、供电、启动配置、DDR拓扑严格依据对应版本的原厂资料。
-3. 先完成最小系统和Linux启动，再扩展接口。
-4. 每个关键器件必须有制造商完整型号、数据手册、封装、供货渠道和替代策略。
-5. 每个设计阶段都要有ERC、DRC、SI/PI、DFM或板级测试证据。
-6. 不把静态检查通过等同于硬件可启动或可量产。
+- 自主绘制CM5模块双连接器符号与载板原理图
+- 自主设计电源输入、USB供电保护、接口ESD和M.2 3.3 V供电
+- 自主完成PCB布局布线、叠层、阻抗和DFM
+- 自主设计外壳、安装孔、接口开窗和散热结构
+- 使用Raspberry Pi OS / Debian等ARM64 Linux完成启动与功能测试
 
 ## 目录
 
-- docs/：需求、架构决策、资料来源、待办事项和验证计划
-- hardware/kicad/：KiCad原理图、PCB、项目库
-- hardware/mechanical/：板框、连接器、散热和外壳
-- hardware/si_pi/：阻抗、DDR、PCIe、USB及电源完整性分析
-- software/linux/：BSP、Boot、设备树和系统验证
-- bom/：器件清单、替代料和采购核对
-- manufacturing/：叠层、Gerber、钻孔、贴片和装配资料
+- docs/：需求、架构、连接器、电源、资料与验证
+- hardware/kicad/：KiCad原理图、PCB和项目库
+- hardware/mechanical/：板框、接口位置、散热和外壳
+- hardware/si_pi/：USB、PCIe、HDMI、Ethernet信号完整性
+- software/linux/：启动、系统镜像和测试记录
+- bom/：BOM、替代料和采购核对
+- manufacturing/：叠层、Gerber、钻孔和装配资料
 
-## 版本规则
+## 当前状态
 
-- main：唯一有效的主线
-- 其他旧分支已清空，暂不用于研发
-- 重要架构冻结、原理图冻结、PCB冻结和生产发布均使用独立标签
-- 任何第三方参考设计必须记录来源、许可证和实际采用范围
+- 项目方向：已缩减为CM5自主载板
+- 计算模块：CM5104032候选，待核价和采购确认
+- 连接器：双100-pin，优先核对Amphenol 10164227-1001A1RLF / 10164227-1004A1RLF
+- 原理图：待建立
+- PCB：待建立
+- 投板状态：禁止投板，接口映射、供电和机械尚未完成核验

@@ -1,11 +1,17 @@
-# SI/PI设计与验证
+# A1高速接口检查
 
-首版重点对象：
-- LPDDR4X：DQ/DQS/CA/CK拓扑、阻抗、时序、串扰和PDN。
-- PCIe Gen3 x4：差分阻抗、过孔、连接器和NVMe通道损耗。
-- USB 3.x：差分阻抗、回流路径、ESD器件寄生和连接器。
-- HDMI：差分通道、ESD和连接器过渡。
-- RGMII：时钟/数据时序、端接和PHY布局。
-- SoC/DDR/PMIC电源：瞬态响应、去耦网络和电源平面阻抗。
+只重点处理载板上的四类高速接口：
 
-目标阻抗不直接在本文件中拍定。所有阻抗值和几何尺寸必须由具体接口规范、SoC指南、实际叠层和板厂场求解结果共同确定。
+| 接口 | 目标差分阻抗 | 依据 |
+|---|---:|---|
+| USB 3.0 | 90 Ω | CM5 Datasheet |
+| PCIe Gen2 x1 | 90 Ω | CM5 Datasheet |
+| HDMI 2.0 | 100 Ω | CM5 Datasheet |
+| Gigabit Ethernet | 100 Ω | CM5 Datasheet |
+
+- USB3/PCIe/HDMI/Ethernet差分线下方保持连续参考地。
+- 不跨地平面开槽或分割。
+- 线宽线距按板厂实际4层/6层叠层计算，不照搬其他板子的尺寸。
+- PCIe按Gen2 x1设计，检查CLK_nREQ、nRST和必要控制信号。
+- M.2 3.3V电源与高速信号分开布局，避免电源开关噪声耦合。
+- 不需要DDR SI/PI仿真，因为DDR已集成在CM5模块内。

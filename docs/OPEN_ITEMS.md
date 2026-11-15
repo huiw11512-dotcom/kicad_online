@@ -1,23 +1,16 @@
-# 未决事项与风险清单
+# 未决事项
 
-| ID | 项目 | 风险/需要确认的内容 | 关闭条件 |
+| ID | 项目 | 待确认内容 | 关闭条件 |
 |---|---|---|---|
-| OI-001 | RK3588供货 | 具体订货型号、渠道、批次、价格和生命周期 | 获得可追溯报价和样品 |
-| OI-002 | 原厂资料 | 完整Datasheet、PinOut、Package Pin Length、Hardware Guide | 版本确认并归档 |
-| OI-003 | SDK | Rockchip BSP获取权限、版本、许可证及DDR初始化文件 | 获取并完成一次可复现构建 |
-| OI-004 | LPDDR4X | 8GB双32Gb x32方案；Samsung K4UBE3D4AB-MGCL为候选，Micron MT53E1G32D2FW-046为备选；T/A状态与后缀需FAE确认 | 与Rockchip DDR Support List Ver3.00、EVB拓扑、DDR模板和实际供货核对 |
-| OI-005 | PMIC | 双RK806-2与单RK806-1成本/电源轨/时序比较 | 电源树评审通过 |
-| OI-006 | eMMC | 32GB候选料号、HS400、温度和供货 | 兼容性和供货核验 |
-| OI-007 | PCIe | PCIe3 x4 lane映射、参考时钟、PERST#、CLKREQ#、M.2定义 | Pinmux与原理图审查 |
-| OI-008 | USB | USB3 PHY、USB2端口、Type-C角色与DP复用 | 完成接口资源矩阵 |
-| OI-009 | HDMI | HDMI输出通道、DDC、HPD、CEC、ESD和连接器 | 完成原理图评审 |
-| OI-010 | Ethernet | GMAC电压域、RGMII时序、PHY和磁性器件 | PHY方案及参考时钟确认 |
-| OI-011 | Wi-Fi/BT | 模块接口、驱动、天线净空和认证 | 决定首版是否装配 |
-| OI-012 | 电源预算 | SoC峰值、DDR、NVMe、USB负载和风扇 | 最坏工况预算与热设计完成 |
-| OI-013 | PCB工艺 | 8/10层、HDI、线宽线距、微孔、阻抗 | 板厂DFM确认 |
-| OI-014 | 机械 | 120×90mm外形、接口位置、散热器高度、安装孔 | 3D接口与外壳评审 |
-| OI-015 | 生产测试 | BGA焊接、X-Ray、上电限流、UART测试点 | 生产测试计划批准 |
+| OI-001 | CM5模块 | CM5104032实际供货、价格、交期和渠道 | 取得可追溯报价 |
+| OI-002 | 100-pin连接器 | Amphenol 10164227-1001A1RLF或-1004A1RLF库存、封装、堆叠高度 | 数据手册与3D模型核对 |
+| OI-003 | USB-C供电 | 5V/5A适配器和CC1/CC2连接 | 电源路径评审通过 |
+| OI-004 | M.2供电 | 3.3V稳压器峰值电流和热设计 | 按选定NVMe规格核算 |
+| OI-005 | USB VBUS | 两路USB3端口电流限制和保护 | USB外设功率预算完成 |
+| OI-006 | Ethernet MagJack | 1:1磁性RJ45、LED脚位、屏蔽和ESD | 选定具体料号 |
+| OI-007 | HDMI | HDMI连接器、ESD、HPD/DDC走线 | 原理图审查通过 |
+| OI-008 | PCB叠层 | 4层能否完成接口布线，必要时6层 | 板厂阻抗与DFM确认 |
+| OI-009 | 机械 | 板框、M.2 SSD、模块天线、散热器和外壳 | 3D装配检查通过 |
+| OI-010 | Linux | CM5 eMMC启动和NVMe驱动 | 实机验证 |
 
-## 阻断项
-
-OI-002、OI-003、OI-004、OI-005、OI-007和OI-012未关闭前，不允许发布原理图冻结版本。
+当前不再存在RK3588裸芯片、LPDDR颗粒选型和多PMIC设计任务。
