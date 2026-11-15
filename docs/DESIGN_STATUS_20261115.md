@@ -12,6 +12,7 @@ Source branch: `main`. Target: independent compact RK3568 SBC for Linux, compara
 - 32GB eMMC 5.1: Samsung KLMBG2JETD-B041: `A1_EMMC_32GB.kicad_sch`.
 - 24MHz oscillator, boot voltage strap, UART2, Recovery key: `A1_BOOT_OSC_DEBUG.kicad_sch`.
 - LPDDR4X DRAM: Micron MT53E512M32D1ZW-046B WT:B, 2GB x32 single-rank baseline; 200-ball map, U10, ZQ resistor R40: `A1_LPDDR4X_2GB.kicad_sch`.
+- microSD: TFP09-2-12B, 4-bit SDMMC0, 22Ω signal series resistors, 100Ω card-detect series, ESD5341N protection, VCCIO_SD voltage switching: `A1_SD_CARD.kicad_sch`.
 
 ## DDR integration completed in the source
 - 67 DRAM signal nets mapped to 67 RK3568 balls.
