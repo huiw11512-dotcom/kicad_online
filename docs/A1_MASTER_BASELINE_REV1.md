@@ -90,7 +90,7 @@ This deliberately prioritizes reliable recovery and a simple first board over ma
 9. USB3_USB2 — one USB3 Host, two USB2 Host ports, VBUS switches and ESD.
 10. HDMI — HDMI TX, DDC, HPD, CEC, +5 V and ESD.
 11. WIFI_BT_GPIO — combo module, antenna keepout, 40-pin header, LEDs and buttons.
-12. TEST_RECOVERY — UART, MaskROM/Recovery, JTAG/test pads and rail test points.
+12. TEST_RECOVERY — UART, MaskROM/Recovery, JTAG/test pads and rail test points.\n13. DDR_POWER — separate LPDDR4X VCC0V6_DDR buck and VCC1V8_DDR LDO; VCC_DDR_1V1 from RK809 BUCK3.
 
 ## 6. Hard gates before fabrication
 
@@ -113,7 +113,7 @@ No board fabrication is authorized until all gates are closed and the native KiC
 ## 8. Current implementation status
 
 - Native KiCad root schematic contains the USB-C PD input and 15 V to 5 V main Buck prototype, and links the RK809-5 PMIC page 2.
-- RK809-5 has a complete 69-pin symbol and 68+EP candidate footprint; its output-to-SoC rail allocation is not frozen.
+- RK809-5 has a complete 69-pin symbol and 68+EP candidate footprint; its output map follows the Rockchip EVB reference.\n- LPDDR4X power page adds separate 0.6V and 1.8V regulators; exact DRAM part/template and current/ramp checks remain open.
 - RK3568 symbol library exists, but the SoC has not yet been placed in the root schematic. LPDDR4X, eMMC and external interfaces are not yet drawn.
 - The project has not passed native KiCad load, ERC, netlist export, visual review, PCB DRC or hardware bring-up.
 - This baseline resolves architecture conflicts; it does not represent a completed schematic or fabrication-ready design.
