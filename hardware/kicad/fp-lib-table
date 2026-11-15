@@ -1,0 +1,37 @@
+(fp_lib_table
+  (lib
+    (name "Package_DFN_QFN")
+    (type "KiCad")
+    (uri "\${KICAD8_FOOTPRINT_DIR}/Package_DFN_QFN.pretty")
+    (options "")
+    (descr "KiCad standard DFN/QFN footprints")
+  )
+  (lib
+    (name "Package_SO")
+    (type "KiCad")
+    (uri "\${KICAD8_FOOTPRINT_DIR}/Package_SO.pretty")
+    (options "")
+    (descr "KiCad standard SO footprints")
+  )
+  (lib
+    (name "Connector_USB")
+    (type "KiCad")
+    (uri "\${KICAD8_FOOTPRINT_DIR}/Connector_USB.pretty")
+    (options "")
+    (descr "KiCad standard USB connector footprints")
+  )
+  (lib
+    (name "Resistor_SMD")
+    (type "KiCad")
+    (uri "\${KICAD8_FOOTPRINT_DIR}/Resistor_SMD.pretty")
+    (options "")
+    (descr "KiCad standard SMD resistor footprints")
+  )
+  (lib
+    (name "Capacitor_SMD")
+    (type "KiCad")
+    (uri "\${KICAD8_FOOTPRINT_DIR}/Capacitor_SMD.pretty")
+    (options "")
+    (descr "KiCad standard SMD capacitor footprints")
+  )
+)
