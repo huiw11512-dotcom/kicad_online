@@ -134,3 +134,15 @@ TCS4525_WT作为候选，需与Rockchip参考方案核对：
   https://www.boardcon.com/download/Rockchip_RK809_Datasheet_V2.5-20250407.pdf
 - RK3568 public reference design index (schematic and PCB review references):
   https://github.com/hqnicolas/RK3568-hardware-design
+
+
+## RK809-5 PMIC page implementation (2026-11-15)
+
+- Native page: `hardware/kicad/A1_RK809_PMIC.kicad_sch` (page 2).
+- RK809-5 VCC1..VCC9 and VCC_RTC are supplied from 5V_SYS; VCC_RTC is therefore not below any other PMIC input.
+- VCC_1P8A/D are supplied from BUCK5 1.8V output; BUCK5 FB5 is sensed at that output.
+- Active buck channels represented: BUCK1, BUCK2, BUCK3 and BUCK5; BUCK4 is held OFF per RK809-5 OTP default.
+- 0.47uH inductors use Isat >=4A and DCR <20mOhm as design targets. Two 47uF output capacitors per active buck are nominal values only; verify effective capacitance at DC bias.
+- BUCK3 feedback resistor values are intentionally TBD until the selected LPDDR4X rail voltage is known.
+- Open-drain I2C/INT/RESETB/CLK32K lines pull up to the 1.8V domain; RESETB has 100nF; VDC divider 100k/33k gives approximately 1.24V.
+- This PMIC page does not yet assign its outputs to individual RK3568 supply balls. That mapping must be checked against the complete Rockchip EVB power tree and exact memory configuration.
