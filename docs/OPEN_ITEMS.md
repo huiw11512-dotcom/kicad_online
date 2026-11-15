@@ -18,4 +18,4 @@
 
 | OI-014 | microSD socket | TFP09-2-12B LCSC C2911421 stock and JLC extended C2887880 availability; supplier land pattern orientation | Confirm orderable stock and compare 15-pad footprint to current supplier drawing |
 | OI-015 | SDMMC0 UHS-I | RK809 LDO5 VCCIO_SD 3.3V↔1.8V switching, device-tree supplies and timing | Confirm PMIC register/driver configuration and test SD 3.0/SDR104 negotiation |
-| OI-016 | ESD5341N | LCSC C22390017 current stock and DFN1006-2L land pattern | Confirm stock, package drawing and assembly capability |
+| OI-016 | ESD5341N | LCSC C3021106 current stock and DFN1006-2 land pattern | Confirm stock, package drawing and assembly capability |
