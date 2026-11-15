@@ -6,4 +6,5 @@
     (options "")
     (descr "Linux SBC A1 custom symbols")
   )
+  (lib (name "A1_SOC") (type "KiCad") (uri "${KIPRJMOD}/A1_SOC.kicad_sym") (options "") (descr "Linux MiniHost A1 RK3568 SoC symbol"))
 )
