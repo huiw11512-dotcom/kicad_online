@@ -1,15 +1,15 @@
-# A1电源架构 Rev 0.4 — RK3568 + RK809-5 参考电源树
+# A1电源架构 Rev 1.0 — RK3568 + RK809-5 参考电源树
 
 状态：电源拓扑按Rockchip指南及EVB参考设计进一步明确；尚未完成逐球映射、器件值核算和KiCad电气原理图。
 
 ## 1. 输入电源与母线
 
-- USB-C PD输入暂定9V/3A（27W）。
-- 9V经同步Buck降为5V_SYS。
-- RK809-5工作输入范围2.7–5.5V，因此不得将9V直接接入RK809-5；PMIC输入由5V_SYS供电。
+- USB-C PD输入冻结为15V/3A（45W）。
+- 15V_IN经同步Buck降为5V_SYS。
+- RK809-5工作输入范围2.7–5.5V，因此不得将15V直接接入RK809-5；PMIC输入由5V_SYS供电。
 - 5V_SYS同时供USB VBUS开关和各后级电源转换器。
-- 5V_SYS总电流预算、SoC峰值负载和USB外设预算必须以27W输入功率为上限联合核算；若需要同时支持4个USB口满载，应降低SoC负载或提升PD输入能力。
-- USB-C PD控制器具体型号、PDO、输入限流、过压和反灌保护待冻结。HUSB238仍是候选，不冻结VSET/ISET电阻。
+- 5V_SYS总电流预算、SoC峰值负载和USB外设预算必须以45W PD合同为输入上限联合核算，同时受5V/5A（25W）主Buck输出能力约束。Rev 1仅配置1个USB3 Host和2个USB2 Host，Type-A VBUS初始总预算1.9A。
+- HUSB238为当前PD控制器；Hynetek参考设计表给出RVSET=14kΩ对应15V、RISET=22.6kΩ对应3.0A。输入限流、TVS/过压、反灌保护及适配器PDO仍需验证。
 
 ## 2. RK3568 + RK809-5参考电源树（功能映射）
 
@@ -119,7 +119,7 @@ TCS4525_WT作为候选，需与Rockchip参考方案核对：
 
 1. 获取Rockchip RK3568 EVB完整RK809-5原理图，逐项核对Figure 2-62的VCC1–VCC9、LDO输入和Switch网络。
 2. 逐球核对RK3568所有电源球位和网络名。
-3. 计算9V→5V_SYS输入功率、5V负载和各后级稳压器的热耗散。
+3. 计算15V→5V_SYS输入功率、5V负载和各后级稳压器的热耗散。
 4. 完成CPU/GPU/Logic/DDR Buck外围元件值与电源完整性核算。
 5. 完成PMIC上电、复位、晶振、I2C及电源键电路。
 6. KiCad绘制并完成ERC后再进入SoC信号页。
