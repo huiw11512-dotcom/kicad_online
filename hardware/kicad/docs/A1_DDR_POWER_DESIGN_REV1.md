@@ -59,3 +59,8 @@ The Rockchip LPDDR4X reference circuit separates the 1.1V, 0.6V and 1.8V rails. 
 - Silergy SY8089AAAC: https://datasheet.lcsc.com/lcsc/Silergy-Corp-SY8089AAAC_C78988.pdf
 - Diodes AP2112K: https://www.diodes.com/assets/Datasheets/AP2112.pdf
 - TDK SPM5030-HZ: https://product.tdk.com/en/system/files/dam/doc/product/inductor/inductor/smd/catalog/inductor_automotive_power_spm5030-hz_en.pdf
+
+
+## DRAM integration update — 2026-11-16
+
+The first-spin DRAM schematic uses Micron MT53E512M32D1ZW-046B WT:B (2GB, x32, single rank). U10 maps VDD1/VDD2/VDDQ to VCC1V8_DDR/VCC_DDR_1V1/VCC0V6_DDR respectively. R40 is 240Ω ±1% from ZQ0 to VDDQ. The Micron 200-ball footprint retains the vacant L/M row positions; the outer row center distance is 13.65mm. The exact Rockchip template/BIN pairing and final land-pattern review remain open.
