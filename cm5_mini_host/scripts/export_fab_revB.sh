@@ -23,9 +23,9 @@ kicad-cli pcb export pos \
   --side back --format csv --units mm --smd-only --exclude-dnp \
   --output "$OUT/assembly/Bottom_PickPlace.csv" "$BOARD"
 kicad-cli sch export bom --exclude-dnp \
-  --fields 'Reference,Value,Footprint,P/N,QUANTITY,DNP' \
-  --labels 'Refs,Value,Footprint,ManufacturerPart,Qty,DNP' \
-  --output "$OUT/assembly/BOM_Parts.csv" "$SCHEMATIC"
+  --fields 'Reference,Value,Footprint,QUANTITY,DNP' \
+  --output "$OUT/assembly/BOM_Schematic_Raw.csv" "$SCHEMATIC"
+python3 "$ROOT/scripts/audit_bom_fields_from_pcb.py" "$BOARD" "$OUT/assembly"
 python3 "$ROOT/scripts/validate_fab_revB.py" "$OUT"
 python3 - <<'PY'
 from pathlib import Path
