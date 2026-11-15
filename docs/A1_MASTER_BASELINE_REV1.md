@@ -80,11 +80,11 @@ This deliberately prioritizes reliable recovery and a simple first board over ma
 
 ## 5. Schematic page plan
 
-1. USB-C_PD_INPUT — receptacle, HUSB238, input protection, PD status, input test points.
-2. MAIN_POWER — 15 V to 5 V_SYS Buck, feedback, EN/PGOOD, protection, current/thermal budget.
-3. 3V3_POWER — 5V_SYS to pre-PMIC VCC3V3_SYS 3.3V/3A buck.
-4. RK809_PMIC — complete RK809-5 pinout, all Buck/LDO/SW rails, VCC input domains, RTC, crystal, I2C, PWRON, RESETB and unused-pin handling.
-5. CPU_GPU_LOGIC_POWER — CPU dynamic Buck, feedback, GPU/logic/DDR-related power rails, sequencing and decoupling.
+1. ROOT_INPUT_MAIN_POWER — USB-C PD receptacle, HUSB238, input protection, 15V-to-5V_SYS main Buck.
+2. RK809_PMIC — complete RK809-5 pinout, all Buck/LDO/SW rails, VCC input domains, RTC, crystal, I2C, PWRON, RESETB and unused-pin handling.
+3. DDR_POWER — separate LPDDR4X 0.6V and 1.8V rails; VCC_DDR_1V1 from RK809 BUCK3.
+4. 3V3_POWER — 5V_SYS to pre-PMIC VCC3V3_SYS 3.3V/3A buck.
+5. CPU_GPU_LOGIC_POWER — CPU dynamic Buck, feedback, GPU/logic power rails, sequencing and decoupling.
 6. RK3568_SOC — all 636 balls, power/ground, clocks, reset, boot straps, UART, I2C and service/download signals.
 7. LPDDR4X_4GB — exact matched DRAM device and complete bus/power wiring.
 8. EMMC_MICROSD — eMMC 8-bit and MicroSD 4-bit.
@@ -92,7 +92,7 @@ This deliberately prioritizes reliable recovery and a simple first board over ma
 10. USB3_USB2 — one USB3 Host, two USB2 Host ports, VBUS switches and ESD.
 11. HDMI — HDMI TX, DDC, HPD, CEC, +5 V and ESD.
 12. WIFI_BT_GPIO — combo module, antenna keepout, 40-pin header, LEDs and buttons.
-13. TEST_RECOVERY — UART, MaskROM/Recovery, JTAG/test pads and rail test points.\n13. DDR_POWER — separate LPDDR4X VCC0V6_DDR buck and VCC1V8_DDR LDO; VCC_DDR_1V1 from RK809 BUCK3.
+13. TEST_RECOVERY — UART, MaskROM/Recovery, JTAG/test pads and rail test points.
 
 ## 6. Hard gates before fabrication
 
