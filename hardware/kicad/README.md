@@ -16,7 +16,7 @@ The root schematic now contains two actual electrical subcircuits:
 - `A1_POWER_BOM.csv` — main buck BOM
 - `A1_POWER_NETS.csv` — main buck net membership
 
-## Electrical decisions
+## RK3568 SoC library\n\n- `A1_SOC.kicad_sym` — 636-ball multi-unit RK3568 symbol.\n- `A1_SOC.pretty/BGA-636_L19.0-W19.0-P0.65-BL.kicad_mod` — candidate 636-pad footprint.\n- `A1_SOC_BALLMAP.csv` — complete ball map, full mux names and pad coordinates.\n- `docs/RK3568_SYMBOL_AUDIT.md` — validation scope and footprint caveat.\n- The symbol displays primary mux functions; full alternatives remain in the CSV. All non-power signal pins are passive pending mode-specific pin-direction review.\n- The 0.35 mm pad diameter is provisional; the footprint is not fabrication-approved until land-pattern and assembly-house confirmation.\n\n## Electrical decisions
 
 ### USB-C PD input
 - HUSB238_003DD, DFN-10L.
