@@ -112,7 +112,8 @@ No board fabrication is authorized until all gates are closed and the native KiC
 
 ## 8. Current implementation status
 
-- Native KiCad root schematic currently contains only the USB-C PD input and 15 V to 5 V main Buck prototype.
-- RK3568, RK809-5, LPDDR4X, eMMC and external interfaces have not yet been added to the root schematic.
+- Native KiCad root schematic contains the USB-C PD input and 15 V to 5 V main Buck prototype, and links the RK809-5 PMIC page 2.
+- RK809-5 has a complete 69-pin symbol and 68+EP candidate footprint; its output-to-SoC rail allocation is not frozen.
+- RK3568 symbol library exists, but the SoC has not yet been placed in the root schematic. LPDDR4X, eMMC and external interfaces are not yet drawn.
 - The project has not passed native KiCad load, ERC, netlist export, visual review, PCB DRC or hardware bring-up.
 - This baseline resolves architecture conflicts; it does not represent a completed schematic or fabrication-ready design.
