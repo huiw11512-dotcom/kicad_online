@@ -1,37 +1,38 @@
 # Linux MiniHost A1
 
-自主设计RK3568 ARM64 Linux SBC。目标是树莓派4B级别的应用场景和接口便利性，整板集成SoC、LPDDR4X、eMMC、PMIC、网络PHY、无线模块及外部接口；不是CM5载板，也不复制第三方SBC工程。
+RK3568 ARM64 Linux SBC，目标是树莓派4B级别的接口体验和独立Linux启动能力。
 
-## Rev 1.0硬件基线
+## 当前KiCad工程（2026-11-16）
 
-| 模块 | 决策 |
-|---|---|
-| SoC | Rockchip RK3568，FCBGA636L，19 × 19 mm |
-| CPU/GPU | 4 × Cortex-A55；Mali-G52 |
-| RAM | 4GB LPDDR4X，32-bit；颗粒/模板/BIN匹配待闭环 |
-| 存储 | 32GB eMMC 5.1 + MicroSD |
-| PMIC | RK809-5 + 独立VDD_CPU动态Buck |
-| 显示 | 1 × HDMI 2.0a |
-| 网络 | 1 × Gigabit Ethernet，GMAC0 RGMII + 外置PHY |
-| USB | 1 × USB3.x Host + 2 × USB2.0 Host |
-| 下载调试 | 1 × Micro-USB，连接USB3_OTG0_DP/DM，保留MaskROM/Loader/ADB |
-| 无线 | 焊接式Wi-Fi/BT combo模块，SDIO + UART |
-| GPIO | 40-pin、2.54 mm排针 |
-| 电源 | USB-C PD 15V/3A（45W）→ 5V_SYS |
-| PCB | 6层FR-4，1.6 mm起步；85 × 56 mm外形目标 |
+**已建立：** USB-C PD 15V输入、15V→5V_SYS主Buck、5V→3.3V SYS预PMIC Buck、RK809-5 PMIC、LPDDR4X 0.6V/1.8V电源、RK3568 SoC 17单元/636球、VDD_CPU独立TCS4525 Buck、32GB eMMC 5.1、24MHz晶振/复位/启动配置/恢复键/UART2调试。
 
-RK3568采用Cortex-A55，树莓派4B采用Cortex-A72；本项目对标的是整机功能和使用场景，不宣称CPU跑分相同。
+**尚未完成：** 实际4GB LPDDR4X颗粒及完整布线表、DDR原厂模板和DDR BIN相容性、USB接口及下载口、HDMI、千兆PHY/RJ45、Wi-Fi/BT、MicroSD、40pin GPIO、局部电源去耦和匹配网络、PCB布局布线。
 
-## 工程状态
+**制造状态：禁止投板。** 新符号/候选BGA封装仍需与原厂球图/land pattern核对；尚未运行原生KiCad ERC/DRC、网表验证和实际Linux启动测试。
 
-- 当前KiCad原生原理图仅有USB-C PD输入及15V→5V主Buck初步电路。
-- RK3568、RK809-5、LPDDR4X、eMMC、USB/HDMI/以太网/Wi-Fi等尚未完成原理图。
-- DDR颗粒与Rockchip模板/BIN、SoC封装球位、PMIC完整电源树仍是投板前硬门槛。
-- 当前工程未完成KiCad原生ERC/网表检查、PCB布局布线或硬件启动验证，不可投板。
+## 打开工程
 
-## 设计入口
+KiCad工程入口：`hardware/kicad/A1.kicad_pro`
 
-- [A1 Rev1唯一硬件基线](docs/A1_MASTER_BASELINE_REV1.md)
-- [当前工程状态](docs/DESIGN_STATUS_20261115.md)
-- [一次性原理图分页计划](docs/A1_SCHEMATIC_FREEZE_REV1.md)
-- [电源设计计划](docs/POWER_PLAN.md)
+主原理图：`hardware/kicad/A1.kicad_sch`（A2根页 + 7张子原理图）。
+
+| 子页 | 文件 | 当前状态 |
+|---|---|---|
+| RK809-5 PMIC | `A1_RK809_PMIC.kicad_sch` | 69焊盘定义，输入3.3V，控制及Buck/LDO网络，待板级验证 |
+| DDR_POWER | `A1_DDR_POWER.kicad_sch` | LPDDR4X 0.6V、1.8V，仍缺颗粒配套验证 |
+| 3V3_POWER | `A1_3V3_POWER.kicad_sch` | 5V→VCC3V3_SYS TPS62132 |
+| RK3568_SOC | `A1_RK3568_SOC.kicad_sch` | 17个符号单元全部入图，636个球位逐项建网 |
+| CPU_POWER | `A1_CPU_POWER.kicad_sch` | TCS4525动态CPU Buck，反馈/使能/I2C |
+| EMMC_32GB | `A1_EMMC_32GB.kicad_sch` | Samsung KLMBG2JETD-B041，153球，8bit总线，封装候选 |
+| BOOT_DEBUG | `A1_BOOT_OSC_DEBUG.kicad_sch` | 24MHz、FLASH_VOL_SEL、nPOR、UART2、Recovery |
+
+## 基线与核验
+
+- [Rev1设计基线](docs/A1_MASTER_BASELINE_REV1.md)
+- [RK3568球位连接CSV](hardware/kicad/A1_RK3568_PINNETS.csv)
+- [RK3568接线审计](hardware/kicad/docs/RK3568_SOC_WIRING_AUDIT.md)
+- [CPU电源设计审计](hardware/kicad/docs/A1_CPU_POWER_DESIGN_REV1.md)
+- [eMMC设计审计](hardware/kicad/docs/A1_EMMC_DESIGN_REV1.md)
+- [启动电路审计](hardware/kicad/docs/A1_BOOT_OSC_DEBUG_REV1.md)
+
+主工程中只有“网络预留”的信号 **不代表** 外设已接通。必须完成真实电路并通过原生ERC/DRC才可认为工程可生产。
