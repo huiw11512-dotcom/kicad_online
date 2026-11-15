@@ -1,30 +1,30 @@
-# A1需求基线
+# A1需求基线 Rev 0.1
 
-| ID | 功能 | 优先级 | A1要求 |
+| ID | 功能 | 规格 | 优先级 |
 |---|---|---|---|
-| SYS-001 | Linux系统 | P | ARM64 Linux独立启动 |
-| SYS-002 | 计算模块 | P | Raspberry Pi CM5 |
-| SYS-003 | 内存/存储 | P | 4GB RAM + 32GB eMMC候选 |
-| PWR-001 | 电源输入 | P | USB-C 5V/5A |
-| DISP-001 | 显示 | P | 1 × HDMI 2.0 |
-| NET-001 | 有线网络 | P | 1 × Gigabit Ethernet |
-| USB-001 | USB高速主机 | P | 2 × USB 3.0 Type-A |
-| USB-002 | 下载/维护 | P | 1 × USB 2.0接口，支持CM5 USB boot |
-| STO-001 | 高速存储 | P | 1 × M.2 M-Key 2230，PCIe Gen2 x1 |
-| DBG-001 | 调试 | P | UART TX/RX/GND测试点 |
-| CTRL-001 | 控制 | P | Power Button、nRPIBOOT跳线/测试点 |
-| THM-001 | 散热 | P | SoC散热器安装空间，预留风扇接口 |
-| WIR-001 | 无线 | O | 使用CM5带无线版本，不另加无线芯片 |
-| GPIO-001 | 扩展GPIO | O | 首版不放40-pin排针，保留少量测试点 |
-| MEC-001 | 外形 | P | 约100 × 70 mm目标，未冻结 |
-| PCB-001 | PCB层数 | P | 4层优先，必要时6层；不采用10层HDI |
-| PCB-002 | 阻抗 | P | 按CM5数据手册和板厂叠层计算 |
+| SYS-001 | SoC | RK3568 FCBGA636L | P |
+| SYS-002 | CPU | 4 × Cortex-A55，最高2.0GHz | P |
+| MEM-001 | RAM | 4GB LPDDR4X，32-bit | P |
+| STO-001 | eMMC | 32GB eMMC 5.1，8-bit | P |
+| STO-002 | MicroSD | SD 3.0 | P |
+| PWR-001 | 输入 | USB-C PD，9V/3A目标 | P |
+| DISP-001 | 显示 | 1 × HDMI 2.0a | P |
+| NET-001 | 以太网 | 1 × 10/100/1000M RJ45 | P |
+| USB-001 | USB高速 | 2 × USB 3.0 Host | P |
+| USB-002 | USB2 | 2 × USB 2.0 Host | P |
+| WIR-001 | 无线 | Wi-Fi + Bluetooth模块 | P |
+| GPIO-001 | 扩展 | 40-pin兼容排针 | P |
+| DBG-001 | 调试 | UART TX/RX/GND | P |
+| CTRL-001 | 控制 | Power、Reset、Recovery | P |
+| THM-001 | 散热 | SoC散热片区域，预留风扇焊盘 | P |
+| MEC-001 | 外形 | 85 × 56mm目标 | P |
+| PCB-001 | PCB | 6层、1.6mm FR-4起步 | P |
 
-## 冻结条件
+## 设计约束
 
-- CM5模块完整料号和采购来源确认。
-- 两个100-pin连接器的配套型号、焊盘和堆叠高度确认。
-- 200-pin信号映射与原厂数据手册逐项核对。
-- 5V/5A供电、USB外设预算及M.2 3.3V电源完成核算。
-- USB、PCIe、HDMI和Ethernet差分线阻抗由实际叠层确认。
-- 接口开窗、模块天线净空、散热器和安装孔完成机械检查。
+- RK3568支持32-bit DDR接口，LPDDR4X最高3200Mbps；A1先以4GB容量和原厂支持模板为准。
+- USB3 Host和USB3 DRD使用不同Multi-PHY资源，按PinMux和PHY复用表核对；DRD固定配置为Host。
+- 高速接口按原厂设计指南和实际板厂叠层计算阻抗。
+- HDMI、USB、RJ45附近配置匹配的低电容ESD。
+- 无线天线净空不得被金属外壳、散热片或高速线破坏。
+- 85 × 56mm为目标尺寸，不得为追求尺寸压缩DDR布线、供电铜皮或插拔空间。

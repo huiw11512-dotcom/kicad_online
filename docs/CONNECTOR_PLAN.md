@@ -1,21 +1,16 @@
-# A1连接器与关键接口计划
+# A1连接器规划
 
-| Ref | 接口 | 初步规格 | 数量 | 状态 |
-|---|---|---|---:|---|
-| J1/J2 | CM5模块连接器 | Amphenol 10164227-1001A1RLF或10164227-1004A1RLF | 2 | 待封装与堆叠高度核验 |
-| J3 | USB-C电源 | 5V/5A，CC1/CC2连接CM5协商脚 | 1 | 待选具体连接器 |
-| J4 | USB-C/USB2下载 | USB2.0数据，支持nRPIBOOT下载 | 1 | 待确认角色与保护 |
-| J5/J6 | USB-A | USB3.0 SuperSpeed | 2 | 待选带壳连接器 |
-| J7 | HDMI | HDMI 2.0 Type-A | 1 | 待选连接器与ESD |
-| J8 | Ethernet | 1:1 Gigabit MagJack | 1 | CM5内置PHY，载板接磁性RJ45 |
-| J9 | M.2 | M-Key 2230，PCIe Gen2 x1 | 1 | 待核对机械高度和供电 |
-| J10 | Fan | 4-pin风扇接口候选 | 1 | PWM/Tacho按模块引脚核对 |
-| TP1–TPn | UART/Boot/Power | 1.27mm或测试焊盘 | 若干 | 待布局 |
+| Ref | 接口 | 目标形式 | 状态 |
+|---|---|---|---|
+| J1 | USB-C PD输入 | 16-pin USB-C receptacle，支持PD CC | 待选具体型号 |
+| J2 | HDMI | HDMI Type-A receptacle | 待选具体型号 |
+| J3 | RJ45 | 10/100/1000M MagJack | 配RTL8211F-CG核对 |
+| J4/J5 | USB3.0 | USB Type-A 9-pin | 2个独立SoC控制器 |
+| J6/J7 | USB2.0 | USB Type-A 4-pin | 2个独立Host |
+| J8 | MicroSD | Push-push或翻盖式卡座 | SD3.0 |
+| J9 | GPIO | 2×20，2.54mm | 兼容树莓派40-pin定义目标 |
+| J10 | UART | 1×4或测试焊盘 | 3.3V TTL |
+| J11/J12 | Wi-Fi天线 | I-PEX按模块选择 | 依AP6275模块版本 |
+| J13 | Fan | 1×2或1×4 | 可选焊盘 |
 
-## 关键注意
-
-- CM5有两个100-pin高密度连接器，必须按官方模块Pinout建立连接器符号。
-- Amphenol 10164227-1001A1RLF堆叠高度1.5mm；10164227-1004A1RLF堆叠高度4.0mm并提供约2.5mm模块下方间隙。选择前需核对连接器实物、封装、焊盘和模块机械空间。
-- Ethernet使用1:1 MagJack；不额外添加外部PHY。
-- PCIe仅按Gen2 x1设计，不能按Gen3要求承诺。
-- USB2下载接口要能将nRPIBOOT拉低，并保证USB数据线映射正确。
+接口外形、插头插拔空间、连接器高度和外壳开窗在机械冻结前必须以制造商图纸核验。

@@ -1,20 +1,33 @@
-# A1简化电源方案
+# A1电源架构 Rev 0.1
 
 ## 输入
+- USB-C PD输入，目标协商9V/3A。
+- HUSB238作为PD Sink控制器候选，待核对完整料号、封装、保护和采购。
+- 9V经同步Buck转换为5V_SYS，设计能力目标5A。
+- USB-C端配置TVS、保险/电子保险丝、过流和浪涌保护。
 
-- USB-C输入，目标5V/5A。
-- CM5数据手册要求5V输入维持在4.75V以上。
-- CC1/CC2连接到USB-C接口，按官方CM5方案实现5V/5A协商。
-- 输入端设置保险/电子保险丝、TVS和必要的反接/浪涌保护；器件根据实际电流和USB-C方案选型。
+## 核心电源
+采用RK3568官方RK809-5电源架构：
+- RK809-5按原厂电源树生成VDD_LOGIC、VDD_GPU、DDR相关电源及IO/模拟电源。
+- VDD_CPU采用独立高电流Buck，参考Rockchip指南中的TCS4525方案。
+- LPDDR4X的VDDQ/VDD2/VDD1等依实际颗粒和原厂参考设计确定。
+- HDMI PHY、USB PHY、GMAC PHY模拟电源按原厂低噪声供电和去耦方式设计。
+- 24MHz主晶振、PMIC 32.768kHz RTC晶振按实际负载电容选型。
 
-## 载板电源分配
+## 电源树
 
-| 电源 | 负载 | 方案 |
+| 电源域 | 供电方式 | 备注 |
 |---|---|---|
-| 5V_SYS | CM5模块 | USB-C输入直接供电，保证低压降和足够铜宽 |
-| 5V_USB | 两个USB-A端口 | 独立限流负载开关，受VBUS_EN控制 |
-| 3V3_M2 | M.2 NVMe | 由5V转换，按SSD峰值电流选3A等级或经核算确定 |
-| 5V_FAN | 风扇 | 由5V_SYS分支供电，PWM/Tacho按官方引脚连接 |
-| RTC_VBAT | CM5 RTC | 预留CR2032或焊盘，按数据手册连接 |
+| 9V_IN | USB-C PD | 输入保护后进入主Buck |
+| 5V_SYS | 9V转5V同步Buck | USB外设及系统电源入口 |
+| VDD_CPU | 独立Buck | 参考TCS4525及原厂电源树 |
+| VDD_LOGIC/GPU/NPU | RK809-5 Buck/LDO | 按原厂电源树分配 |
+| DDR rails | PMIC/专用电源轨 | 由所选LPDDR4X决定 |
+| 1V8/3V3 IO | PMIC或独立Buck/LDO | 按IO电压域分配 |
+| PHY analog rails | 低噪声LDO/滤波 | 按原厂参考电路 |
 
-CM5模块内部已经集成主要电源管理，载板不设计RK806/RK860等多路SoC PMIC电源树。CM5提供的3.3V/1.8V外围输出合计各自最高600mA，不能默认用来给M.2 NVMe或大负载外设供电。
+## 约束
+- RK809-5不同子型号上电时序不可混用。
+- RESETn在相关电源稳定后释放。
+- 不删减SoC参考设计要求的去耦电容。
+- CPU、逻辑和DDR电源逐轨核算峰值电流、压降、纹波和温升。

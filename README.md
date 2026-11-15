@@ -1,55 +1,38 @@
-# Linux MiniHost A1
+# Linux SBC A1
 
-一块自主设计的紧凑型 ARM64 Linux 小主机载板。采用 Raspberry Pi Compute Module 5（CM5）作为计算核心，载板从空白 KiCad 工程独立设计。
+自主设计ARM64 Linux单板计算机，产品定位和使用场景参考Raspberry Pi 4B。RK3568 SoC、LPDDR4X、eMMC、PMIC、网络PHY、无线模块和全部外部接口直接集成在同一块PCB上；不是CM5载板，不复制第三方SBC工程。
 
-**本项目自主设计的是载板（Carrier Board），不是重新设计 CM5 模块内部的 SoC、LPDDR 和 eMMC。** CPU、RAM、eMMC、无线模块和核心电源管理由官方 CM5 模块提供。我们独立完成双 100-pin 连接器、供电输入、USB、HDMI、Ethernet、NVMe、调试、PCB、外壳和生产验证。
+## Rev 0.1基线
 
-不复制 CM5 MiniHost、CM5IO 或其他第三方载板的原理图、PCB布局和布线。官方CM5数据手册、Pinout与参考资料只用于核对接口和电气约束。
-
-## A1基线
-
-| 项目 | 当前基线 |
+| 模块 | 选型/目标 |
 |---|---|
-| 计算核心 | Raspberry Pi Compute Module 5 |
-| 候选模块料号 | CM5104032 |
-| CPU | Broadcom BCM2712，4 × Cortex-A76，2.4 GHz |
-| 内存 | 4 GB LPDDR4X |
-| 启动存储 | 32 GB eMMC |
-| 无线 | 模块集成 Wi-Fi / Bluetooth |
-| 有线网络 | 1 × Gigabit Ethernet |
-| 显示 | 1 × HDMI 2.0 |
-| USB | 2 × USB 3.0 Type-A；1 × USB 2.0 下载/维护口 |
-| 扩展 | 1 × M.2 M-Key 2230，PCIe Gen 2 x1 |
-| 电源 | USB-C 5 V / 5 A 输入 |
-| 调试 | UART测试点、Power / Reset控制 |
-| PCB | 4层优先评估；确有布线需要时再评估6层 |
-| 外形 | 约100 × 70 mm初始目标，待接口和机械核对 |
+| SoC | Rockchip RK3568，FCBGA636L |
+| CPU/GPU | 4 × Cortex-A55，最高2.0GHz；Mali-G52 |
+| RAM | 4GB LPDDR4X，32-bit |
+| 存储 | 32GB eMMC 5.1 + MicroSD |
+| PMIC | RK809-5 + 独立VDD_CPU Buck |
+| 显示 | 1 × HDMI 2.0a |
+| 网络 | 1 × Gigabit Ethernet，RTL8211F-CG候选 |
+| USB | 2 × USB 3.0 Host + 2 × USB 2.0 Host |
+| 无线 | AP6275系列Wi-Fi/BT模块候选，SDIO + UART |
+| GPIO | 40-pin兼容排针 |
+| 电源 | USB-C PD，9V/3A目标，转换为5V_SYS |
+| 调试 | UART、Power/Reset/Recovery |
+| PCB | 6层、1.6mm FR-4起步 |
+| 外形 | 85 × 56mm目标，布局验证后冻结 |
 
-模块料号、供货和价格须在下单前核实。
+## 性能边界
 
-## 项目范围
+RK3568是四核Cortex-A55，树莓派4B采用四核Cortex-A72。A1以Pi 4B的整机功能和应用场景为参照，不宣称CPU基准性能相同。若跑分必须达到Pi 4B，再评估更高一级SoC。
 
-- 自主绘制CM5模块双连接器符号与载板原理图
-- 自主设计电源输入、USB供电保护、接口ESD和M.2 3.3 V供电
-- 自主完成PCB布局布线、叠层、阻抗和DFM
-- 自主设计外壳、安装孔、接口开窗和散热结构
-- 使用Raspberry Pi OS / Debian等ARM64 Linux完成启动与功能测试
+## 设计规则
 
-## 目录
-
-- docs/：需求、架构、连接器、电源、资料与验证
-- hardware/kicad/：KiCad原理图、PCB和项目库
-- hardware/mechanical/：板框、接口位置、散热和外壳
-- hardware/si_pi/：USB、PCIe、HDMI、Ethernet信号完整性
-- software/linux/：启动、系统镜像和测试记录
-- bom/：BOM、替代料和采购核对
-- manufacturing/：叠层、Gerber、钻孔和装配资料
+- SoC、DDR、PMIC、电源、存储和接口全部自主集成。
+- 使用Rockchip数据手册、硬件设计指南、DDR模板和启动配置作为设计约束。
+- DDR颗粒必须匹配Rockchip支持清单、PCB模板和DDR初始化BIN。
+- 首版不做M.2 NVMe、双网口、MIPI摄像头、PoE、SATA和复杂音频。
+- 不得在DDR/供电/阻抗尚未核验时投板。
 
 ## 当前状态
 
-- 项目方向：已缩减为CM5自主载板
-- 计算模块：CM5104032候选，待核价和采购确认
-- 连接器：双100-pin，优先核对Amphenol 10164227-1001A1RLF / 10164227-1004A1RLF
-- 原理图：待建立
-- PCB：待建立
-- 投板状态：禁止投板，接口映射、供电和机械尚未完成核验
+RK3568为首选；4GB LPDDR4X、32GB eMMC容量已定，具体料号待核；RK809-5为PMIC首选；原理图和PCB尚未完成。

@@ -1,17 +1,16 @@
-# A1高速接口检查
+# A1高速信号与电源完整性
 
-只重点处理载板上的四类高速接口：
+## 重点网络
+- LPDDR4X：DQ/DQS/CA/CK/CS/RESET/ZQ，严格按Rockchip对应模板。
+- USB3：Host和DRD各一组SuperSpeed差分对。
+- HDMI 2.0a：TMDS差分对、DDC、HPD和CEC。
+- RGMII：SoC至RTL8211F-CG，检查时钟方向、延时和长度约束。
+- SDIO：SoC至Wi-Fi模块。
+- eMMC：8-bit总线。
 
-| 接口 | 目标差分阻抗 | 依据 |
-|---|---:|---|
-| USB 3.0 | 90 Ω | CM5 Datasheet |
-| PCIe Gen2 x1 | 90 Ω | CM5 Datasheet |
-| HDMI 2.0 | 100 Ω | CM5 Datasheet |
-| Gigabit Ethernet | 100 Ω | CM5 Datasheet |
-
-- USB3/PCIe/HDMI/Ethernet差分线下方保持连续参考地。
-- 不跨地平面开槽或分割。
-- 线宽线距按板厂实际4层/6层叠层计算，不照搬其他板子的尺寸。
-- PCIe按Gen2 x1设计，检查CLK_nREQ、nRST和必要控制信号。
-- M.2 3.3V电源与高速信号分开布局，避免电源开关噪声耦合。
-- 不需要DDR SI/PI仿真，因为DDR已集成在CM5模块内。
+## PCB原则
+- RK3568首版采用6层，L2/L5优先保持完整GND。
+- DDR走线先于外围接口布线。
+- 高速差分线按器件指南和实际叠层计算阻抗，不提前硬编码线宽。
+- 电源轨分别进行最大负载、压降、纹波和温升核算。
+- 不在DDR/高速接口下方切割参考地。
