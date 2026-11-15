@@ -49,6 +49,8 @@ jobs:
         run: python3 cm5_mini_host/scripts/snapshot_embedded_footprints_revB.py
       - name: Set proposed JLC06161H-3313 controlled stackup
         run: python3 cm5_mini_host/scripts/set_jlc3313_stackup_revB.py
+      - name: Populate SMT MPN/LCSC fields and correct SOT-523 ESD footprint
+        run: python3 cm5_mini_host/scripts/populate_smt_mpn_fields_revB.py
       - name: Run ERC, DRC and export netlist
         shell: bash
         run: |
