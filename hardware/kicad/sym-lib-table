@@ -15,4 +15,5 @@
  (lib (name "A1_BOOT") (type "KiCad") (uri "${KIPRJMOD}/A1_BOOT.kicad_sym") (options "") (descr "A1 boot clock reset debug symbols"))
 
   (lib (name "A1_IO") (type "KiCad") (uri "${KIPRJMOD}/A1_IO.kicad_sym") (options "") (descr "A1 SD and I/O interface symbols"))
+  (lib (name "A1_USB") (type "KiCad") (uri "${KIPRJMOD}/A1_USB.kicad_sym") (options "") (descr "A1 USB3 host and USB-C recovery interface symbols"))
 )
