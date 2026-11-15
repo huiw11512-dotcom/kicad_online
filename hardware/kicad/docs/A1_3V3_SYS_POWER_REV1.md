@@ -21,7 +21,7 @@ Generate the pre-PMIC 3.3V system rail from 5V_SYS. This is the input supply for
 
 ## 3. Component sourcing
 
-All six BOM lines have an LCSC part number:
+All seven BOM lines have an LCSC part number:
 - U6 TPS62132RGTT — C2070674.
 - L8 APV ANR5040T2R2M — C7427127.
 - C52 Samsung CL21A106KAYNNNE — C15850.
