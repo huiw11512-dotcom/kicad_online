@@ -100,7 +100,27 @@ for block in iter_blocks(text,"footprint"):
         notes.append("PACKAGE MISMATCH: description says 2012/0805 while PCB footprint is 0402/1005")
     if re.search(r'R_0805|C_0805|2012Metric',fp) and re.search(r'\bM1005\b|1005\s*\(1005 Metric\)',desc,re.I):
         notes.append("PACKAGE MISMATCH: description says 1005/0402 while PCB footprint is 0805/2012")
-    conflict=any(x.startswith(("STALE","PACKAGE MISMATCH")) for x in notes)
+    # Validate known LCSC catalog numbers against the actual value and package.
+    known_lcsc={
+        "C25756":("15k","0402WGF1502TCE"),
+        "C25768":("22k","0402WGF2202TCE"),
+        "C25783":("39k","0402WGF3902TCE"),
+        "C25796":("56k","0402WGF5602TCE"),
+        "C25879":("2k2","0402WGF2201TCE"),
+        "C17168":("0R","0402WGF0000TCE"),
+        "C25744":("10k","0402WGF1002TCE"),
+        "C25741":("100k","0402WGF1003TCE"),
+        "C25117":("470R","0402WGF4700TCE"),
+        "C15850":("10uF","CL21A106KAYNNNE"),
+    }
+    if lcsc in known_lcsc:
+        expected_value,expected_mpn=known_lcsc[lcsc]
+        # For LCSC-known resistor/capacitor codes, a mismatch is a hard BOM conflict.
+        if value.lower().replace(" ","") != expected_value.lower().replace(" ",""):
+            notes.append(f"LCSC VALUE MISMATCH: {lcsc} is {expected_value}, PCB value is {value}")
+        if candidate and candidate != expected_mpn:
+            notes.append(f"LCSC MPN MISMATCH: {lcsc} is {expected_mpn}, footprint field says {candidate}")
+    conflict=any(x.startswith(("STALE","PACKAGE MISMATCH","LCSC VALUE MISMATCH","LCSC MPN MISMATCH")) for x in notes)
     if conflict:
         status="BLOCKED_CONFLICT"
     elif dnp:
