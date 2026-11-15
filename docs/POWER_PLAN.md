@@ -141,8 +141,20 @@ TCS4525_WT作为候选，需与Rockchip参考方案核对：
 - Native page: `hardware/kicad/A1_RK809_PMIC.kicad_sch` (page 2).
 - RK809-5 VCC1..VCC9 and VCC_RTC are supplied from 5V_SYS; VCC_RTC is therefore not below any other PMIC input.
 - VCC_1P8A/D are supplied from BUCK5 1.8V output; BUCK5 FB5 is sensed at that output.
-- Active buck channels represented: BUCK1, BUCK2, BUCK3 and BUCK5; BUCK4 is held OFF per RK809-5 OTP default.
+- Active buck channels represented: BUCK1, BUCK2, BUCK3 and BUCK5; BUCK4 stage is populated for VDD_NPU_0V9 but remains OFF per RK809-5 OTP default.
 - TDK SPM5030T-R47M-HZ 0.47uH inductors are selected for all buck channels: Isat 11A typ, Itemp 14A typ, DCR 5.39mOhm max. Local land pattern follows TDK's recommended 1.5×2.2mm pads and 2.7mm gap. Two 47uF output capacitors per active buck are nominal values only; verify effective capacitance at DC bias.
-- BUCK3 feedback resistor values are intentionally TBD until the selected LPDDR4X rail voltage is known.
+- BUCK3 feedback is set to RH=37.4k/RL=100k for approximately 1.10V VCC_DDR, pending final DRAM/template verification.
 - Open-drain I2C/INT/RESETB/CLK32K lines pull up to the 1.8V domain; RESETB has 100nF; VDC divider 100k/33k gives approximately 1.24V.
 - This PMIC page does not yet assign its outputs to individual RK3568 supply balls. That mapping must be checked against the complete Rockchip EVB power tree and exact memory configuration.
+
+
+## A1 PMIC rail mapping adopted from Rockchip EVB reference
+
+- BUCK1 → VDD_LOGIC_0V9 (RK3568 VDD_LOGIC).
+- BUCK2 → VDD_GPU_0V9 (RK3568 VDD_GPU).
+- BUCK3 → VCC_DDR_1V1 (LPDDR4X VDD2 / RK3568 DDRPHY_VDDQ); RH=37.4k, RL=100k.
+- BUCK4 → VDD_NPU_0V9 (hardware populated, OTP-default OFF).
+- BUCK5 → VCC_1V8.
+- LDO2 → VDDA_0V9; LDO3 → VDDA0V9_PMU; LDO5 → VCCIO_SD; LDO6 → VCC3V3_PMU; LDO7 → VCCA_1V8; LDO8 → VCCA1V8_PMU.
+- SWOUT1 → VCC_3V3; SWOUT2 → VCC3V3_SD.
+- LPDDR4X additionally needs VCC0V6_DDR and VCC1V8_DDR, implemented with separate regulators on the DDR power page.
