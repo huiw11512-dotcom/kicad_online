@@ -9,4 +9,5 @@
   (lib (name "A1_SOC") (type "KiCad") (uri "${KIPRJMOD}/A1_SOC.kicad_sym") (options "") (descr "Linux MiniHost A1 RK3568 SoC symbol"))
   (lib (name "A1_PMIC") (type "KiCad") (uri "${KIPRJMOD}/A1_PMIC.kicad_sym") (options "") (descr "Linux MiniHost A1 RK809-5 PMIC symbols"))
   (lib (name "A1_DDR") (type "KiCad") (uri "${KIPRJMOD}/A1_DDR.kicad_sym") (options "") (descr "Linux MiniHost A1 LPDDR4X power symbols"))
+  (lib (name "A1_POWER") (type "KiCad") (uri "${KIPRJMOD}/A1_POWER.kicad_sym") (options "") (descr "Linux MiniHost A1 power symbols"))
 )
