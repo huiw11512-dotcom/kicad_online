@@ -12,4 +12,5 @@
   (lib (name "A1_HDMI")(type "KiCad")(uri "${KIPRJMOD}/A1_HDMI.pretty")(options "")(descr "A1 HDMI TX footprints"))
   (lib (name "A1_ETH") (type "KiCad") (uri "${KIPRJMOD}/A1_ETH.pretty") (options "") (descr "A1 Ethernet PHY footprint"))
  (lib (name "A1_WIFI") (type "KiCad") (uri "${KIPRJMOD}/A1_WIFI.pretty") (options "") (descr "A1 AP6256 module footprint candidate"))
+ (lib (name "A1_TEST") (type "KiCad") (uri "${KIPRJMOD}/A1_TEST.pretty") (options "") (descr "A1 factory pogo pad footprints"))
 )

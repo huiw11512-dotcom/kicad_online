@@ -20,4 +20,5 @@
   (lib (name "A1_ETH") (type "KiCad") (uri "${KIPRJMOD}/A1_ETH.kicad_sym") (options "") (descr "A1 Realtek RTL8211F and MagJack symbols"))
  (lib (name "A1_WIFI") (type "KiCad") (uri "${KIPRJMOD}/A1_WIFI.kicad_sym") (options "") (descr "A1 AP6256 WiFi + UART translator"))
  (lib (name "A1_GPIO") (type "KiCad") (uri "${KIPRJMOD}/A1_GPIO.kicad_sym") (options "") (descr "A1 40-pin GPIO header symbol and PTC fuse"))
+ (lib (name "A1_TEST") (type "KiCad") (uri "${KIPRJMOD}/A1_TEST.kicad_sym") (options "") (descr "A1 factory test pogo pad symbols"))
 )
