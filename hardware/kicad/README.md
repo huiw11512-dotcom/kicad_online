@@ -42,7 +42,7 @@ Rockchip Hardware Design Guide Rev1.2 names SD6 as the LPDDR4/LPDDR4X base refer
 - SDMMC0 4-bit mapping: D2, D3, CMD, CLK, D0, D1 and DET to RK3568.
 - R50–R55: 22Ω series on DAT[3:0], CMD and CLK; R56: 100Ω series on DET.
 - D20–D26: TECH PUBLIC ESD5341N, LCSC C3021106, one per signal including DET.
-- Card VDD is 3.3V through R57=0Ω; C80=10µF and C81=100nF are retained close to the socket.
+- Card VDD is supplied by RK809-5 SWOUT2 on VCC3V3_SD (sequence slot 4); R57 0Ω bypass from VCC3V3_SYS is DNP to preserve the switch. C80=10µF and C81=100nF are retained close to the socket.
 - VCCIO_SD is connected to RK809-5 LDO5 / RK3568 VCCIO3 domain; 3.3V default and 1.8V UHS transition still require PMIC/DTS validation.
 - BOM: A1_SD_CARD_BOM.csv.
 

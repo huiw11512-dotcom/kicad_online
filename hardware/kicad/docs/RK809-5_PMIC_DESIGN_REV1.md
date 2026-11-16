@@ -51,9 +51,12 @@ The RK809-5 OTP defaults from Datasheet Rev 2.5 are retained as the initial stat
 | LDO7 | 1.8V | 2 | 1uF; output net reserved |
 | LDO8 | 1.8V | 2 | 1uF; output net reserved |
 | LDO9 | 0.6V OFF | OFF | NC |
-| SWOUT1/2 | 3.3V | 4 | 1uF each; outputs reserved |
+| SWOUT1 | 3.3V | 4 | VCC_3V3; 1uF local bypass |
+| SWOUT2 | 3.3V | 4 | VCC3V3_SD for microSD card VDD; 1uF local bypass |
 
 These are the RK809-5 OTP defaults, not the final SoC rail map. Connect these outputs to RK3568 power balls according to the Rockchip EVB power tree, then re-check all rail voltages and IO-bank assignments against the selected memory and pinmux.
+
+**MicroSD supply rule:** SWOUT2 is the intended VCC3V3_SD source (sequence slot 4; 2.1A max, 100mΩ RDS(on) per RK3568 EVB User Guide Rev1.2). SD-page R57, a 0Ω link from VCC3V3_SYS to VCC3V3_SD, must be DNP; populating it bypasses SWOUT2.
 
 ## 5. Startup and control
 
