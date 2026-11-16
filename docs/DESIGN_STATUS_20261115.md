@@ -14,7 +14,11 @@ Source branch: `main`. Target: independent compact RK3568 SBC for Linux, compara
 - LPDDR4X DRAM: Micron MT53E512M32D1ZW-046B WT:B, 2GB x32 single-rank baseline, 200-ball map, U10, R40: `A1_LPDDR4X_2GB.kicad_sch`.
 - microSD: XKB TFP09-2-12B, 4-bit SDMMC0, ESD, series resistors and card detect: `A1_SD_CARD.kicad_sch`. Card VDD is from RK809 SWOUT2; R57 0Ω bypass is DNP.
 
-- USB2 HOST2/HOST3: `A1_USB2_HOSTS.kicad_sch`; SoC R1/R2/T1/T2 now carry the matching D−/D+ labels. Four misplaced labels formerly on K17/K18/M12/M17 power balls were corrected to VDD_CPU/VDD_LOGIC_0V9; no-connect markers removed from R1/R2/T1/T2.\n- Ethernet: preliminary RTL8211F-CG + HR911130A page exists at `A1_ETHERNET.kicad_sch`; pin/strap/power/RGMII validation remains open.\n- Wi-Fi/BT pinmux: provisional AP6275S allocation uses SDMMC2 M0 (VCCIO6, 1.8V) and UART8 M0 (VCCIO4, 1.8V); module page, clocks and wake controls remain open.\n\n## DDR integration
+- USB2 HOST2/HOST3: `A1_USB2_HOSTS.kicad_sch`; SoC R1/R2/T1/T2 now carry the matching D−/D+ labels. Four misplaced labels formerly on K17/K18/M12/M17 power balls were corrected to VDD_CPU/VDD_LOGIC_0V9; no-connect markers removed from R1/R2/T1/T2.
+- Ethernet: preliminary RTL8211F-CG + HR911130A page exists at `A1_ETHERNET.kicad_sch`; pin/strap/power/RGMII validation remains open.
+- Wi-Fi/BT pinmux: provisional AP6275S allocation uses SDMMC2 M0 (VCCIO6, 1.8V) and UART8 M0 (VCCIO4, 1.8V); module page, clocks and wake controls remain open.
+
+## DDR integration
 - 67 DRAM signal nets mapped to 67 RK3568 balls.
 - Six second-rank controls (CS1n, CKE1, ODT1_CA for A/B) marked NC.
 - U10 supplies: VDD1/VDD2/VDDQ/VSS → 1.8V/1.1V/0.6V/GND.
