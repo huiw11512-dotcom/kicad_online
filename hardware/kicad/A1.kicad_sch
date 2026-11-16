@@ -536,5 +536,12 @@
  (instances (project "A1" (path "/b1000000-0000-4000-8000-000000000001" (page "11"))))
 )
 
+
+(sheet (at 20 335) (size 88.9 50.8) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+ (fields_autoplaced yes) (stroke (width 0.1524) (type solid)) (fill (color 0 0 0 0)) (uuid "b2000000-0000-4000-8000-000000000001")
+ (property "Sheetname" "USB2_HOSTS" (at 20 334.288 0) (effects (font (size 1.27 1.27)) (justify left bottom)))
+ (property "Sheetfile" "A1_USB2_HOSTS.kicad_sch" (at 20 386.6 0) (effects (font (size 1.27 1.27)) (justify left top)))
+ (instances (project "A1" (path "/b2000000-0000-4000-8000-000000000001" (page "12"))))
+)
 (sheet_instances (path "/" (page "1")))
 )
