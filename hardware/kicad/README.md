@@ -77,6 +77,8 @@ Rockchip Hardware Design Guide Rev1.2 names SD6 as the LPDDR4/LPDDR4X base refer
 
 Static source parsing is not an authoritative KiCad ERC/DRC. Native KiCad CLI is not available in the current execution environment, so **native KiCad load, ERC, netlist and DRC have not been run**.
 
+- Ethernet review checklist: `docs/A1_ETHERNET_VALIDATION_REV1.md` (strap, RGMII timing, clock, power, reset, MagJack and PCB release gates).
+
 ## Remaining minimum Linux-boot requirements
 
 - Confirm exact Rockchip-approved LPDDR4X MPN/template/BIN pairing and WDQS requirement.
