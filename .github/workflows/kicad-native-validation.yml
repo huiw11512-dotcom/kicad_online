@@ -1,0 +1,49 @@
+name: KiCad native validation
+
+on:
+  push:
+    branches:
+      - engineering/a1-native-audit-20261117
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  schematic-native:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run official KiCad 9 CLI checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          docker run --rm \
+            -v "${GITHUB_WORKSPACE}:/work" \
+            -w /work/hardware/kicad \
+            kicad/kicad:9.0 \
+            sh -lc '
+              set -e
+              kicad-cli version
+              kicad-cli sch erc --severity-all --output /work/artifacts/A1_ERC_all.rpt A1.kicad_sch
+              kicad-cli sch export netlist --format kicadxml --output /work/artifacts/A1_netlist.xml A1.kicad_sch
+              kicad-cli sch export pdf --output /work/artifacts/A1_schematic.pdf A1.kicad_sch
+              if [ -f A1.kicad_pcb ]; then
+                kicad-cli pcb drc --severity-all --output /work/artifacts/A1_DRC_all.rpt A1.kicad_pcb
+                kicad-cli pcb drc --severity-error --exit-code-violations --output /work/artifacts/A1_DRC_errors.rpt A1.kicad_pcb
+              else
+                printf "%s\n" "NOT RUN: no A1.kicad_pcb exists in this revision." > /work/artifacts/A1_DRC_STATUS.txt
+              fi
+              kicad-cli sch erc --severity-error --exit-code-violations --output /work/artifacts/A1_ERC_errors.rpt A1.kicad_sch
+            '
+
+      - name: Upload native validation outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: minihost-a1-kicad-validation
+          path: artifacts/
+          if-no-files-found: warn
