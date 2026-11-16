@@ -43,7 +43,8 @@ WDQS并非所有LPDDR4X颗粒都要启用。Rockchip说明需要WDQS的器件由
 | 接口 | 数量 | 说明 |
 |---|---:|---|
 | USB 3.x Type-A | 1 | Host |
-| USB 2.0 Type-A | 2 | USB2_HOST2/3 Host |\n| USB-C service | 1 | USB3_OTG0_DP/DM USB2 firmware download and service |
+| USB 2.0 Type-A | 2 | USB2_HOST2/3 Host |
+| USB-C service | 1 | USB3_OTG0_DP/DM USB2 firmware download and service |
 | HDMI 2.0a | 1 | HDMI TX |
 | Gigabit Ethernet | 1 | RGMII + external PHY |
 | MicroSD | 1 | SDMMC0 4-bit |
