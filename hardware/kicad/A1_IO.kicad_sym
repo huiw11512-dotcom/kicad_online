@@ -68,4 +68,22 @@
   )
  )
 )
+(symbol "C_POL"
+ (pin_names (offset 0.508)) (in_bom yes) (on_board yes)
+ (property "Reference" "C" (id 0) (at 0 7.62 0) (effects (font (size 1.27 1.27))))
+ (property "Value" "C_POL" (id 1) (at 0 -7.62 0) (effects (font (size 1 1))))
+ (property "Footprint" "Capacitor_SMD:CP_Elec_6.3x5.9" (id 2) (at 0 -10.16 0) (effects (font (size 1 1)) (hide yes)))
+ (property "Datasheet" "" (id 3) (at 0 -12.7 0) (effects (font (size 1 1)) (hide yes)))
+ (symbol "C_POL_0_1"
+  (polyline (pts (xy -2.54 -1.27) (xy 2.54 -1.27)) (stroke (width 0.254) (type default)) (fill (type none)))
+  (polyline (pts (xy -2.54 1.27) (xy 2.54 1.27)) (stroke (width 0.254) (type default)) (fill (type none)))
+  (text "+" (at 4.064 2.54 0) (effects (font (size 1.27 1.27)) (justify center)))
+ )
+ (symbol "C_POL_1_1"
+  (pin passive line (at 0 5.08 90) (length 2.54) (name "+" (effects (font (size 0.9 0.9)))) (number "1" (effects (font (size 0.75 0.75))))
+  )
+  (pin passive line (at 0 -5.08 270) (length 2.54) (name "-" (effects (font (size 0.9 0.9)))) (number "2" (effects (font (size 0.75 0.75))))
+  )
+ )
+)
 )
