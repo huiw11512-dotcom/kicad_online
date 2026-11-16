@@ -14,8 +14,16 @@ Date: 2026-11-16
 - RK3568 DDR_RZQ ball H7 → R41 120Ω ±1% → VCC_DDR_1V1 (1.1V), per Hardware Design Guide Rev1.2 §2.1.7.2. This SoC reference resistor is distinct from DRAM U10 ZQ0 R40 240Ω ±1% to VCC0V6_DDR.
 - VDD_CPU balls → VDD_CPU from a separately controlled dynamic CPU Buck (not yet drawn).
 - VDD_CPU_COM has its own VDD_CPU_REMOTE_SENSE net, **do not short** to GND or 3.3V; check the chosen regulator's remote-sense arrangement.
-- PMUIO1/2, VCCIO1..7 are provisionally mapped to 3.3V/1.8V domains per RK3568 IO-domain examples. Verify pinmux and DTS io-domain regulator supplies **before PCB layout**.
-- VCCIO2=1.8V requires FLASH_VOL_SEL pulled high to a matching 1.8V rail, before boot; the pull-up is not yet placed.
+- IO-domain voltage assignments now match the RK3568 EVB IO-domain reference and DTS example; the final Linux DTS must use the same supplies:
+  - PMUIO1 / PMUIO2 → VCC3V3_PMU (3.3V)
+  - VCCIO1 → VCC_3V3 (3.3V)
+  - VCCIO2 → VCC_1V8 (1.8V)
+  - VCCIO3 → VCCIO_SD (3.3V default; switch to 1.8V only for validated UHS-I)
+  - VCCIO4 → VCC_1V8 (1.8V)
+  - VCCIO5 → VCC_3V3 (3.3V)
+  - VCCIO6 → VCC_1V8 (1.8V)
+  - VCCIO7 → VCC_3V3 (3.3V)
+- VCCIO2=1.8V requires FLASH_VOL_SEL high before boot. R37=10k is already placed on A1_BOOT_OSC_DEBUG.kicad_sch from FLASH_VOL_SEL to VCC3V3_PMU (3.3V PMUIO logic rail); this is a logic strap, not a connection to the VCCIO2 1.8V rail.
 - Critical PMIC I2C0 lines, PMIC interrupt GPIO0_A3, PMIC_SLEEP and CLK32K_IN have net names matching the RK809-5 page.
 - 0.9V/1.8V/3.3V analog PHY balls are provisionally tied to named supply networks; local filtering and decoupling still need to be added.
 - Unassigned peripheral signals keep unique ball names until exact pinmux and connectors are confirmed.
