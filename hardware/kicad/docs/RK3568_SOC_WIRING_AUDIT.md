@@ -32,3 +32,14 @@ Date: 2026-11-16
 - Rockchip RK3568 Hardware Design Guide Rev 1.2, section 2.1.7.5, LPDDR4X DDRPHY rails.
 - RK3568 Datasheet Rev 2.1, package / pin list.
 - RK3568 EVB IO voltage domain checklist and Linux RK3568 device-tree IO power domain definitions.
+
+
+## USB2 HOST2/HOST3 pin allocation (2026-11-16)
+
+- R1 = USB2_HOST2_DM; R2 = USB2_HOST2_DP.
+- T1 = USB2_HOST3_DM; T2 = USB2_HOST3_DP.
+- AF8 / GPIO4_C2 = USB2_HOST2_PWR_EN.
+- AB9 / GPIO4_D2 = USB2_HOST3_PWR_EN.
+- VCCIO7 is mapped to VCC_3V3 in the current SoC power map; both GPIO enables are 3.3V logic.
+- These GPIOs are reserved for USB VBUS switch control and must not be reassigned to the 40-pin header or another peripheral.
+- Schematic page: A1_USB2_HOST23.kicad_sch. Native ERC/netlist and Linux DTS verification remain open.
