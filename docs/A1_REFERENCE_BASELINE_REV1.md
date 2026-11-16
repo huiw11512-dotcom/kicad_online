@@ -31,7 +31,7 @@ WDQS并非所有LPDDR4X颗粒都要启用。Rockchip说明需要WDQS的器件由
 因此：
 - A1 Rev1 首板采用 Micron MT53E512M32D1ZW-046B WT:B，2GB、x32、单 Die、单 Rank。
 - 4GB MT53E1G32D2FW-046 WT:C 作为后续独立版本候选；公开 Rockchip DDR AVL v3.01 转录也显示 RK3568 T/A，但不能直接沿用首板 2GB 球位图。
-- Rockchip Hardware Design Guide Rev1.2 使用 SD6 模板名，当前 rkbin 表列出 SD4 模板名；需 FAE 确认正式模板和匹配 BIN。
+- Rockchip Hardware Design Guide Rev1.2 将 SD6 列为 LPDDR4X 基础参考模板；rkbin 表中的 SD4 属于 WDQS-capable 模板集合。当前 MPN 无公开 WDQS 应用注释标记，首板按标准 non-WDQS 路径推进，正式模板/BIN 仍需 FAE 确认。
 - DDR原理图必须先取得准确ball map、AVL application note、模板和DDR BIN文件名/版本。
 - 若Micron候选无法闭环，优先改选Rockchip明确支持的颗粒/拓扑，不修改原厂模板去迁就颗粒。
 - 参考模板文件可以作为DDR网络拓扑和布线约束来源；不能直接复制未经验证的旧版LPDDR4或DDR4电路到LPDDR4X板。
