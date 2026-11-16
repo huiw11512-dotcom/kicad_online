@@ -24,7 +24,7 @@ Performance note: RK3568 uses four Cortex-A55 cores; Raspberry Pi 4B uses Cortex
 | CPU rail | Separate dynamic Buck, TCS4525_WT candidate | Schematic added; startup timing, feedback and load validation open |
 | Display | 1 × HDMI 2.0a | Product requirement; schematic not yet added |
 | Ethernet | 1 × Gigabit Ethernet, GMAC0 RGMII + external PHY | RTL8211F-series candidate; schematic not yet added |
-| USB host | 1 × USB 3.x HOST1 Type-A + 2 × USB 2.0 HOST2/HOST3 Type-A | USB3 HOST1 page partly implemented; HOST2/HOST3 not yet drawn |
+| USB host | 1 × USB 3.x HOST1 Type-A + 2 × USB 2.0 HOST2/HOST3 Type-A | HOST1 plus both USB2 host-port schematics are present; native ERC/netlist and bring-up validation pending |
 | Service/download | USB3_OTG0 DP/DM on a USB-C service connector, USB2 download/recovery mode | Connector and OTG0 USB2 path are present; verify VBUSDET, role behavior and flashing |
 | Wireless | 1 soldered Wi-Fi/Bluetooth combo module, SDIO + UART | Architecture target; module and pinmux not frozen |
 | GPIO | 40-pin, 2.54mm header | Feature target; final pinout subject to pinmux and voltage-domain audit |
@@ -40,13 +40,13 @@ The 2GB part is the Rev1 first-spin choice to reduce memory topology and bring-u
 ## 3. USB resource allocation
 
 - USB3_HOST1 + MULTI_PHY1 → one USB3 Type-A host port. This is present in the current USB page.
-- USB2_HOST2 → one USB2 Type-A host port. Not yet drawn.
-- USB2_HOST3 → one USB2 Type-A host port. Not yet drawn.
+- USB2_HOST2 → one USB2 Type-A host port. Drawn on `A1_USB2_HOSTS.kicad_sch`; SoC R1=DM, R2=DP; independent TPS2553 VBUS switch.
+- USB2_HOST3 → one USB2 Type-A host port. Drawn on `A1_USB2_HOSTS.kicad_sch`; SoC T1=DM, T2=DP; independent TPS2553 VBUS switch.
 - USB3_OTG0_DP/DM → USB-C service/download connector, USB2 device/recovery path. Present in the current USB page.
 - OTG0 SuperSpeed MULTI_PHY0 is not allocated to a user connector in Rev1.
 - USB3_OTG0_VBUSDET must be connected as required by Rockchip. Verify connector-side VBUS detection and no reverse sourcing.
-- Each Type-A VBUS must have an independent current-limited load switch, connector-side ESD, enable and over-current handling. Current USB3 host uses TPS2553; the two USB2 host load switches remain to be added.
-- Planned host VBUS budget: USB3 HOST1 0.9A + USB2 HOST2 0.5A + USB2 HOST3 0.5A = 1.9A total. The 5V_SYS power budget must be rechecked with this load.
+- Each Type-A VBUS has an independent TPS2553DBVR switch. HOST2/HOST3 use R71/R72=43.2kΩ 1% (LCSC C2097969): TI Table 9-2 gives 544.3mA min, 604.6mA nominal and 673.1mA max. EN is tied to VCC3V3_SYS; FAULT is intentionally NC. Each USB2 D+/D− line has an ESD5341N (0.35pF); each port has 100nF input bypass plus 120uF polymer and 100nF output bypass.
+- Host VBUS worst-case current-limit budget: USB3 HOST1 0.989A max (R70=28.7kΩ) + USB2 HOST2 0.673A max + USB2 HOST3 0.673A max = 2.335A; use 2.34A in the 5V_SYS power budget. This is the sum of protection thresholds, not expected continuous device consumption.
 
 ## 4. Power baseline
 
@@ -54,7 +54,7 @@ The 2GB part is the Rev1 first-spin choice to reduce memory topology and bring-u
 2. HUSB238 resistor targets from Hynetek's reference-design guide: RVSET = 14kΩ for 15V; RISET = 22.6kΩ for 3.0A. Verify against the exact controller revision and actual adapters.
 3. Protected 15V_IN feeds the main synchronous Buck.
 4. LM76005 is the current 5V/5A converter candidate. 5V_SYS feeds the pre-PMIC 3.3V buck, PMIC and other 5V loads. The 5V converter's 5A output limit is the binding board-level power limit (25W nominal), not the 45W PD contract.
-5. The power budget must include conversion losses, SoC/DDR/PHY, Wi-Fi, HDMI, and up to 1.9A USB VBUS. USB ports must be current-limited and total load managed.
+5. The power budget must include conversion losses, SoC/DDR/PHY, Wi-Fi, HDMI, and up to 2.34A USB VBUS current-limit headroom. USB ports must be current-limited and total load managed.
 6. RK809-5 VCC1–VCC9 and VCC_RTC use VCC3V3_SYS (3.3V); VCC_SPK_HP retains a separate filtered 5V_SYS supply. Never connect 15V_IN directly to the PMIC.
 7. RK809-5 SWOUT2 supplies VCC3V3_SD for MicroSD (sequence slot 4). The optional 0Ω R57 bypass from VCC3V3_SYS is DNP; do not populate it.
 8. VDD_CPU uses an independent dynamic Buck with remote feedback to VDD_CPU_COM. TCS4525_WT is a candidate, not a validated production choice.
@@ -91,7 +91,7 @@ The 2GB part is the Rev1 first-spin choice to reduce memory topology and bring-u
 
 ## 6. Current schematic page inventory
 
-The KiCad root sheet currently links ten child pages:
+The KiCad root sheet currently links eleven child pages:
 
 1. RK809-5 PMIC
 2. DDR power rails
@@ -103,8 +103,9 @@ The KiCad root sheet currently links ten child pages:
 8. LPDDR4X 2GB
 9. MicroSD
 10. USB3 HOST1 / USB-C OTG0 recovery
+11. USB2 HOST2 / HOST3 independent Type-A host ports
 
-Still to add: HDMI, Gigabit Ethernet, USB2 HOST2/HOST3, Wi-Fi/BT, 40-pin GPIO and production test/recovery points. A page with reserved net labels is not a completed peripheral circuit.
+Still to add: HDMI, Gigabit Ethernet, Wi-Fi/BT, 40-pin GPIO and production test/recovery points. A page with reserved net labels is not a completed peripheral circuit.
 
 ## 7. Hard gates before fabrication
 
