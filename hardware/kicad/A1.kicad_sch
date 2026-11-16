@@ -567,5 +567,13 @@
  (property "Sheetfile" "A1_GIGABIT_ETHERNET.kicad_sch" (at 220 386.6 0) (effects (font (size 1.27 1.27)) (justify left top)))
  (instances (project "A1" (path "/e0000000-0000-4000-8000-000000000001" (page "14"))))
 )
+
+(sheet (at 320 335) (size 88.9 50.8) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+ (fields_autoplaced yes) (stroke (width 0.1524) (type solid)) (fill (color 0 0 0 0))
+ (uuid "f0000000-0000-4000-8000-000000000001")
+ (property "Sheetname" "WIFI_BT_SDIO2" (at 320 334.288 0) (effects (font (size 1.27 1.27)) (justify left bottom)))
+ (property "Sheetfile" "A1_WIFI_BT_SDIO2.kicad_sch" (at 320 386.6 0) (effects (font (size 1.27 1.27)) (justify left top)))
+ (instances (project "A1" (path "/f0000000-0000-4000-8000-000000000001" (page "15"))))
+)
 (sheet_instances (path "/" (page "1")))
 )
