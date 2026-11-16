@@ -1,4 +1,4 @@
 Reference,Qty,Manufacturer,MPN,Value,Footprint,Status,Notes
 U10,1,Micron,MT53E512M32D1ZW-046B WT:B,2GB LPDDR4X x32,A1_DDR:LPDDR4X_200Ball_ZW,Candidate,Confirm Rockchip template and DDR BIN plus sourcing
 R40,1,Generic,,240R 1%,Resistor_SMD:R_0402_1005Metric,Design value,ZQ0 to VDDQ 0.60V
-R41,1,Generic,,120R 1%,Resistor_SMD:R_0402_1005Metric,Design value,SoC DDR_RZQ H7 to VCC_DDR_1V1 per RK3568 Hardware Design Guide Rev1.2
+R41,1,YAGEO,RC0402FR-07120RL,120R 1%,Resistor_SMD:R_0402_1005Metric,LCSC C114758,SoC DDR_RZQ H7 to VCC_DDR_1V1 per RK3568 Hardware Design Guide Rev1.2; verify stock at order
