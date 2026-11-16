@@ -1,0 +1,51 @@
+name: A1 KiCad schematic and symbol library audit
+on:
+  push:
+    branches:
+      - 'work/a1-baseline-ddr-audit-20261116'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install KiCad 9
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository --yes ppa:kicad/kicad-9.0-releases
+          sudo apt-get update
+          sudo apt-get install -y kicad
+          kicad-cli version
+      - name: Export every sheet and library with individual diagnostics
+        shell: bash
+        run: |
+          mkdir -p artifacts/schematics artifacts/symbols
+          cd hardware/kicad
+          : > ../../artifacts/schematic-results.csv
+          : > ../../artifacts/symbol-results.csv
+          for f in A1*.kicad_sch; do
+            base="${f%.kicad_sch}"
+            mkdir -p "../../artifacts/schematics/$base"
+            kicad-cli sch export svg --output "../../artifacts/schematics/$base" "$f" > "../../artifacts/schematics/$base.log" 2>&1
+            rc=$?
+            echo "$f,$rc" >> ../../artifacts/schematic-results.csv
+          done
+          for f in *.kicad_sym; do
+            base="${f%.kicad_sym}"
+            mkdir -p "../../artifacts/symbols/$base"
+            kicad-cli sym export svg --output "../../artifacts/symbols/$base" "$f" > "../../artifacts/symbols/$base.log" 2>&1
+            rc=$?
+            echo "$f,$rc" >> ../../artifacts/symbol-results.csv
+          done
+          cd ../..
+          kicad-cli sch export svg --output artifacts/root-hierarchy hardware/kicad/A1.kicad_sch > artifacts/root-hierarchy.log 2>&1
+          echo "root_svg_rc=$?" >> artifacts/status.txt
+      - name: Upload visual and parser audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: A1-KiCad-visual-audit
+          path: artifacts/
