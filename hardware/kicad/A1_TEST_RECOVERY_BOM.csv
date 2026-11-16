@@ -1,0 +1,3 @@
+Reference,Value,Footprint,Qty,Status
+"TP1701","Power rail 2x5 bare-copper pogo pad array","A1_TEST:TP_ARRAY_2X5_P1.27mm","1","PCB copper only; no fitted component"
+"TP1702","Debug/recovery 2x7 bare-copper pogo pad array","A1_TEST:TP_ARRAY_2X7_P1.27mm","1","PCB copper only; no fitted component"
