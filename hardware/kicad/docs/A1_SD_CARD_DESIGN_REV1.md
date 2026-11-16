@@ -10,9 +10,10 @@ Status: editable schematic and local symbol/footprint libraries added. Native Ki
 - Card-detect series resistor: R56 = 100Ω, 0402, 1%.
 - Card-detect pull-up: R58 = 10kΩ, 0402, 1%, to VCCIO_SD.
 - ESD: D20–D26, TECH PUBLIC ESD5341N, 0.35pF typical, DFN1006-2, one per DAT[3:0], CMD, CLK and DET.
-- Card VDD: fixed 3.3V from VCC3V3_SYS through R57=0Ω to VCC3V3_SD.
+- Card VDD: 3.3V from RK809-5 SWOUT2 output VCC3V3_SD (power-sequence slot 4). Rockchip RK3568 EVB User Guide Rev1.2 specifies Switch2 for VCC3V3_SD / MicroSD, 2.1A max and 100mΩ RDS(on).
+- R57 is a 0Ω optional bypass from VCC3V3_SYS to VCC3V3_SD and is DNP for Rev1. Do not populate it: doing so bypasses the PMIC SWOUT2 switch.
 - Decoupling: C80=10µF/10V/X5R/0603 and C81=100nF/10V/X7R/0402.
-- SDMMC0_PWREN is intentionally NC; card VDD is always supplied.
+- SDMMC0_PWREN is intentionally NC; card VDD is supplied by SWOUT2 after PMIC power-sequence slot 4. The SD card is not independently power-gated by the SoC PWREN pin.
 
 ## RK3568 ball assignment
 
@@ -31,7 +32,7 @@ J4 pin 4 is VDD (VCC3V3_SD); pin 6 is VSS; pin 10 is the shell ground pad number
 
 ## Voltage domains
 
-- Card VDD stays at 3.3V on VCC3V3_SD.
+- Card VDD is sourced from RK809-5 SWOUT2 on VCC3V3_SD; R57 bypass to VCC3V3_SYS remains DNP.
 - RK3568 VCCIO3 is supplied by VCCIO_SD from RK809 LDO5.
 - VCCIO_SD must be configured to 3.3V for initial SD negotiation and switched to 1.8V for UHS-I modes. The device tree should provide VCC3V3_SD as `vmmc-supply` and VCCIO_SD as `vqmmc-supply`; enable UHS modes only after the PMIC LDO5 transition and signal integrity are validated.
 - SDMMC0 DAT[3:0] and CMD use the SoC internal pull-ups; no additional external pull-ups are fitted.
@@ -50,7 +51,7 @@ J4 pin 4 is VDD (VCC3V3_SD); pin 6 is VSS; pin 10 is the shell ground pad number
 - D20–D26: TECH PUBLIC ESD5341N, LCSC C3021106.
 - R50–R55: Yageo RC0402FR-0722RL, C106260.
 - R56: Yageo RC0402FR-07100RL, C106232.
-- R57: UNI-ROYAL 0402WGF0000TCE, C17168.
+- R57: UNI-ROYAL 0402WGF0000TCE, C17168, DNP in Rev1 (optional bypass only).
 - R58: UNI-ROYAL 0402WGF1002TCE, C25744.
 - C80: CCTC TCC0603X5R106K100CT, C380314.
 - C81: C387941 (100nF, 10V, X7R, 0402); confirm current stock and exact MPN before purchase.
