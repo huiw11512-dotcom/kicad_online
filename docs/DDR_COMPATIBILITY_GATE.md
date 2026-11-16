@@ -58,7 +58,7 @@ These are source-file and mapping checks only. They are not KiCad ERC/netlist/DR
 
 1. Obtain current official Rockchip DDR AVL and confirm exact full MPN and application-note requirements.
 2. Obtain the official LPDDR4X base template package (guide reference: SD6) and confirm the exact MPN-to-template mapping.
-3. Confirm exact MPN-to-template mapping and obtain the matching DDR initialization BIN, version, frequency and bootloader integration instructions.
+3. Confirm the standard non-WDQS DDR BIN version, operating frequency and bootloader integration with Rockchip/FAE.
 4. Confirm from the official AVL/reference list that this MPN uses the standard non-WDQS path; obtain FAE confirmation.
 5. Cross-check SoC/DRAM balls, byte lanes, DQS, CA, CK, CS, RESET, ZQ, ODT and power pins against the released template.
 6. Validate the 200-ball footprint land pattern, mask and paste against Micron and the assembly house.
