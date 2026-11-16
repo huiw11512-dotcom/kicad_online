@@ -8,7 +8,7 @@
 - 15V_IN经同步Buck降为5V_SYS。
 - RK809-5工作输入范围2.7–5.5V，因此不得将15V直接接入RK809-5；PMIC输入由5V_SYS供电。
 - 5V_SYS同时供USB VBUS开关和各后级电源转换器。
-- 5V_SYS总电流预算、SoC峰值负载和USB外设预算必须以45W PD合同为输入上限联合核算，同时受5V/5A（25W）主Buck输出能力约束。Rev 1仅配置1个USB3 Host和2个USB2 Host，Type-A VBUS初始总预算1.9A。
+- 5V_SYS总电流预算、SoC峰值负载和USB外设预算必须以45W PD合同为输入上限联合核算，同时受5V/5A（25W）主Buck输出能力约束。Rev 1配置1个USB3 Host和2个USB2 Host，Type-A VBUS预算暂按2.2A预留；HDMI +5V另计。
 - HUSB238为当前PD控制器；Hynetek参考设计表给出RVSET=14kΩ对应15V、RISET=22.6kΩ对应3.0A。输入限流、TVS/过压、反灌保护及适配器PDO仍需验证。
 
 ## 2. RK3568 + RK809-5参考电源树（功能映射）
@@ -21,7 +21,7 @@
 | BUCK2（VCC2，2.5A max） | VDD_GPU | 按原厂DVFS要求实现 |
 | BUCK3（VCC3，1.5A max） | VCC_DDR | FB3外部分压必须按实际LPDDR4X电压设置；LPDDR4X模式按指南另配置VCC0V6_DDR |
 | BUCK4（VCC4，1.5A max） | VDD_NPU | A1首版不启用NPU时，按官方未使用模块处理并在DTS禁用；不可把1.5A输出当作满足≥2A替代Buck要求 |
-| LDO1 | VDDA0V9_IMAGE | 未使用Image PHY时按原厂建议关闭/处理 |
+| LDO1 | VDDA0V9_IMAGE / HDMI_TX_AVDD_0V9 | **已启用**；设定0.9V，供HDMI TX AVDD 0.9V，400mA额定上限，PMIC侧C42=1uF去耦 |
 | LDO2 | VDDA0V9 | 参考原厂模拟电源分配 |
 | LDO3 | VDDA0V9_PMU | PMU低噪声电源 |
 | LDO4 | Audio codec VDDIO | A1首版不使用RK809音频Codec时，按官方未用引脚规则处理 |
@@ -29,7 +29,7 @@
 | LDO6 | VCC3V3_PMU | PMUIO1/PMUIO2的3.3V域，需结合PMUIO2最终配置 |
 | LDO7 | VCCA_1V8 | PMUPLL_AVDD_1V8等参考电源 |
 | LDO8 | VCCA1V8_PMU | PMU 1.8V域 |
-| LDO9 | VCCA1V8_IMAGE | 未使用Image PHY时按原厂建议关闭/处理 |
+| LDO9 | VCCA1V8_IMAGE / HDMI_TX_AVDD_1V8 | **已启用**；设定1.8V，供HDMI TX AVDD 1.8V，400mA额定上限，PMIC侧C43=1uF去耦 |
 | BUCK5 / Switch1 | VCC_3V3、VCC_1V8的系统电源路径 | 依Figure 2-62及完整EVB原理图确认具体网络和开关连接 |
 | Switch2 | VCC3V3_SD / MicroSD卡电源 | 按MicroSD卡电源控制需求决定是否采用 |
 
@@ -114,6 +114,18 @@ TCS4525_WT作为候选，需与Rockchip参考方案核对：
 - A1计划使用eMMC、SDMMC0、SDMMC2、GMAC0、UART/I2C，所有IO Bank需根据最终PinMux统一定电压。
 - USB3 PHY、MULTI_PHY、HDMI PHY模拟电源按原厂低噪声LDO/磁珠/去耦网络实现。
 - 不使用的PHY电源可按指南关闭，但对应DTS节点必须禁用。
+
+
+## 7A. HDMI TX 模拟电源映射修正（2026-11-16）
+
+RK3568 EVB电源树将HDMI TX模拟电源分配到RK809 Image PHY专用LDO，不能使用普通USB/PLL模拟电源代替：
+
+- RK809 LDO1 → `VDDA0V9_IMAGE` → RK3568 V17/V18（HDMI_TX_AVDD_0V9_1/2），目标0.9V。
+- RK809 LDO9 → `VCCA1V8_IMAGE` → RK3568 W18（HDMI_TX_AVDD_1V8），目标1.8V。
+- LDO1、LDO9的VCC输入分别来自PMIC VCC5、VCC7；当前PMIC页两输入均接VCC3V3_SYS。
+- PMIC页新增C42、C43各1uF/6.3V X7R 0603作为LDO输出去耦；HDMI页另按原厂要求在SoC端配置每个0.9V电源球4.7uF+100nF，1.8V电源球配置本地去耦。
+- LDO1/LDO9必须在PMIC启动配置中启用，并分别设置0.9V/1.8V；DTS/PMIC寄存器初始化需要与原理图一致。
+- 原SoC页将V17/V18误接到VDDA_0V9、W18误接到VCCA_1V8，现已改为Image PHY专用网络。禁止将这三球重新并回普通模拟电源。
 
 ## 8. 原理图下一步
 
