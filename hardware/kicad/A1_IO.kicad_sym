@@ -4,7 +4,7 @@
  (property "Value" "TFP09-2-12B" (id 1) (at 0 -23 0) (effects (font (size 1.0 1.0))))
  (property "Footprint" "A1_IO:TFP09-2-12B_microSD" (id 2) (at 0 -25.54 0) (effects (font (size 1 1)) (hide yes)))
  (property "Datasheet" "https://datasheet.lcsc.com/lcsc/2303221530_XKB-Connectivity-TFP09-2-12B_C2911421.pdf" (id 3) (at 0 -28.08 0) (effects (font (size 1 1)) (hide yes)))
- (symbol "TFP09_2_12B_0_1" (rectangle (start -10.16 -20.32) (end 10.16 20.32) (stroke (width 0.254) (type default)) (fill (type background))) (text "microSD" (at 0 0 0) (effects (font (size 1.4 1.4)) (justify center))))
+ (symbol "TFP09_2_12B_0_1" (rectangle (start -10.16 -20.32) (end 10.16 20.32) (stroke (width 0.254) (type default)) (fill (type background))) (text "microSD" (at 0 0 0) (effects (font (size 1.4 1.4)) )))
  (symbol "TFP09_2_12B_1_1"
   (pin passive line (at -15.24 15.24 180) (length 5.08) (name "DAT2" (effects (font (size 1 1)))) (number "1" (effects (font (size 0.9 0.9))))
   )
@@ -33,7 +33,7 @@
  (property "Value" "ESD5341N" (id 1) (at 0 -5.08 0) (effects (font (size 1.0 1.0))))
  (property "Footprint" "A1_IO:ESD5341N_DFN1006-2L" (id 2) (at 0 -7.62 0) (effects (font (size 1 1)) (hide yes)))
  (property "Datasheet" "https://www.lcsc.com/product-detail/ESD-Protection-Devices_TECH-PUBLIC-ESD5341N_C3021106.html" (id 3) (at 0 -10.16 0) (effects (font (size 1 1)) (hide yes)))
- (symbol "ESD5341N_0_1" (rectangle (start -3.81 -2.54) (end 3.81 2.54) (stroke (width 0.254) (type default)) (fill (type background))) (text "ESD" (at 0 0 0) (effects (font (size 1.2 1.2)) (justify center))))
+ (symbol "ESD5341N_0_1" (rectangle (start -3.81 -2.54) (end 3.81 2.54) (stroke (width 0.254) (type default)) (fill (type background))) (text "ESD" (at 0 0 0) (effects (font (size 1.2 1.2)) )))
  (symbol "ESD5341N_1_1"
   (pin passive line (at -5.08 0 180) (length 2.54) (name "IO" (effects (font (size 1 1)))) (number "1" (effects (font (size 0.9 0.9))))
   )
@@ -77,7 +77,7 @@
  (symbol "C_POL_0_1"
   (polyline (pts (xy -2.54 -1.27) (xy 2.54 -1.27)) (stroke (width 0.254) (type default)) (fill (type none)))
   (polyline (pts (xy -2.54 1.27) (xy 2.54 1.27)) (stroke (width 0.254) (type default)) (fill (type none)))
-  (text "+" (at 4.064 2.54 0) (effects (font (size 1.27 1.27)) (justify center)))
+  (text "+" (at 4.064 2.54 0) (effects (font (size 1.27 1.27)) ))
  )
  (symbol "C_POL_1_1"
   (pin passive line (at 0 5.08 90) (length 2.54) (name "+" (effects (font (size 0.9 0.9)))) (number "1" (effects (font (size 0.75 0.75))))

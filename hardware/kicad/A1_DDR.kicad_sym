@@ -6,7 +6,7 @@
   (property "Value" "SY8089AAAC" (id 1) (at 0 -12.7 0) (effects (font (size 1.27 1.27))))
   (property "Footprint" "Package_TO_SOT_SMD:SOT-23-5" (id 2) (at 0 -15.24 0) (effects (font (size 1 1)) (hide yes)))
   (property "Datasheet" "https://datasheet.lcsc.com/lcsc/Silergy-Corp-SY8089AAAC_C78988.pdf" (id 3) (at 0 -17.78 0) (effects (font (size 1 1)) (hide yes)))
-  (symbol "SY8089AAAC_0_1" (rectangle (start -10.16 -7.62) (end 10.16 7.62) (stroke (width 0.254) (type default)) (fill (type background))) (text "SY8089AAAC" (at 0 0 0) (effects (font (size 1 1)) (justify center))))
+  (symbol "SY8089AAAC_0_1" (rectangle (start -10.16 -7.62) (end 10.16 7.62) (stroke (width 0.254) (type default)) (fill (type background))) (text "SY8089AAAC" (at 0 0 0) (effects (font (size 1 1)) )))
   (symbol "SY8089AAAC_1_1"
     (pin input line (at -15.24 5.08 180) (length 5.08) (name "EN" (effects (font (size 1 1)))) (number "1" (effects (font (size 0.9 0.9)))))
     (pin power_in line (at -15.24 0 180) (length 5.08) (name "GND" (effects (font (size 1 1)))) (number "2" (effects (font (size 0.9 0.9)))))
@@ -20,7 +20,7 @@
   (property "Value" "AP2112K-1.8TRG1" (id 1) (at 0 -12.7 0) (effects (font (size 1.27 1.27))))
   (property "Footprint" "Package_TO_SOT_SMD:SOT-23-5" (id 2) (at 0 -15.24 0) (effects (font (size 1 1)) (hide yes)))
   (property "Datasheet" "https://www.diodes.com/assets/Datasheets/AP2112.pdf" (id 3) (at 0 -17.78 0) (effects (font (size 1 1)) (hide yes)))
-  (symbol "AP2112K-1.8TRG1_0_1" (rectangle (start -10.16 -7.62) (end 10.16 7.62) (stroke (width 0.254) (type default)) (fill (type background))) (text "AP2112K-1.8TRG1" (at 0 0 0) (effects (font (size 1 1)) (justify center))))
+  (symbol "AP2112K-1.8TRG1_0_1" (rectangle (start -10.16 -7.62) (end 10.16 7.62) (stroke (width 0.254) (type default)) (fill (type background))) (text "AP2112K-1.8TRG1" (at 0 0 0) (effects (font (size 1 1)) )))
   (symbol "AP2112K-1.8TRG1_1_1"
     (pin power_in line (at -15.24 5.08 180) (length 5.08) (name "VIN" (effects (font (size 1 1)))) (number "1" (effects (font (size 0.9 0.9)))))
     (pin power_in line (at -15.24 0 180) (length 5.08) (name "GND" (effects (font (size 1 1)))) (number "2" (effects (font (size 0.9 0.9)))))
@@ -36,7 +36,7 @@
  (property "Footprint" "A1_DDR:LPDDR4X_200Ball_ZW" (id 2) (at 0 -49.54 0) (effects (font (size 1 1)) (hide yes)))
  (property "Datasheet" "https://my.micron.com/products/memory/lpddr-components/lpddr4/part-catalog/part-detail/mt53e512m32d1zw-046bwt-b" (id 3) (at 0 -52.08 0) (effects (font (size 1 1)) (hide yes)))
  (property "Description" "Micron 16Gb x32 LPDDR4/LPDDR4X, 200-ball TFBGA ZW, single die, dual channel, single rank." (id 4) (at 0 -54.62 0) (effects (font (size 1 1)) (hide yes)))
- (symbol "MT53E512M32D1ZW_046B_WT_B_0_1" (rectangle (start -15.24 -44.45) (end 15.24 44.45) (stroke (width 0.254) (type default)) (fill (type background))) (text "LPDDR4X 2GB x32" (at 0 0 0) (effects (font (size 1.4 1.4)) (justify center))))
+ (symbol "MT53E512M32D1ZW_046B_WT_B_0_1" (rectangle (start -15.24 -44.45) (end 15.24 44.45) (stroke (width 0.254) (type default)) (fill (type background))) (text "LPDDR4X 2GB x32" (at 0 0 0) (effects (font (size 1.4 1.4)) )))
  (symbol "MT53E512M32D1ZW_046B_WT_B_1_1" (pin bidirectional line (at -20.32 41.91 180) (length 5.08) (name "DQ0_A" (effects (font (size 0.8 0.8)))) (number "B2" (effects (font (size 0.7 0.7)))))
 (pin bidirectional line (at -20.32 39.37 180) (length 5.08) (name "DQ1_A" (effects (font (size 0.8 0.8)))) (number "C2" (effects (font (size 0.7 0.7)))))
 (pin bidirectional line (at -20.32 36.83 180) (length 5.08) (name "DQ2_A" (effects (font (size 0.8 0.8)))) (number "E2" (effects (font (size 0.7 0.7)))))

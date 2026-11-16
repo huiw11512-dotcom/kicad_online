@@ -11,7 +11,7 @@
       (property "Description" "Rockchip RK809-5 PMIC, QFN68 7x7mm, 0.35mm pitch, EP5.49mm; 69 electrical pads including exposed ground." (id 4) (at 0 -62.23 0) (effects (font (size 1 1)) (hide yes)))
   (symbol "RK809-5_0_1"
     (rectangle (start -10.16 -45.72) (end 10.16 45.72) (stroke (width 0.254) (type default)) (fill (type background)))
-    (text "RK809-5" (at 0 0 0) (effects (font (size 1.27 1.27)) (justify center)))
+    (text "RK809-5" (at 0 0 0) (effects (font (size 1.27 1.27)) ))
   )
   (symbol "RK809-5_1_1"
       (pin input line (at -15.24 41.91 180) (length 5.08) (name "SCL" (effects (font (size 0.7 0.7)))) (number "1" (effects (font (size 0.65 0.65)))))
