@@ -128,3 +128,8 @@ No board fabrication is authorized until all gates are closed and native KiCad E
 ## 9. Release status
 
 The project has native editable hierarchical schematics and local symbols/footprints, but it has not passed native KiCad load, ERC, netlist export, visual review, PCB DRC or hardware bring-up. Static source parsing and ball-map comparisons do not replace these checks. **Rev1 remains DESIGN-IN-PROGRESS and NOT FABRICATION READY.**
+
+
+## Reference designator audit
+
+The RK809 PMIC sheet was renumbered to R200–R209, C200–C240, and L200–L205 to remove collisions with the root power-input sheet. U3, Y1 and SW1 remain unique.
