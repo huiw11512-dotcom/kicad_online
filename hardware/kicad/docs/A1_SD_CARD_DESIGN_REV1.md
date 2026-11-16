@@ -63,3 +63,8 @@ J4 pin 4 is VDD (VCC3V3_SD); pin 6 is VSS; pin 10 is the shell ground pad number
 3. Check VCCIO_SD LDO5 output range, boot default, PMIC register configuration and 3.3V↔1.8V transition timing.
 4. Run native KiCad ERC/netlist/DRC and inspect the page in the KiCad GUI.
 5. Validate card insertion/removal, detect polarity, 4-bit enumeration, UHS-I voltage switching and sustained read/write.
+
+
+## Reference
+
+- Rockchip RK3568 EVB User Guide Rev1.2, Power Diagram (p.12): SWOUT2 / Switch2 supplies VCC3V3_SD for MicroSD, 2.1A maximum, 100mΩ RDS(on): https://dl.xkwy2018.com/downloads/RK3568/RK356X/Hardware/Rockchip_RK3568_EVB_User_Guide_V1.2_EN.pdf
