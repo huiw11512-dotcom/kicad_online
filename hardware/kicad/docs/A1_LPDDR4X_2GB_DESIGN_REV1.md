@@ -36,9 +36,18 @@ The Micron ZW package drawing defines 22 row positions: A, B, C, D, E, F, G, H, 
 
 The 200 footprint pads are Ø0.40mm, as specified for the SMD ball pads. The mask opening, paste aperture and copper land must still be checked against the selected assembly house and the exact Rockchip reference PCB template before release.
 
-## Rockchip template/BIN gate
+## Rockchip base template / WDQS / BIN gate
 
-The public `rockchip-linux/rkbin` configuration table lists `RK3568_Template_LP4XD200P132SD4_43x28_1600MHz` among RK3568 templates. However, the Rockchip Hardware Design Guide Rev1.2 names `RK3568_Template_LP4XD200P132SD6_43x28_1600MHz` for its LPDDR4/LPDDR4X-compatible reference circuit. The SD4/SD6 discrepancy is unresolved; neither name is frozen for PCB routing until Rockchip/FAE confirms the current template package and its exact MPN mapping. The AVL v3.01 transcription marks the selected Micron 2GB MPN T/A for RK3568; the 4GB D2FW alternate is also marked T/A. T/A is sample-tested/applicable status, not proof that this board has passed DDR training. Confirm the current official AVL, application-note flags, exact DDR BIN, WDQS requirement, frequency and bootloader integration with Rockchip/FAE.
+The earlier SD4/SD6 wording is clarified:
+
+- RK3568 Hardware Design Guide Rev1.2 §2.1.7.5 names RK3568_Template_LP4XD200P132SD6_43x28_1600MHz for the LPDDR4/LPDDR4X reference circuit. Use SD6 as the base-template candidate pending the actual released template package.
+- The RK3568 section in rockchip-linux/rkbin lists template families with WDQS-capable versions; SD4 appears in that WDQS-capable list. The table says the WDQS DDR BINs are only for memory parts that require WDQS.
+- Rockchip identifies WDQS-required parts by AVL Application Note [35]/[36] or Reference Vendor List Application Note [5]/[6].
+- The selected Micron MT53E512M32D1ZW-046B WT:B row has T/A for RK3568 and no [35]/[36] marker in the public AVL v3.01 transcription. The standard non-WDQS path is therefore the working assumption, pending current official AVL and FAE confirmation.
+- Public standard BIN candidates in current rkbin include rk3568_ddr_1560MHz_v1.26.bin, rk3568_ddr_1332MHz_v1.26.bin, rk3568_ddr_1056MHz_v1.26.bin and rk3568_ddr_920MHz_v1.26.bin. Evaluate 1560MHz v1.26 first against the SD6 reference layout; do not freeze it until Rockchip confirms the exact MPN/BIN/frequency pairing.
+- Do not use a WDQS-specific BIN for this part unless the current official list or Rockchip/FAE explicitly requires it.
+
+The remaining gate is to obtain the actual SD6 template package, exact MPN-to-template confirmation, standard DDR BIN version/frequency and Bootloader integration instructions. No DDR critical routing before this gate closes.
 
 ## Validation still required
 
