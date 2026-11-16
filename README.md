@@ -54,7 +54,7 @@ RK3568 ARM64 Linux SBC。目标是树莓派 4B 级别的使用场景与接口体
 - RK3568 SoC 页的 11 个 ECC 球、P8 DDR_VREFOUT 和 F5 已按 LPDDR4X 使用条件标记 NC；全 SoC 636 球位为 607 个网络标签 + 29 个显式 NC。
 - R40：DRAM ZQ0 → 240Ω ±1% → VCC0V6_DDR。
 - R41：RK3568 DDR_RZQ（H7）→ 120Ω ±1% → VCC_DDR_1V1。
-- Rockchip Hardware Design Guide Rev1.2 与当前 rkbin 模板表存在 SD6/SD4 模板名称差异，尚未取得 FAE 对应的正式模板与 DDR BIN 确认。
+- Rockchip 指南将 SD6 列为 LPDDR4X 基础参考模板；rkbin 中的 SD4 出现在 WDQS-capable 模板集合。当前 Micron MPN 无公开 WDQS 应用注释标记，按标准 non-WDQS 路径推进；正式模板/BIN 仍待 FAE 确认。
 
 上述均为源文件与球位映射级检查，不等于 KiCad ERC、网表、电气规则或 DDR Training 通过。
 
