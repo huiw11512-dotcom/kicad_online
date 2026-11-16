@@ -1,7 +1,7 @@
 # A1 Rev1 — 原厂参考设计采用边界与电路实现基线
 
-日期：2026-11-15
-状态：设计决策记录；不是完整原理图发布。与[A1_MASTER_BASELINE_REV1.md](A1_MASTER_BASELINE_REV1.md)冲突时，以主基线为准。
+日期：2026-11-16
+状态：参考边界记录；容量和接口现状以 A1_MASTER_BASELINE_REV1.md 为准。与[A1_MASTER_BASELINE_REV1.md](A1_MASTER_BASELINE_REV1.md)冲突时，以主基线为准。
 
 ## 1. 采用的参考资料
 
@@ -29,8 +29,9 @@ Rockchip公开DDR配置表列出RK3568 LPDDR4X模板：
 WDQS并非所有LPDDR4X颗粒都要启用。Rockchip说明需要WDQS的器件由AVL中的Application Note [35]/[36]等标识；只有匹配相应模板后，才使用对应WDQS DDR BIN。
 
 因此：
-- A1保持4GB目标。
-- Micron MT53E1G32D2FW-046 WT:C暂列候选，不宣称与SD4/SD6或某个BIN已匹配。
+- A1 Rev1 首板采用 Micron MT53E512M32D1ZW-046B WT:B，2GB、x32、单 Die、单 Rank。
+- 4GB MT53E1G32D2FW-046 WT:C 作为后续独立版本候选；公开 Rockchip DDR AVL v3.01 转录也显示 RK3568 T/A，但不能直接沿用首板 2GB 球位图。
+- Rockchip Hardware Design Guide Rev1.2 使用 SD6 模板名，当前 rkbin 表列出 SD4 模板名；需 FAE 确认正式模板和匹配 BIN。
 - DDR原理图必须先取得准确ball map、AVL application note、模板和DDR BIN文件名/版本。
 - 若Micron候选无法闭环，优先改选Rockchip明确支持的颗粒/拓扑，不修改原厂模板去迁就颗粒。
 - 参考模板文件可以作为DDR网络拓扑和布线约束来源；不能直接复制未经验证的旧版LPDDR4或DDR4电路到LPDDR4X板。
@@ -42,7 +43,7 @@ WDQS并非所有LPDDR4X颗粒都要启用。Rockchip说明需要WDQS的器件由
 | 接口 | 数量 | 说明 |
 |---|---:|---|
 | USB 3.x Type-A | 1 | Host |
-| USB 2.0 Type-A | 2 | USB2_HOST2/3 Host |\n| Micro-USB service | 1 | USB3_OTG0_DP/DM firmware download and service |
+| USB 2.0 Type-A | 2 | USB2_HOST2/3 Host |\n| USB-C service | 1 | USB3_OTG0_DP/DM USB2 firmware download and service |
 | HDMI 2.0a | 1 | HDMI TX |
 | Gigabit Ethernet | 1 | RGMII + external PHY |
 | MicroSD | 1 | SDMMC0 4-bit |
