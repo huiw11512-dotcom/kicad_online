@@ -44,7 +44,7 @@ KiCad 主工程已建立层级原理图：**1 张根页 + 12 张子页**。当�
 - RK3568：636 个唯一球位；Pin assignment CSV 为 610 个已分配网络 + 26 个显式 NC。
 - SoC 原理图 global labels 与 CSV 做坐标级交叉核对：0 个网络标签错配；26 个 NC 标记与 CSV 一致。
 - USB2 HOST2/3：SoC R1/R2 对应 HOST2 D−/D+，T1/T2 对应 HOST3 D−/D+；此前误放在 K17/K18/M12/M17 电源球位上的 USB 标签已纠正。
-- Wi-Fi/BT pinmux：由于 GMAC0 RGMII 与 SDMMC1 复用球位冲突，Wi-Fi 临时改分配到 SDMMC2 M0，Bluetooth UART 临时分配 UART8 M0；AP6275S 仍是候选模块，电源、时钟、唤醒控制和模块页尚未完成。
+- Wi-Fi/BT pinmux：由于 GMAC0 RGMII 与 SDMMC1 复用球位冲突，Wi-Fi 临时改分配到 SDMMC2 M0，Bluetooth UART 临时分配 UART8 M0。AP6275S 仍是候选；AMPAK Rev.2.7 与 LCSC C2918717 旧版在 pin33/pin35/pin48 存在差异，模块 padout/RF 端口、内部 Buck 网络和模块页未冻结。
 - MicroSD：VCC 由 RK809-5 SWOUT2 控制；R57 0Ω 旁路为 DNP，不得装配。
 - Ethernet：RTL8211F-CG + HR911130A 初步页已建立；PHY strap、电源、时钟、RGMII 延时、MagJack 引脚和网表审查仍未关闭。
 
