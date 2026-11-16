@@ -575,5 +575,13 @@
  (property "Sheetfile" "A1_WIFI_BT_SDIO2.kicad_sch" (at 320 386.6 0) (effects (font (size 1.27 1.27)) (justify left top)))
  (instances (project "A1" (path "/f0000000-0000-4000-8000-000000000001" (page "15"))))
 )
+
+(sheet (at 420 335) (size 88.9 50.8) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+ (fields_autoplaced yes) (stroke (width 0.1524) (type solid)) (fill (color 0 0 0 0))
+ (uuid "a0000000-0000-4000-8000-000000000001")
+ (property "Sheetname" "GPIO_40PIN" (at 420 334.288 0) (effects (font (size 1.27 1.27)) (justify left bottom)))
+ (property "Sheetfile" "A1_GPIO_40PIN.kicad_sch" (at 420 386.6 0) (effects (font (size 1.27 1.27)) (justify left top)))
+ (instances (project "A1" (path "/a0000000-0000-4000-8000-000000000001" (page "16"))))
+)
 (sheet_instances (path "/" (page "1")))
 )

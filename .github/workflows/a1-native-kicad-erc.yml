@@ -1,0 +1,41 @@
+name: A1 Native KiCad ERC and Netlist
+on:
+  push:
+    branches:
+      - 'work/a1-baseline-ddr-audit-20261116'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  schematic-erc:
+    name: Validate A1 schematic using KiCad 9
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install KiCad 9 CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository --yes ppa:kicad/kicad-9.0-releases
+          sudo apt-get update
+          sudo apt-get install -y kicad
+          kicad-cli version
+      - name: Run real KiCad ERC and netlist export
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          set +e
+          cd hardware/kicad
+          kicad-cli sch export netlist --output ../../artifacts/A1.net A1.kicad_sch 2>&1 | tee ../../artifacts/netlist.log
+          net_rc=${PIPESTATUS[0]}
+          kicad-cli sch erc --format json --output ../../artifacts/A1-erc.json --exit-code-violations A1.kicad_sch 2>&1 | tee ../../artifacts/erc.log
+          erc_rc=${PIPESTATUS[0]}
+          cd ../..
+          printf 'netlist_rc=%d\nerc_rc=%d\n' "$net_rc" "$erc_rc" > artifacts/status.txt
+          test "$net_rc" -eq 0 && test "$erc_rc" -eq 0
+      - name: Archive ERC and netlist outputs even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: A1-KiCad9-ERC
+          path: artifacts/

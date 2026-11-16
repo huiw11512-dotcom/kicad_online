@@ -1,0 +1,9 @@
+Ref,Value,Footprint,Status
+"J501","40PIN_HEADER_A1_3V3","Connector_PinHeader_2.54mm:PinHeader_2x20_P2.54mm_Vertical",VERIFY
+"F501","MF-MSMF110 1.1A hold CANDIDATE","Fuse:Fuse_1812_4532Metric",VERIFY
+"R501","4.7k 1% 0402","Resistor_SMD:R_0402_1005Metric",VERIFY
+"R502","4.7k 1% 0402","Resistor_SMD:R_0402_1005Metric",VERIFY
+"R503","4.7k 1% 0402","Resistor_SMD:R_0402_1005Metric",VERIFY
+"R504","4.7k 1% 0402","Resistor_SMD:R_0402_1005Metric",VERIFY
+"C501","1uF 10V X7R","Capacitor_SMD:C_0603_1608Metric",VERIFY
+"C502","1uF 10V X7R","Capacitor_SMD:C_0603_1608Metric",VERIFY

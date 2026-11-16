@@ -19,4 +19,5 @@
   (lib (name "A1_HDMI")(type "KiCad")(uri "${KIPRJMOD}/A1_HDMI.kicad_sym")(options "")(descr "A1 HDMI TX symbols"))
   (lib (name "A1_ETH") (type "KiCad") (uri "${KIPRJMOD}/A1_ETH.kicad_sym") (options "") (descr "A1 Realtek RTL8211F and MagJack symbols"))
  (lib (name "A1_WIFI") (type "KiCad") (uri "${KIPRJMOD}/A1_WIFI.kicad_sym") (options "") (descr "A1 AP6256 WiFi + UART translator"))
+ (lib (name "A1_GPIO") (type "KiCad") (uri "${KIPRJMOD}/A1_GPIO.kicad_sym") (options "") (descr "A1 40-pin GPIO header symbol and PTC fuse"))
 )
