@@ -8,7 +8,7 @@
 | OI-004 | RK809-5 | 供货、QFN68 land pattern、EVB rail mapping、BUCK3 divider | PMIC输出与SoC电源树逐项核对，封装经板厂确认 |
 | OI-005 | VDD_CPU | TCS4525及电感/反馈网络 | 原厂电源树核验 |
 | OI-006 | USB-C PD | HUSB238 15V/3A PDO与PD适配器兼容性 | 实测15V/3A协商及输入保护验证 |
-| OI-007 | Wi-Fi/BT | AP6275S候选的完整料号/版本、50-pad footprint、3.3V VBAT峰值1.2A、1.8V VDDIO、37.4MHz晶体、1.8V/32.768kHz LPO、WL/BT控制与唤醒脚 | 模块页、供电/时钟/控制电路、SDMMC2 M0 + UART8 M0、DTS/固件均核对并实测 |
+| OI-007 | Wi-Fi/BT | AP6275S候选的确切版本；AMPAK Rev.2.7 与 LCSC C2918717 旧版 pin33/pin35/pin48 不一致；50-pad footprint/RF端口、内部Buck外部网络、3.3V VBAT峰值1.2A、1.8V VDDIO、37.4MHz晶体、1.8V/32.768kHz LPO、WL/BT控制与唤醒脚 | 模块页、供电/时钟/控制电路、SDMMC2 M0 + UART8 M0、DTS/固件均核对并实测 |
 | OI-008 | Ethernet | 初步页已建立；确认RTL8211F-CG准确后缀、strap、RGMII延时策略、25MHz时钟和HR911130A引脚 | 对照PHY/MagJack原厂资料逐脚审查，完成ERC/netlist和千兆链路实测 |
 | OI-009 | USB3 | Host/DRD PHY资源分配 | Multi-PHY/PinMux复核 |
 | OI-010 | GPIO | 40-pin与SoC PinMux协调 | PinMux表通过 |
