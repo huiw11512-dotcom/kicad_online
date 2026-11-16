@@ -66,6 +66,7 @@ RK3568 ARM64 Linux SBC。目标是树莓派 4B 级别的使用场景与接口体
 - [Rev1 主设计基线](docs/A1_MASTER_BASELINE_REV1.md)
 - [DDR 选型与兼容性门槛](docs/DDR_COMPATIBILITY_GATE.md)
 - [DDR 首轮审计记录](docs/A1_DDR_AUDIT_2026-11-16.md)
+- [Rockchip DDR 模板 / BIN 确认请求](docs/RK3568_DDR_FAE_REQUEST.md)
 
 ## 投板前硬门槛
 
