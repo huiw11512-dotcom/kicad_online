@@ -24,7 +24,7 @@ Performance note: RK3568 uses four Cortex-A55 cores; Raspberry Pi 4B uses Cortex
 | CPU rail | Separate dynamic Buck, TCS4525_WT candidate | Schematic added; startup timing, feedback and load validation open |
 | Display | 1 × HDMI 2.0a | Product requirement; schematic not yet added |
 | Ethernet | 1 × Gigabit Ethernet, GMAC0 RGMII + external PHY | RTL8211F-series candidate; schematic not yet added |
-| USB host | 1 × USB 3.x HOST1 Type-A + 2 × USB 2.0 HOST2/HOST3 Type-A | USB3 HOST1 page partly implemented; HOST2/HOST3 not yet drawn |
+| USB host | 1 × USB 3.x HOST1 Type-A + 2 × USB 2.0 HOST2/HOST3 Type-A | USB3 HOST1/OTG0 page plus separate HOST2/HOST3 page added; native ERC and PCB validation pending |
 | Service/download | USB3_OTG0 DP/DM on a USB-C service connector, USB2 download/recovery mode | Connector and OTG0 USB2 path are present; verify VBUSDET, role behavior and flashing |
 | Wireless | 1 soldered Wi-Fi/Bluetooth combo module, SDIO + UART | Architecture target; module and pinmux not frozen |
 | GPIO | 40-pin, 2.54mm header | Feature target; final pinout subject to pinmux and voltage-domain audit |
@@ -40,13 +40,13 @@ The 2GB part is the Rev1 first-spin choice to reduce memory topology and bring-u
 ## 3. USB resource allocation
 
 - USB3_HOST1 + MULTI_PHY1 → one USB3 Type-A host port. This is present in the current USB page.
-- USB2_HOST2 → one USB2 Type-A host port. Not yet drawn.
-- USB2_HOST3 → one USB2 Type-A host port. Not yet drawn.
+- USB2_HOST2 → one USB2 Type-A host port. Implemented on A1_USB2_HOST23.kicad_sch with R1/R2, TPS2553 and GPIO4_C2 enable; ERC/netlist pending.
+- USB2_HOST3 → one USB2 Type-A host port. Implemented on A1_USB2_HOST23.kicad_sch with T1/T2, TPS2553 and GPIO4_D2 enable; ERC/netlist pending.
 - USB3_OTG0_DP/DM → USB-C service/download connector, USB2 device/recovery path. Present in the current USB page.
 - OTG0 SuperSpeed MULTI_PHY0 is not allocated to a user connector in Rev1.
 - USB3_OTG0_VBUSDET must be connected as required by Rockchip. Verify connector-side VBUS detection and no reverse sourcing.
-- Each Type-A VBUS must have an independent current-limited load switch, connector-side ESD, enable and over-current handling. Current USB3 host uses TPS2553; the two USB2 host load switches remain to be added.
-- Planned host VBUS budget: USB3 HOST1 0.9A + USB2 HOST2 0.5A + USB2 HOST3 0.5A = 1.9A total. The 5V_SYS power budget must be rechecked with this load.
+- Each Type-A VBUS must have an independent current-limited load switch, connector-side ESD, enable and over-current handling. Current USB3 host uses TPS2553; the two USB2 host load switches are now drawn on the separate USB2 page; current-limit tolerance and GPIO/DTS mapping still require validation.
+- Planned host VBUS budget: USB3 HOST1 0.9A + USB2 HOST2/HOST3 up to approximately 0.62A each = 2.14A; reserve 2.2A total. The 5V_SYS power budget must be rechecked with this load.
 
 ## 4. Power baseline
 
@@ -90,7 +90,7 @@ The 2GB part is the Rev1 first-spin choice to reduce memory topology and bring-u
 
 ## 6. Current schematic page inventory
 
-The KiCad root sheet currently links ten child pages:
+The KiCad root sheet currently links eleven child pages:
 
 1. RK809-5 PMIC
 2. DDR power rails
@@ -102,8 +102,9 @@ The KiCad root sheet currently links ten child pages:
 8. LPDDR4X 2GB
 9. MicroSD
 10. USB3 HOST1 / USB-C OTG0 recovery
+11. USB2 HOST2 / HOST3
 
-Still to add: HDMI, Gigabit Ethernet, USB2 HOST2/HOST3, Wi-Fi/BT, 40-pin GPIO and production test/recovery points. A page with reserved net labels is not a completed peripheral circuit.
+Still to add: HDMI, Gigabit Ethernet PHY/MagJack, Wi-Fi/BT, 40-pin GPIO and production test/recovery points. A page with reserved net labels is not a completed peripheral circuit.
 
 ## 7. Hard gates before fabrication
 
