@@ -104,8 +104,11 @@ The KiCad root sheet currently links twelve child pages:
 9. MicroSD
 10. USB3 HOST1 / USB-C OTG0 recovery
 11. USB2 HOST2 / HOST3 independent Type-A host ports
+12. Preliminary Gigabit Ethernet PHY / MagJack page
 
-Still to add: HDMI, Gigabit Ethernet, Wi-Fi/BT, 40-pin GPIO and production test/recovery points. A page with reserved net labels is not a completed peripheral circuit. Ethernet is present as a preliminary page, not an electrically released interface.
+The SoC source audit now covers 636 unique balls: 610 assigned nets and 26 NC. Schematic global labels and NC markers match the pin assignment CSV with zero coordinate-level mismatches. USB2 HOST2/3 are mapped to R1/R2 and T1/T2; K17/K18/M12/M17 retain their CPU/logic supply labels.
+
+Still to add: HDMI, Wi-Fi/BT module circuit, 40-pin GPIO and production test/recovery points. Ethernet is present as a preliminary page, not an electrically released interface.
 
 ## 7. Hard gates before fabrication
 
