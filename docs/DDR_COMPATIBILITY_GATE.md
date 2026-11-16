@@ -66,7 +66,11 @@ These are source-file and mapping checks only. They are not KiCad ERC/netlist/DR
 7. Complete DDR placement/routing using the released topology and constraints.
 8. Run native KiCad load/ERC/netlist/DRC, then prototype DDR training, memory stress tests and thermal tests.
 
-## 6. References
+## 6. FAE confirmation request
+
+See [RK3568_DDR_FAE_REQUEST.md](RK3568_DDR_FAE_REQUEST.md) for the exact MPN, template, WDQS, BIN and frequency questions to send to Rockchip/FAE.
+
+## 7. References
 
 - Micron part page: https://my.micron.com/products/memory/lpddr-components/lpddr4/part-catalog/part-detail/mt53e512m32d1zw-046bwt-b
 - Micron Z42M LPDDR4X/LPDDR4 datasheet, Rev.I 04/2023, Figures 5 and 9, Table 5: https://www.mouser.com/datasheet/2/671/Micron_05092023_z42m_embedded_lpddr4x_lpddr4-3175595.pdf
