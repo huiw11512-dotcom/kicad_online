@@ -21,7 +21,7 @@ RK3568 ARM64 Linux SBC。目标是树莓派 4B 级别的独立 Linux 单板计�
 
 ## 当前工程状态（2026-11-16）
 
-<badge>DESIGN IN PROGRESS — DO NOT FABRICATE</badge>
+**DESIGN IN PROGRESS — DO NOT FABRICATE**
 
 KiCad 主工程已建立层级原理图：**1 张根页 + 12 张子页**。当前源文件结构如下：
 
