@@ -23,10 +23,10 @@ Performance note: RK3568 uses four Cortex-A55 cores; Raspberry Pi 4B uses Cortex
 | PMIC | RK809-5 | Selected; full EVB rail map, unused-pin treatment and startup sequence still require review |
 | CPU rail | Separate dynamic Buck, TCS4525_WT candidate | Schematic added; startup timing, feedback and load validation open |
 | Display | 1 × HDMI 2.0a | Product requirement; schematic not yet added |
-| Ethernet | 1 × Gigabit Ethernet, GMAC0 RGMII + external PHY | RTL8211F-series candidate; schematic not yet added |
+| Ethernet | 1 × Gigabit Ethernet, GMAC0 RGMII + external PHY | Preliminary `A1_ETHERNET.kicad_sch` page exists; RTL8211F-CG + HR911130A candidate; electrical validation pending |
 | USB host | 1 × USB 3.x HOST1 Type-A + 2 × USB 2.0 HOST2/HOST3 Type-A | HOST1 plus both USB2 host-port schematics are present; native ERC/netlist and bring-up validation pending |
 | Service/download | USB3_OTG0 DP/DM on a USB-C service connector, USB2 download/recovery mode | Connector and OTG0 USB2 path are present; verify VBUSDET, role behavior and flashing |
-| Wireless | 1 soldered Wi-Fi/Bluetooth combo module, SDIO + UART | Architecture target; module and pinmux not frozen |
+| Wireless | 1 soldered Wi-Fi/Bluetooth combo module, SDIO + UART | AP6275S candidate; provisional SDMMC2 M0 / UART8 M0 allocation; module page, clocks, power and wake controls pending |
 | GPIO | 40-pin, 2.54mm header | Feature target; final pinout subject to pinmux and voltage-domain audit |
 | Debug | 3-pin 3.3V UART + Recovery/MaskROM access | UART2 and Recovery page present; production test pads still open |
 | Input | USB-C PD 15 V / 3 A (45 W) | Schematic prototype present; PDO and protection validation open |
@@ -91,7 +91,7 @@ The 2GB part is the Rev1 first-spin choice to reduce memory topology and bring-u
 
 ## 6. Current schematic page inventory
 
-The KiCad root sheet currently links eleven child pages:
+The KiCad root sheet currently links twelve child pages:
 
 1. RK809-5 PMIC
 2. DDR power rails
@@ -105,7 +105,7 @@ The KiCad root sheet currently links eleven child pages:
 10. USB3 HOST1 / USB-C OTG0 recovery
 11. USB2 HOST2 / HOST3 independent Type-A host ports
 
-Still to add: HDMI, Gigabit Ethernet, Wi-Fi/BT, 40-pin GPIO and production test/recovery points. A page with reserved net labels is not a completed peripheral circuit.
+Still to add: HDMI, Gigabit Ethernet, Wi-Fi/BT, 40-pin GPIO and production test/recovery points. A page with reserved net labels is not a completed peripheral circuit. Ethernet is present as a preliminary page, not an electrically released interface.
 
 ## 7. Hard gates before fabrication
 
