@@ -12,7 +12,7 @@ The root sheet currently links **11 child sheets**.
 | Sheet | File | Current content / status |
 |---|---|---|
 | Main | A1.kicad_sch | USB-C PD 15V/3A input, LM76005 5V Buck, hierarchical links |
-| 2 | A1_RK809_PMIC.kicad_sch | RK809-5 PMIC, BUCK/LDO, RTC, input domains; EVB rail mapping still open |
+| 2 | A1_RK809_PMIC.kicad_sch | RK809-5 PMIC, BUCK/LDO, RTC, input domains; reference designators renumbered R200+, C200+, L200+ to avoid root-sheet collisions; EVB rail mapping still open |
 | 3 | A1_DDR_POWER.kicad_sch | LPDDR4X 1.1V / 0.6V / 1.8V rail generation |
 | 4 | A1_3V3_POWER.kicad_sch | Pre-PMIC TPS62132 5V→3.3V |
 | 5 | A1_RK3568_SOC.kicad_sch | RK3568 in 17 units; 636 ball positions accounted for |
@@ -46,6 +46,11 @@ Rockchip Hardware Design Guide Rev1.2 names SD6 as the LPDDR4/LPDDR4X base refer
 - Card VDD is supplied by RK809-5 SWOUT2 on VCC3V3_SD (sequence slot 4); R57 0Ω bypass from VCC3V3_SYS is DNP to preserve the switch. C80=10µF and C81=100nF are retained close to the socket.
 - VCCIO_SD is connected to RK809-5 LDO5 / RK3568 VCCIO3 domain; 3.3V default and 1.8V UHS transition still require PMIC/DTS validation.
 - BOM: A1_SD_CARD_BOM.csv.
+
+## Symbol-library syntax repair
+
+- Fixed malformed embedded generic symbol definitions (`A1:R`, `A1:C`, `A1:L`, `A1:SW_PUSH`) on RK809_PMIC, DDR_POWER, 3V3_POWER, CPU_POWER, EMMC_32GB and BOOT_DEBUG using the valid definitions from `A1_CUSTOM.kicad_sym`.
+- Static parse checks now pass on all 12 child sheets. Native KiCad open/ ERC still needs to be run locally; ZiroEDA read-only preview must be refreshed to confirm its renderer displays the repaired symbols.
 
 ## USB2 HOST2/HOST3 implementation
 
