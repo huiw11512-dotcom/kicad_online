@@ -28,6 +28,7 @@ The 2GB single-die/single-rank part is retained for the first spin because its p
 - Hidden DRAM supply pins are assigned to VCC1V8_DDR, VCC_DDR_1V1, VCC0V6_DDR and GND.
 - R40 is 240Ω ±1% from DRAM ZQ0 to VDDQ (0.60V), as required by Micron and Rockchip for LPDDR4X.
 - R41 is 120Ω ±1% from RK3568 DDR_RZQ ball H7 to VCC_DDR_1V1 (1.1V), as required by Rockchip RK3568 Hardware Design Guide Rev1.2 §2.1.7.2. This is a separate SoC reference resistor; it must not be confused with DRAM R40.
+- R41 BOM selection: YAGEO RC0402FR-07120RL, 0402, 120Ω ±1%, LCSC C114758; confirm live stock before ordering.
 
 ## Package grid and orientation
 
