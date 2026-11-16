@@ -24,7 +24,7 @@ Pin,Name,Electrical_Type,Net_or_Status,Datasheet_Description,Design_Note
 23,"LDO1",power_out,"NC","LDO1 output; default OFF in RK809-5",""
 24,"VCC3",power_in,"VCC3V3_SYS","BUCK3 supply input",""
 25,"SW3",passive,"PMIC_SW3","BUCK3 switching node",""
-26,"VBUCK3",power_out,"VCC_DDR_1V1","BUCK3 output; VCC_DDR 1.1V for LPDDR4X VDD2 and SoC DDRPHY_VDDQ","Micron MT53E1G32D2FW-046 WT:C selected; 1.1V VDD2; Rockchip template/BIN validation remains open"
+26,"VBUCK3",power_out,"VCC_DDR_1V1","BUCK3 output; VCC_DDR 1.1V for LPDDR4X VDD2 and SoC DDRPHY_VDDQ","Micron MT53E512M32D1ZW-046B WT:B selected for Rev1 2GB; 1.1V VDD2; Rockchip template/BIN validation remains open"
 27,"FB3",input,"VCC_DDR_FB","BUCK3 feedback divider midpoint; R1=37.4k RH / R2=100k RL sets about 1.1V","R1=37.4k RH / R2=100k RL gives about 1.1V; validate DDR template/BIN"
 28,"LDO4",power_out,"NC","LDO4 output; default OFF in RK809-5",""
 29,"LDO5",power_out,"VCCIO_SD","LDO5 output; VCCIO_SD, programmable 3.3V/1.8V", sequence 4",""
