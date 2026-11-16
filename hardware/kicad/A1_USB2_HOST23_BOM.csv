@@ -1,0 +1,10 @@
+Reference,Qty,Manufacturer,MPN,Value,Footprint,LCSC Part Number,Notes
+J7;J8,2,HC-USB3.0-L168-WP,HC-USB3.0-L168-WP,USB Type-A receptacle (wired USB2-only),A1_USB:USB_A_3.0_HC-USB3.0-L168-WP,C7501850,SuperSpeed contacts 5/6/8/9 are NC; pins 7 and 10 shield/ground drain to GND
+U13;U14,2,Texas Instruments,TPS2553DBVR,USB current-limited power switch,Package_TO_SOT_SMD:SOT-23-6,C55266,EN active high; RILIM=47k; FAULT left NC
+R80;R81;R82;R83,4,YAGEO,RC0402FR-072R2L,2.2R 1%,Resistor_SMD:R_0402_1005Metric,C327251,Series resistors in DP/DM per RK3568 Hardware Design Guide
+R84;R85,2,Walsin,WR04X4702FTL,47k 1%,Resistor_SMD:R_0402_1005Metric,C163830,TPS2553 ILIM resistor; approx 0.505-0.616A limit range per datasheet tolerance equations
+R86;R87,2,Walsin,WR04X1003FTL,100k 1%,Resistor_SMD:R_0402_1005Metric,C163806,EN pulldown; port defaults OFF during reset
+C110;C113,2,Samsung,CL10B105KA8NNNC,1uF 25V X7R,Capacitor_SMD:C_0603_1608Metric,C29936,TPS2553 input bypass
+C111;C114,2,Panasonic,16SVPC100M,100uF 16V polymer,Capacitor_SMD:CP_Elec_6.3x5.8,C136275,USB VBUS bulk capacitor; verify polarity and pad geometry against datasheet
+C112;C115,2,YAGEO,CC0603KRX7R9BB104,100nF 50V X7R,Capacitor_SMD:C_0603_1608Metric,C14663,USB VBUS high-frequency bypass
+D39;D40;D41;D42,4,TECH PUBLIC,ESD5341N,0.35pF ESD diode,A1_IO:ESD5341N_DFN1006-2L,C3021106,One low-capacitance ESD device per USB2 data line; locate close to connector
