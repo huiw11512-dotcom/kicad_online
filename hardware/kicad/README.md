@@ -7,7 +7,7 @@ Open A1.kicad_pro, then A1.kicad_sch.
 
 ## Hierarchical native schematics
 
-The root sheet currently links **10 child sheets**.
+The root sheet currently links **11 child sheets**.
 
 | Sheet | File | Current content / status |
 |---|---|---|
@@ -21,7 +21,8 @@ The root sheet currently links **10 child sheets**.
 | 8 | A1_BOOT_OSC_DEBUG.kicad_sch | 24MHz clock, POR, FLASH_VOL_SEL, UART2, Recovery |
 | 9 | A1_LPDDR4X_2GB.kicad_sch | Micron MT53E512M32D1ZW-046B WT:B, 2GB x32, 200-ball map, R40 and R41 |
 | 10 | A1_SD_CARD.kicad_sch | TFP09-2-12B microSD, SDMMC0 4-bit, series resistors and ESD |
-| 11 | A1_USB_PORTS.kicad_sch | One USB3 HOST1 Type-A and one USB-C OTG0 USB2 recovery/download connector; USB2 HOST2/3 still absent |
+| 11 | A1_USB_PORTS.kicad_sch | One USB3 HOST1 Type-A and one USB-C OTG0 USB2 recovery/download connector |
+| 12 | A1_USB2_HOST23.kicad_sch | Two independent USB2 HOST2/HOST3 Type-A ports; TPS2553 VBUS switches, GPIO enables, 2.2Ω series resistors and ESD5341N protection |
 
 ## Rev1 DDR implementation
 
@@ -62,7 +63,7 @@ Static source parsing is not an authoritative KiCad ERC/DRC. Native KiCad CLI is
 ## Remaining minimum Linux-boot requirements
 
 - Confirm exact Rockchip-approved LPDDR4X MPN/template/BIN pairing and WDQS requirement.
-- Complete USB2 HOST2/HOST3, then validate USB3 host and OTG0 recovery path.
+- Validate the new USB2 HOST2/HOST3 page with native ERC/netlist, regulator GPIO device-tree mapping and hot-plug tests; also validate USB3 host and OTG0 recovery path.
 - Complete Gigabit Ethernet PHY/RJ45, HDMI/display, Wi-Fi/BT and 40-pin GPIO.
 - Confirm all vendor package pad/paste patterns, sourcing, thermal and power startup.
 - Complete PCB layout using the confirmed Rockchip DDR template and board-house impedance stackup.
