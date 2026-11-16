@@ -28,13 +28,13 @@ VCC1–VCC9 and VCC_RTC are supplied from the pre-PMIC 3.3V system rail, generat
 |---|---:|---|---|
 | BUCK1 | 0.9V | 0.47uH, 2×47uF, output net VDD_LOGIC_0V9 | Voltage/load mapping to SoC pending |
 | BUCK2 | 0.9V | 0.47uH, 2×47uF, output net VDD_GPU_0V9 | Voltage/load mapping to SoC pending |
-| BUCK3 | 1.1V target | 0.47uH, 2×47uF, R1=37.4k RH/R2=100k RL | LPDDR4X VDD2 1.1V; Micron 4GB x32 selected, template/BIN validation pending |
+| BUCK3 | 1.1V target | 0.47uH, 2×47uF, R1=37.4k RH/R2=100k RL | LPDDR4X VDD2 1.1V; Micron MT53E512M32D1ZW-046B WT:B 2GB x32 first-spin baseline; template/BIN validation pending |
 | BUCK4 | 0.9V target, OFF | 0.47uH + 2×47uF stage populated; output VDD_NPU_0V9 | Hardware retained; OTP-default OFF |
 | BUCK5 | 1.8V | 0.47uH, 2×47uF; supplies internal 1.8V PMIC rails | 1.8V default retained |
 
 Rockchip's RK3568 guide specifies 0.47uH inductors with saturation current above 3.5A and DCR below 50mOhm (preferably below 20mOhm). It specifies more than 30uF output capacitance for BUCK1/2/3/4 and more than 33uF for BUCK5. The schematic uses 2×47uF nominal per active buck as a conservative starting point; effective capacitance under DC bias must be checked against the selected capacitor datasheet.
 
-BUCK3 uses an external divider referenced to 0.8V. With R1=37.4kΩ (RH) and R2=100kΩ (RL), `VBUCK3 = 0.8 × (1 + 37.4/100) ≈ 1.099V`. This is the selected 1.1V VDD2 rail for Micron MT53E1G32D2FW-046 WT:C (4GB, x32, dual-die). The resistor values are now fixed; validate the memory against the Rockchip LP4X 200-ball x32 template and matching DDR BIN before release.
+BUCK3 uses an external divider referenced to 0.8V. With R1=37.4kΩ (RH) and R2=100kΩ (RL), `VBUCK3 = 0.8 × (1 + 37.4/100) ≈ 1.099V`. This is the selected 1.1V VDD2 rail for the Rev1 Micron MT53E512M32D1ZW-046B WT:B (2GB, x32, single-die) first-spin baseline. The previously considered 4GB MT53E1G32D2FW-046 WT:C is a separate dual-die alternate and is not the current schematic baseline. The divider values are fixed for 1.1V; verify output tolerance, transient response and sequencing with the selected memory and confirmed Rockchip template/BIN before release.
 
 ## 4. LDO and switch channels
 
@@ -76,7 +76,7 @@ A1 Rev1 does not include the RK809 audio codec, headphone amplifier, microphone 
 
 1. Map BUCK1/2/3, BUCK5, LDO2/3/5/6/7/8 and SWOUT1/2 to the RK3568 power tree using the full EVB schematic, not only the block diagram.
 2. Confirm whether any unused channel requires a specific termination in the RK809-5 reference schematic.
-3. Finalize BUCK3 divider after exact LPDDR4X voltage is known.
+3. Verify BUCK3 1.1V output tolerance, effective output capacitance, ripple and transient response against the selected LPDDR4X load.
 4. Select exact 0.47uH and 1uH inductor MPNs with saturation current, DCR and temperature rise verified.
 5. Verify capacitor effective capacitance under DC bias, ESR and package size.
 6. Confirm QFN68 land pattern, EP solder paste segmentation and thermal via strategy with assembly house.
@@ -118,7 +118,7 @@ A1 Rev1 does not include the RK809 audio codec, headphone amplifier, microphone 
 | SWOUT1 | VCC_3V3 | 3.3V system rail and input to DDR 0.6V buck |
 | SWOUT2 | VCC3V3_SD | SD card 3.3V supply |
 
-LPDDR4X also requires separate VCC0V6_DDR and VCC1V8_DDR rails; these are implemented on the DDR power page, not by BUCK3. Micron MT53E1G32D2FW-046 WT:C is a 32Gb/4GB, x32, 200-ball, dual-die device; verify the approved Rockchip DDR BIN/template pairing before fabrication.
+LPDDR4X also requires separate VCC0V6_DDR and VCC1V8_DDR rails; these are implemented on the DDR power page, not by BUCK3. The current 2GB MT53E512M32D1ZW-046B WT:B uses VDD2=1.1V. The 4GB MT53E1G32D2FW-046 WT:C alternate appears T/A in the public AVL v3.01 transcription but requires a separate dual-die/rank, package, template and BIN review.
 
 
 ## 2026-11-16 IO pull-up voltage correction
