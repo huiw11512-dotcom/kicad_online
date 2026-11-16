@@ -16,7 +16,7 @@ RK3568不是“任意组合两个USB3+两个USB2”。原厂指南2.3.4说明：
 1. USB3 HOST1 → 1个USB3 Type-A（Host）。
 2. USB2 HOST2 → 1个USB2 Type-A（Host）。
 3. USB2 HOST3 → 1个USB2 Type-A（Host）。
-4. USB3 OTG0_DP/DM → 独立Micro-USB service connector，仅作MaskROM/Loader/ADB调试口；OTG0 SuperSpeed的MULTI_PHY0不接外部接口，按原厂unused-module规则处理。
+4. USB3 OTG0_DP/DM → 独立USB-C service connector，仅作MaskROM/Loader/ADB调试口；OTG0 SuperSpeed的MULTI_PHY0不接外部接口，按原厂unused-module规则处理。
 5. OTG0_ID、OTG0_VBUSDET按原厂推荐电路处理；VBUSDET不得悬空。
 6. 各Host VBUS使用独立限流开关、GPIO使能、过流状态反馈和连接器侧ESD。
 7. USB2 DP/DM串联2.2Ω；USB3 TX串联100nF AC耦合电容（0201），RX预留0Ω；USB3 ESD寄生电容≤0.4pF；USB2 ESD按原厂≤3pF要求。
@@ -31,7 +31,7 @@ A1 Rev 1输入冻结为USB-C PD 15V/3A（45W），与当前KiCad输入级一致�
 USB-C PD Sink → 输入保险/电子保险及TVS/反灌保护 → 15V_IN → 5V_SYS同步Buck → RK809-5及后级DC/DC。
 RK809-5工作输入为2.7–5.5V，不允许15V直接进入PMIC。
 
-USB VBUS总电流预算暂定1.9A（USB3 Host1 0.9A + 两个USB2 Host各0.5A），每口独立限流。Service Micro-USB为Device下载接口，不向主机反向供电；VBUS只作检测并按原厂推荐电路处理。
+USB VBUS总电流预算暂定1.9A（USB3 Host1 0.9A + 两个USB2 Host各0.5A），每口独立限流。Service USB-C为Device下载接口，不向主机反向供电；VBUS只作检测并按原厂推荐电路处理。
 
 PD Sink器件必须明确支持15V/3A PDO、输入额定电压、CC状态及过压保护。HUSB238当前阻值：RVSET=14kΩ请求15V，RISET=22.6kΩ请求3.0A（Hynetek参考设计电阻表）；仍须按芯片版本和目标适配器PDO实测确认。
 
@@ -63,18 +63,26 @@ PD Sink器件必须明确支持15V/3A PDO、输入额定电压、CC状态及过�
 
 - 1×USB3 Host Type-A
 - 2×USB2 Host Type-A
-- 1×Micro-USB service/download
+- 1×USB-C service/download（USB2 OTG0）
 - 1×HDMI
 - 1×Gigabit Ethernet
 - 1×MicroSD
 - 1×32GB eMMC目标
-- 1×4GB LPDDR4X目标
+- 1×2GB LPDDR4X首板基线（Micron MT53E512M32D1ZW-046B WT:B）；4GB D2FW 作为独立后续版本
 - 1×Wi-Fi/BT combo module
 - 1×40-pin GPIO header
 - 1×USB-C PD 15V/3A input
 - 6-layer PCB
 
-## 7. 依据
+## 7. LPDDR4X 首板决策
+
+- 首板采用 Micron MT53E512M32D1ZW-046B WT:B，2GB、x32、单 Die、单 Rank。
+- 4GB MT53E1G32D2FW-046 WT:C 作为后续独立版本候选；公开 Rockchip DDR AVL v3.01 转录也显示 RK3568 T/A，但需单独核对双 Die/rank、封装和模板/BIN。
+- DRAM ZQ0 使用 240Ω±1% 接 VCC0V6_DDR；RK3568 DDR_RZQ H7 使用 120Ω±1% 接 VCC_DDR_1V1。
+- Rockchip Hardware Design Guide Rev1.2 命名 SD6 模板，当前 rkbin 表命名 SD4 模板；未取得 FAE 确认前不得冻结 DDR 走线。
+- 67 条 DRAM 信号与 SoC 球位表已做源文件比对，未发现球号错配；该检查不等于 KiCad ERC/DRC 或 DDR Training。
+
+## 8. 依据
 
 - Rockchip RK3568 Hardware Design Guide V1.2, §2.3.4 USB2.0/USB3.0: controllers, PHY sharing, OTG download port, VBUSDET, ESD, series components and VBUS current limiting.
   https://dl.xkwy2018.com/downloads/RK3568/RK356X/Hardware/Rockchip_RK3568_Hardware_Design_Guide_V1.2_EN.pdf

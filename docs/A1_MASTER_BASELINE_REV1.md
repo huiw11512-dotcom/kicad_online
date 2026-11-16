@@ -1,9 +1,9 @@
 # Linux MiniHost A1 — Master Hardware Baseline Rev 1.0
 
-Date: 2026-11-15  
-Status: design baseline frozen for schematic development; not a fabrication release.
+**Date:** 2026-11-16  
+**Status:** Rev1 design baseline for schematic development; partial native schematic; not a fabrication release.
 
-This file is the single source of truth for Rev 1. If older planning notes conflict with this file, this file takes precedence until those notes are updated.
+This is the single source of truth for the Rev1 first-spin architecture. Any capacity, package, pinmux or interface change must be reflected in this file and the corresponding KiCad sheets/BOM.
 
 ## 1. Product definition
 
@@ -11,112 +11,118 @@ An independently designed RK3568 ARM64 Linux single-board computer. The function
 
 Performance note: RK3568 uses four Cortex-A55 cores; Raspberry Pi 4B uses Cortex-A72. A1 targets a similar application class and interface set, not identical CPU benchmark performance.
 
-## 2. Rev 1 architecture — frozen decisions
+## 2. Rev1 first-spin architecture
 
-| Block | Rev 1 decision | Freeze status |
+| Block | Rev1 first-spin decision | Status |
 |---|---|---|
-| SoC | Rockchip RK3568, FCBGA636L, 19 × 19 mm | Device selected; ball map and land pattern verification required |
-| RAM | 4 GB LPDDR4X, 32-bit | Capacity frozen; exact part/template/BIN pairing open |
-| Boot storage | 32 GB eMMC 5.1, 8-bit | Capacity/interface frozen; exact part open |
-| Removable storage | MicroSD, SDMMC0 4-bit | Interface frozen |
-| PMIC | RK809-5 | Selected; input rail and BUCK3/VDC dividers corrected; remaining EVB rail mapping open |
-| CPU rail | Separate dynamic Buck, ≥4 A design capability | Architecture frozen; exact regulator and compensation open |
-| Display | 1 × HDMI 2.0a | Frozen |
-| Ethernet | 1 × Gigabit Ethernet, GMAC0 RGMII + external PHY | Frozen; exact PHY/strap/clock details open |
-| USB Type-A | 1 × USB 3.x Host1 + 2 × USB 2.0 Host2/Host3 | Frozen |
-| Service/download | 1 × Micro-USB on USB3_OTG0_DP/DM, device/download mode | Reserved per Rockchip requirement |
-| Wireless | 1 soldered Wi-Fi/Bluetooth combo module, SDIO + UART | Architecture frozen; exact module open |
-| GPIO | 40-pin, 2.54 mm header | Frozen as a feature; final pinout subject to pinmux and voltage-domain audit |
-| Debug | 3-pin 3.3 V UART + Recovery/MaskROM access | Frozen |
-| Input | USB-C PD 15 V / 3 A (45 W) | Frozen for Rev 1 |
-| Main rail | 15 V_IN → 5 V_SYS, 5 A maximum converter target | Topology frozen; power/thermal validation open |
-| Pre-PMIC rail | 5 V_SYS → VCC3V3_SYS, 3.3 V / 3 A, TPS62132RGTT | Schematic page added; full-load thermal/transient validation open |
-| PCB | 6-layer FR-4, 1.6 mm starting thickness | Starting target; stackup/impedance must be confirmed with fabricator |
-| Outline | 85 × 56 mm target | Mechanical target only; freeze after connector and DDR placement |
+| SoC | Rockchip RK3568, FCBGA636L, 19 × 19mm | Selected; ball map and land pattern still require package-level verification |
+| RAM | 2GB LPDDR4X, x32, single package/single rank | Selected first-spin baseline: Micron MT53E512M32D1ZW-046B WT:B |
+| RAM alternate | 4GB LPDDR4X x32 | MT53E1G32D2FW-046 WT:C retained as a separate future variant; not current schematic baseline |
+| Boot storage | 32GB eMMC 5.1, 8-bit | Samsung KLMBG2JETD-B041 candidate; sourcing, package and voltage checks open |
+| Removable storage | MicroSD, SDMMC0 4-bit | Schematic page added; VCCIO switching and DTS validation open |
+| PMIC | RK809-5 | Selected; full EVB rail map, unused-pin treatment and startup sequence still require review |
+| CPU rail | Separate dynamic Buck, TCS4525_WT candidate | Schematic added; startup timing, feedback and load validation open |
+| Display | 1 × HDMI 2.0a | Product requirement; schematic not yet added |
+| Ethernet | 1 × Gigabit Ethernet, GMAC0 RGMII + external PHY | RTL8211F-series candidate; schematic not yet added |
+| USB host | 1 × USB 3.x HOST1 Type-A + 2 × USB 2.0 HOST2/HOST3 Type-A | USB3 HOST1 page partly implemented; HOST2/HOST3 not yet drawn |
+| Service/download | USB3_OTG0 DP/DM on a USB-C service connector, USB2 download/recovery mode | Connector and OTG0 USB2 path are present; verify VBUSDET, role behavior and flashing |
+| Wireless | 1 soldered Wi-Fi/Bluetooth combo module, SDIO + UART | Architecture target; module and pinmux not frozen |
+| GPIO | 40-pin, 2.54mm header | Feature target; final pinout subject to pinmux and voltage-domain audit |
+| Debug | 3-pin 3.3V UART + Recovery/MaskROM access | UART2 and Recovery page present; production test pads still open |
+| Input | USB-C PD 15 V / 3 A (45 W) | Schematic prototype present; PDO and protection validation open |
+| Main rail | 15 V_IN → 5 V_SYS, LM76005, 5A target | Schematic prototype; power/thermal/transient validation open |
+| Pre-PMIC rail | 5 V_SYS → VCC3V3_SYS, TPS62132RGTT, 3.3 V / 3 A target | Schematic page added; full-load thermal/transient validation open |
+| PCB | 6-layer FR-4, 1.6mm initial target | Fabricator stackup and controlled impedance still to be confirmed |
+| Outline | 85 × 56mm target | Mechanical target only; freeze after connector, DDR and thermal placement |
 
-### USB resource allocation
+The 2GB part is the Rev1 first-spin choice to reduce memory topology and bring-up risk. Public transcription of Rockchip DDR AVL v3.01 shows T/A for the selected 2GB part in the RK3568 column; the 4GB D2FW alternate also shows T/A. T/A is sample-tested/applicable status, not proof of A1 board-level DDR training. Confirm both rows against the current official Rockchip-issued AVL before release.
 
-- USB3_HOST1 + MULTI_PHY1 → one USB 3.x Type-A Host port.
-- USB2_HOST2 → one USB 2.0 Type-A Host port.
-- USB2_HOST3 → one USB 2.0 Type-A Host port.
-- USB3_OTG0_DP/DM → dedicated Micro-USB service/download port. The OTG0 SuperSpeed pair is not routed to a user port in Rev 1; MULTI_PHY0 is not allocated to SATA/PCIe.
-- USB3_OTG0_VBUSDET must be connected as required by Rockchip. Keep the service port accessible for MaskROM/Loader/ADB and production flashing.
-- Each Type-A VBUS gets its own current-limited load switch and connector-side ESD. Initial system VBUS budget: 0.9 A + 0.5 A + 0.5 A = 1.9 A total.
+## 3. USB resource allocation
 
-This deliberately prioritizes reliable recovery and a simple first board over maximizing the number of USB3 sockets.
+- USB3_HOST1 + MULTI_PHY1 → one USB3 Type-A host port. This is present in the current USB page.
+- USB2_HOST2 → one USB2 Type-A host port. Not yet drawn.
+- USB2_HOST3 → one USB2 Type-A host port. Not yet drawn.
+- USB3_OTG0_DP/DM → USB-C service/download connector, USB2 device/recovery path. Present in the current USB page.
+- OTG0 SuperSpeed MULTI_PHY0 is not allocated to a user connector in Rev1.
+- USB3_OTG0_VBUSDET must be connected as required by Rockchip. Verify connector-side VBUS detection and no reverse sourcing.
+- Each Type-A VBUS must have an independent current-limited load switch, connector-side ESD, enable and over-current handling. Current USB3 host uses TPS2553; the two USB2 host load switches remain to be added.
+- Planned host VBUS budget: USB3 HOST1 0.9A + USB2 HOST2 0.5A + USB2 HOST3 0.5A = 1.9A total. The 5V_SYS power budget must be rechecked with this load.
 
-## 3. Power baseline
+## 4. Power baseline
 
-1. USB-C PD Sink negotiates 15 V / 3 A. HUSB238 remains the selected controller candidate.
-2. HUSB238 resistor targets from Hynetek's reference-design guide: RVSET = 14 kΩ for 15 V; RISET = 22.6 kΩ for 3.0 A.
-3. Protected 15 V_IN feeds the main synchronous Buck.
-4. LM76005 is the current 5 V / 5 A converter candidate. 5V_SYS feeds the pre-PMIC 3.3V buck, speaker supply and other 5V loads. VCC3V3_SYS is the supply for RK809 VCC1-VCC9 and VCC_RTC.
-5. The 5 V converter's 5 A output limit is the binding board-level power limit (25 W nominal), not the 45 W PD contract. The power budget must include conversion losses, SoC/DDR/PHY, Wi-Fi, HDMI, and up to 1.9 A USB VBUS. USB ports must be current-limited and total load managed.
-6. RK809-5 VCC1-VCC9 and VCC_RTC use VCC3V3_SYS (3.3V); VCC_SPK_HP retains a separate filtered 5V_SYS supply. Never connect 15V_IN to the PMIC.
-7. VDD_CPU uses an independent dynamic Buck with ≥4 A capability and remote feedback to VDD_CPU_COM.
-8. RK809-5 rails and fixed power-on sequence must follow the complete RK3568 EVB reference schematic and the RK3568 Hardware Design Guide, not a simplified block diagram.
-9. LPDDR4X SoC PHY rails and DRAM VDD1/VDD2/VDDQ are separate networks. Micron MT53E1G32D2FW-046 WT:C is selected as the 4GB x32 candidate; final rail/BIN/template pairing remains a hard gate.
+1. USB-C PD Sink negotiates 15V/3A. HUSB238 remains the selected controller candidate.
+2. HUSB238 resistor targets from Hynetek's reference-design guide: RVSET = 14kΩ for 15V; RISET = 22.6kΩ for 3.0A. Verify against the exact controller revision and actual adapters.
+3. Protected 15V_IN feeds the main synchronous Buck.
+4. LM76005 is the current 5V/5A converter candidate. 5V_SYS feeds the pre-PMIC 3.3V buck, PMIC and other 5V loads. The 5V converter's 5A output limit is the binding board-level power limit (25W nominal), not the 45W PD contract.
+5. The power budget must include conversion losses, SoC/DDR/PHY, Wi-Fi, HDMI, and up to 1.9A USB VBUS. USB ports must be current-limited and total load managed.
+6. RK809-5 VCC1–VCC9 and VCC_RTC use VCC3V3_SYS (3.3V); VCC_SPK_HP retains a separate filtered 5V_SYS supply. Never connect 15V_IN directly to the PMIC.
+7. VDD_CPU uses an independent dynamic Buck with remote feedback to VDD_CPU_COM. TCS4525_WT is a candidate, not a validated production choice.
+8. RK809-5 rails and fixed power-on sequence must follow the complete RK3568 EVB reference schematic and Hardware Design Guide, not a simplified block diagram.
+9. LPDDR4X SoC PHY rails and DRAM VDD1/VDD2/VDDQ are separate networks. For the selected Micron part: VDD1=1.8V, VDD2=1.1V, VDDQ=0.6V. RK3568 DDRPHY_VDDQ=1.1V and DDRPHY_VDDQL=0.6V.
 
 ### Existing input-stage review flags
 
-- The current KiCad prototype requests 15 V / 3 A and uses AO4407A (30 V VDS) as the P-MOS path switch. The 30 V rating is not automatically accepted for production: TVS/clamp voltage, cable/transient conditions, MOSFET SOA and thermal margin must be checked. Keep Q1 as a candidate until that check closes.
-- The current LM76005 5 V / 5 A values, inductor and capacitor bank remain provisional until the TI datasheet design equations, DC-bias derating, ripple, loop stability and thermal rise are checked.
-- Add/verify input fuse or eFuse, TVS, reverse-current behavior, input bulk capacitance, and test points before freezing the input page.
+- The current KiCad prototype uses AO4407A (30V VDS) as the P-MOS path switch. This is not automatically accepted for production: TVS/clamp voltage, cable/transient conditions, MOSFET SOA and thermal margin must be checked.
+- LM76005 5V/5A values, inductor and capacitor bank remain provisional until TI datasheet design equations, DC-bias derating, ripple, loop stability and thermal rise are checked.
+- Add/verify input fuse or eFuse, TVS, reverse-current behavior, input bulk capacitance and test points before freezing the input page.
 
-## 4. Memory and boot decisions
+## 5. LPDDR4X decision and hard gate
 
-### LPDDR4X
+### Selected first-spin part
 
-- Target: 4 GB, 32-bit.
-- Selected candidate: Micron MT53E1G32D2FW-046 WT:C; 32Gb/4GB, x32, 200-ball TFBGA, two-die package, 1.1V/0.6V IO.
-- Must close all of: Rockchip AVL row/application note, exact PCB template, exact DDR initialization BIN/version, WDQS requirement, SoC-to-DRAM DQ/DQS/CA/CK/CS mapping, and rail mapping. The Rockchip table lists LP4X 200-ball x32 templates, but exact MPN-to-BIN compatibility is not yet proven.
-- If the single x32 candidate cannot be proven compatible, switch to a Rockchip-supported two-device x16 organization. Do not force an unverified device into a convenient template.
+- Micron MT53E512M32D1ZW-046B WT:B.
+- 16Gb density = 2GB raw capacity.
+- x32 total bus width, two x16 channels A/B, single die, single rank.
+- 200-ball TFBGA ZW, 10.0 × 14.5 × 1.05mm.
+- 0.8mm column pitch, 0.65mm row pitch; Micron package drawing specifies Ø0.40mm SMD ball pads.
+- DRAM rails: VDD1=1.8V, VDD2=1.1V, VDDQ=0.6V.
+- Micron datasheet ZQ0 requires 240Ω ±1% to VDDQ. A1 R40 implements this.
+- Rockchip RK3568 guide specifies SoC DDR_RZQ H7 with 120Ω ±1% to VCC_DDR. A1 R41 implements this separately.
 
-### eMMC / MicroSD
+### Compatibility status
 
-- eMMC: 32 GB, 8-bit, HS200-capable target. Exact ordering code and VCC/VCCQ requirements remain open.
-- MicroSD: SDMMC0 4-bit, with 3.3 V I/O as the initial plan, subject to VCCIO3 and pinmux confirmation.
-- Recovery: preserve USB OTG0 firmware-download path and UART console.
+- Public transcription of Rockchip DDR AVL v3.01 lists the selected 2GB MPN as T/A for RK3568.
+- The 4GB MT53E1G32D2FW-046 WT:C alternate also appears T/A in the RK3568 column, but its D2/FW dual-die organization is not the current first-spin schematic.
+- The public rkbin template table lists RK3568_Template_LP4XD200P132SD4_43x28_1600MHz.
+- Rockchip Hardware Design Guide Rev1.2 names RK3568_Template_LP4XD200P132SD6_43x28_1600MHz for its LPDDR4/LPDDR4X-compatible reference circuit.
+- This SD4/SD6 discrepancy is unresolved. Do not freeze DDR PCB placement/routing or claim template compatibility until Rockchip/FAE supplies the current exact template files, confirms the MPN mapping, and provides the matching DDR BIN.
+- Confirm whether the selected MPN carries any WDQS application-note requirement in the current official AVL/reference list. Do not choose a WDQS or non-WDQS BIN by guess.
 
-## 5. Schematic page plan
+## 6. Current schematic page inventory
 
-1. ROOT_INPUT_MAIN_POWER — USB-C PD receptacle, HUSB238, input protection, 15V-to-5V_SYS main Buck.
-2. RK809_PMIC — complete RK809-5 pinout, all Buck/LDO/SW rails, VCC input domains, RTC, crystal, I2C, PWRON, RESETB and unused-pin handling.
-3. DDR_POWER — separate LPDDR4X 0.6V and 1.8V rails; VCC_DDR_1V1 from RK809 BUCK3.
-4. 3V3_POWER — 5V_SYS to pre-PMIC VCC3V3_SYS 3.3V/3A buck.
-5. CPU_GPU_LOGIC_POWER — CPU dynamic Buck, feedback, GPU/logic power rails, sequencing and decoupling.
-6. RK3568_SOC — all 636 balls, power/ground, clocks, reset, boot straps, UART, I2C and service/download signals.
-7. LPDDR4X_4GB — exact matched DRAM device and complete bus/power wiring.
-8. EMMC_MICROSD — eMMC 8-bit and MicroSD 4-bit.
-9. GIGABIT_ETHERNET — RGMII, PHY, clock, straps, magnetics/RJ45 and ESD.
-10. USB3_USB2 — one USB3 Host, two USB2 Host ports, VBUS switches and ESD.
-11. HDMI — HDMI TX, DDC, HPD, CEC, +5 V and ESD.
-12. WIFI_BT_GPIO — combo module, antenna keepout, 40-pin header, LEDs and buttons.
-13. TEST_RECOVERY — UART, MaskROM/Recovery, JTAG/test pads and rail test points.
+The KiCad root sheet currently links ten child pages:
 
-## 6. Hard gates before fabrication
+1. RK809-5 PMIC
+2. DDR power rails
+3. Pre-PMIC 3.3V
+4. RK3568 SoC, 17 units / 636 balls
+5. CPU dynamic Buck
+6. 32GB eMMC
+7. Boot / clock / reset / UART2 / Recovery
+8. LPDDR4X 2GB
+9. MicroSD
+10. USB3 HOST1 / USB-C OTG0 recovery
 
-- Gate A — SoC: verify all 636 ball numbers and names against Rockchip RK3568 Datasheet Rev 2.1 Table 2-1; verify BGA footprint origin, A1 orientation, pitch and land dimensions against the package drawing and assembly recommendation.
-- Gate B — DDR: exact DRAM ↔ AVL ↔ PCB template ↔ DDR BIN compatibility proven; then verify all bus lanes and rails.
-- Gate C — PMIC/power: transcribe the full EVB RK809-5 implementation pin-by-pin; calculate startup sequence, steady-state and transient current, DC drop, ripple and thermal rise.
-- Gate D — interfaces: finalize SoC pinmux, IO-bank voltages, USB Multi-PHY allocation, PHY straps and ESD parts.
-- Gate E — PCB: 6-layer stackup and impedance controlled by fabricator; DDR placement/routing must follow the matched Rockchip template; complete ERC/DRC and netlist review.
+Still to add: HDMI, Gigabit Ethernet, USB2 HOST2/HOST3, Wi-Fi/BT, 40-pin GPIO and production test/recovery points. A page with reserved net labels is not a completed peripheral circuit.
 
-No board fabrication is authorized until all gates are closed and the native KiCad ERC/DRC reports have been reviewed.
+## 7. Hard gates before fabrication
 
-## 7. Primary references
+- Gate A — SoC: verify all 636 ball numbers/names against Rockchip RK3568 Datasheet Rev2.1; verify BGA origin, A1 orientation, pitch and land dimensions against package drawing and assembly recommendation.
+- Gate B — DDR: official AVL + exact MPN + exact reference template + matching DDR BIN + WDQS status + full DQ/DQS/CA/CK/CS/RESET/ZQ/ODT mapping.
+- Gate C — PMIC/power: transcribe the full EVB RK809-5 implementation pin-by-pin; verify every rail, startup sequence, current, ripple, DC drop and thermal rise.
+- Gate D — interfaces: finalize pinmux, IO-bank voltages, USB Multi-PHY allocation, PHY straps, ESD and connector circuits.
+- Gate E — PCB: 6-layer stackup and impedance controlled by fabricator; DDR placement/routing follows the confirmed Rockchip template; complete ERC/DRC and netlist review.
 
-- Rockchip RK3568 Datasheet Rev 2.1 (2024-06-21), especially Table 2-1 Pin Number List, Table 2-2 Power/Ground IO, and package drawing: https://www.boardcon.com/download/Rockchip_RK3568_Datasheet_V2.1-20240621.pdf
-- Rockchip RK3568 Hardware Design Guide Rev 1.2: https://dl.xkwy2018.com/downloads/RK3568/RK356X/Hardware/Rockchip_RK3568_Hardware_Design_Guide_V1.2_EN.pdf
-- Hynetek HUSB238 Sink Reference Design Guide, RVSET/RISET resistor tables: https://en.hynetek.com/2525.html
+No board fabrication is authorized until all gates are closed and native KiCad ERC/DRC reports have been reviewed.
+
+## 8. Primary references
+
+- Rockchip RK3568 Datasheet Rev2.1 (2024-06-21): https://www.boardcon.com/download/Rockchip_RK3568_Datasheet_V2.1-20240621.pdf
+- Rockchip RK3568 Hardware Design Guide Rev1.2: https://dl.xkwy2018.com/downloads/RK3568/RK356X/Hardware/Rockchip_RK3568_Hardware_Design_Guide_V1.2_EN.pdf
 - Rockchip RK3568 DDR template/BIN configuration table: https://github.com/rockchip-linux/rkbin/blob/master/specific/Rockchip_Specific_PCB_Template_and_DDR_bin_Configuration_Table.md
-- RK3568 public reference hardware index: https://github.com/hqnicolas/RK3568-hardware-design
+- Public transcription of Rockchip DDR AVL v3.01; verify against official current PDF: https://cseker.com/zh-cn/news/40.html
+- Hynetek HUSB238 Sink Reference Design Guide: https://en.hynetek.com/2525.html
 
-## 8. Current implementation status
+## 9. Release status
 
-- Native KiCad root schematic contains the USB-C PD input, 15 V to 5 V main Buck prototype, RK809-5 PMIC page 2, DDR_POWER page 3 and pre-PMIC 3V3_POWER page 4.
-- RK809-5 has a complete 69-pin symbol and 68+EP candidate footprint; VCC1-VCC9/VCC_RTC now use VCC3V3_SYS. BUCK3 FB3 and VDC divider values are corrected in schematic/BOM.\n- LPDDR4X power page adds separate 0.6V and 1.8V regulators; Micron 4GB x32 part selected, exact Rockchip template/BIN and current/ramp checks remain open.
-- Pre-PMIC 3.3V page uses TPS62132RGTT, 2.2uH APV inductor and specified LCSC capacitors; 3A thermal and transient validation remain open.
-- RK3568 symbol library exists, but the SoC has not yet been placed in the root schematic. LPDDR4X, eMMC and external interfaces are not yet drawn.
-- The project has not passed native KiCad load, ERC, netlist export, visual review, PCB DRC or hardware bring-up.
-- This baseline resolves architecture conflicts; it does not represent a completed schematic or fabrication-ready design.
+The project has native editable hierarchical schematics and local symbols/footprints, but it has not passed native KiCad load, ERC, netlist export, visual review, PCB DRC or hardware bring-up. Static source parsing and ball-map comparisons do not replace these checks. **Rev1 remains DESIGN-IN-PROGRESS and NOT FABRICATION READY.**
