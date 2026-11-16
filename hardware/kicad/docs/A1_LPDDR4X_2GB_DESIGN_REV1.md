@@ -1,6 +1,6 @@
 # LPDDR4X 2GB memory — A1 Rev1 design note
 
-Status: native editable schematic, 200-ball footprint, package map and ZQ network added. **Not a fabrication release.**
+Status: native editable schematic, 200-ball footprint, package map, DRAM ZQ0 and SoC DDR_RZQ networks added. **Not a fabrication release.**
 
 ## Selected engineering baseline
 
@@ -14,7 +14,7 @@ Status: native editable schematic, 200-ball footprint, package map and ZQ networ
 | Rated speed | 4266MT/s per pin; actual RK3568 operating rate is set by the validated template/BIN |
 | Rails | VDD1 1.8V; VDD2 1.1V; VDDQ 0.6V; VSS GND |
 
-The 2GB baseline replaces the previously discussed 4GB x32 candidate for the first board. The 4GB MT53E1G32D2FW-046 WT:C remains an unselected alternate; it requires its own positive Rockchip MPN/template/BIN confirmation.
+The 2GB single-die/single-rank part is retained for the first spin because its package topology is simpler. The 4GB MT53E1G32D2FW-046 WT:C alternate also appears with T/A status in the public transcription of Rockchip DDR AVL v3.01 for RK3568, but it is a D2/FW dual-die package and is not the current schematic baseline; its rank organization, package map, exact template/BIN and land pattern must be verified separately.
 
 ## Schematic and mapping
 
@@ -26,7 +26,8 @@ The 2GB baseline replaces the previously discussed 4GB x32 candidate for the fir
 - Micron CA0..CA5 map to RK3568 A0..A5; CK_t/c map to CLKP/CLKN; DQS_t/c map to DQSxP/N; DMI maps to DM; CS0 maps to active-low CS0n; RESET_n maps to RESETn.
 - Single-rank device does not use RK3568 CS1n_A/B, CKE1_A/B or ODT1_CA_A/B. These six SoC pins are marked no-connect.
 - Hidden DRAM supply pins are assigned to VCC1V8_DDR, VCC_DDR_1V1, VCC0V6_DDR and GND.
-- R40 is 240Ω ±1% from ZQ0 to VDDQ (0.60V), as required by the Micron data sheet.
+- R40 is 240Ω ±1% from DRAM ZQ0 to VDDQ (0.60V), as required by Micron and Rockchip for LPDDR4X.
+- R41 is 120Ω ±1% from RK3568 DDR_RZQ ball H7 to VCC_DDR_1V1 (1.1V), as required by Rockchip RK3568 Hardware Design Guide Rev1.2 §2.1.7.2. This is a separate SoC reference resistor; it must not be confused with DRAM R40.
 
 ## Package grid and orientation
 
@@ -36,19 +37,22 @@ The 200 footprint pads are Ø0.40mm, as specified for the SMD ball pads. The mas
 
 ## Rockchip template/BIN gate
 
-The public Rockchip RK3568 template table lists `RK3568_Template_LP4XD200P132SD4_43x28_1600MHz` as the first single-device x32 template to evaluate. It is a **candidate template**, not a confirmed pairing for this exact ordering code. Obtain the current Rockchip DDR Approved Vendor List and matching DDR initialization BIN; confirm WDQS requirement, BIN version, frequency and bootloader integration with Rockchip/FAE.
+The public `rockchip-linux/rkbin` configuration table lists `RK3568_Template_LP4XD200P132SD4_43x28_1600MHz` among RK3568 templates. However, the Rockchip Hardware Design Guide Rev1.2 names `RK3568_Template_LP4XD200P132SD6_43x28_1600MHz` for its LPDDR4/LPDDR4X-compatible reference circuit. The SD4/SD6 discrepancy is unresolved; neither name is frozen for PCB routing until Rockchip/FAE confirms the current template package and its exact MPN mapping. The AVL v3.01 transcription marks the selected Micron 2GB MPN T/A for RK3568; the 4GB D2FW alternate is also marked T/A. T/A is sample-tested/applicable status, not proof that this board has passed DDR training. Confirm the current official AVL, application-note flags, exact DDR BIN, WDQS requirement, frequency and bootloader integration with Rockchip/FAE.
 
 ## Validation still required
 
 1. Confirm exact MPN and current stock/traceability with the supplier.
-2. Confirm current Rockchip AVL row, template and DDR BIN pairing.
-3. Validate the 200-ball footprint land pattern, mask and paste against Micron and the assembly house.
-4. Complete DDR byte-lane routing, impedance, topology, via and length-matching rules using the matching Rockchip template.
-5. Run native KiCad load/ERC/netlist/DRC, then prototype DDR training and memory stress tests.
+2. Obtain the current official Rockchip AVL and confirm the exact MPN row/application-note flags.
+3. Resolve the Rockchip guide SD6 versus rkbin table SD4 template-name discrepancy and obtain the actual matching template files and DDR BIN.
+4. Validate the 200-ball footprint land pattern, mask and paste against Micron and the assembly house.
+5. Complete DDR byte-lane routing, impedance, topology, via and length-matching rules using the confirmed Rockchip template.
+6. Run native KiCad load/ERC/netlist/DRC, then prototype DDR training and memory stress tests.
 
 ## References
 
 - Micron part page: https://my.micron.com/products/memory/lpddr-components/lpddr4/part-catalog/part-detail/mt53e512m32d1zw-046bwt-b
 - Micron Z42M data sheet: https://www.mouser.com/datasheet/2/671/Micron_05092023_z42m_embedded_lpddr4x_lpddr4-3175595.pdf
 - Rockchip RK3568 PCB template / DDR BIN table: https://github.com/rockchip-linux/rkbin/blob/master/specific/Rockchip_Specific_PCB_Template_and_DDR_bin_Configuration_Table.md
+- Rockchip RK3568 Hardware Design Guide Rev1.2, §§2.1.7.2, 2.1.7.3, 2.1.7.5 (SoC DDR_RZQ, LPDDR4X ZQ0, rails and template): https://dl.xkwy2018.com/downloads/RK3568/RK356X/Hardware/Rockchip_RK3568_Hardware_Design_Guide_V1.2_EN.pdf
+- Public transcription of Rockchip DDR AVL v3.01 (verify against current official Rockchip PDF): https://cseker.com/zh-cn/news/40.html
 - Public AVL mirror (verify against current Rockchip-issued PDF): https://cseker.com/zh-cn/news/40.html
