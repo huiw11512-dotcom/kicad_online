@@ -48,7 +48,6 @@
   (pin passive line (at 5.08 0 180) (length 3.81) (name "2" (effects (font (size 0.85 0.85)))) (number "2" (effects (font (size 0.75 0.75))))))
 )
 )
-)
 (symbol "C_POL"
  (pin_names (offset 0.508)) (exclude_from_sim no) (in_bom yes) (on_board yes)
  (property "Reference" "C" (id 0) (at 0 6.35 0) (effects (font (size 1 1))))
