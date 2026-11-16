@@ -3,8 +3,8 @@ Date: 2026-11-16
 
 ## Native schematic state
 - U7 RK3568 represented as 17 editable unit instances on A1_RK3568_SOC.kicad_sch.
-- One global net label per ball: 636 / 636 balls accounted for.
-- Original ball names, primary function and assigned net retained in A1_RK3568_PINNETS.csv.
+- All 636 ball positions are explicitly accounted for: 607 net-labeled pins and 29 no-connect markers.
+- Original ball names and primary functions are retained in A1_RK3568_PINNETS.csv; each ball is assigned either a named net or explicit NC status.
 - Power and ground nets have been mapped provisionally. Every signal without verified final mux or peripheral mapping has a *unique* SOC_<ball>_<function> net, preventing accidental short-circuit by a common unknown net.
 - Per-ball net labeling is **not** equivalent to completion of the peripheral schematic or ERC success.
 
@@ -24,7 +24,7 @@ Date: 2026-11-16
 ## Verification performed
 - Source symbol has 17 logical units and 636 distinct ball numbers.
 - Source footprint contains 636 distinct pad numbers (from preceding repository audit).
-- Each source pin is represented exactly once as a placed schematic pin and once as a net label.
+- Each source pin is represented exactly once as a placed schematic pin; 607 pins have global net labels and 29 have explicit no-connect markers.
 - File assembled as balanced KiCad S-expressions by generator; **KiCad CLI has not been run**.
 - Mark as DESIGN-IN-PROGRESS, NOT FABRICATION READY.
 
