@@ -44,6 +44,7 @@
 7. DRAM ZQ0 使用 R40=240Ω±1% 接 VCC0V6_DDR；RK3568 DDR_RZQ（H7）使用 R41=120Ω±1% 接 VCC_DDR_1V1。
 8. HDMI、USB3/Multi-PHY、GMAC 模拟电源按 Rockchip 指南采用独立滤波和就近去耦。
 9. 所有 USB Host VBUS 使用独立限流开关；总负载受 5V_SYS 功率预算约束。
+10. MicroSD VDD 使用 RK809-5 SWOUT2（VCC3V3_SD，序列 4）；SD 页 R57 的 0Ω 旁路必须 DNP，避免绕过 PMIC 开关。
 
 ## 4. 原理图分页和交付范围
 
