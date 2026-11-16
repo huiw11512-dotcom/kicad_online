@@ -48,7 +48,7 @@ Rockchip Hardware Design Guide Rev1.2 names SD6 as the LPDDR4/LPDDR4X base refer
 
 ## Static source checks completed
 
-- Ten hierarchical child schematic files are linked from the root sheet.
+- Ten hierarchical child schematic files are linked from the root sheet. On 2026-11-16, all child-sheet symbol instance paths and `sheet_instances` records were corrected to the full `/root-sheet-uuid/child-sheet-uuid` hierarchy path; six misassigned component paths on the 3V3 page were also corrected. Static S-expression and path checks pass; native KiCad ERC/netlist still pending.
 - Child schematic files checked so far pass balanced S-expression checks.
 - U7 RK3568 has 17 units; all 636 ball positions are represented as 607 labeled nets + 29 explicit NC markers.
 - U8 TCS4525 symbol and candidate footprint: 20 balls each.
