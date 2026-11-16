@@ -79,7 +79,7 @@ PD Sink器件必须明确支持15V/3A PDO、输入额定电压、CC状态及过�
 - 首板采用 Micron MT53E512M32D1ZW-046B WT:B，2GB、x32、单 Die、单 Rank。
 - 4GB MT53E1G32D2FW-046 WT:C 作为后续独立版本候选；公开 Rockchip DDR AVL v3.01 转录也显示 RK3568 T/A，但需单独核对双 Die/rank、封装和模板/BIN。
 - DRAM ZQ0 使用 240Ω±1% 接 VCC0V6_DDR；RK3568 DDR_RZQ H7 使用 120Ω±1% 接 VCC_DDR_1V1。
-- Rockchip Hardware Design Guide Rev1.2 命名 SD6 模板，当前 rkbin 表命名 SD4 模板；未取得 FAE 确认前不得冻结 DDR 走线。
+- Rockchip Hardware Design Guide Rev1.2 将 SD6 列为 LPDDR4X 基础参考模板；rkbin 中 SD4 属于 WDQS-capable 模板集合。当前 MPN 无公开 WDQS 应用注释标记，按标准 non-WDQS 路径推进；正式模板/BIN 仍需 FAE 确认。
 - 67 条 DRAM 信号与 SoC 球位表已做源文件比对，未发现球号错配；该检查不等于 KiCad ERC/DRC 或 DDR Training。
 
 ## 8. 依据
