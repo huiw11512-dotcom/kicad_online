@@ -21,12 +21,12 @@
 | 4GB RAM | MT53E1G32D2FW-046 WT:C 作为后续独立版本候选 | 不进入首板 BOM；须单独核对 D2/FW 双 Die 拓扑 |
 | 系统盘 | 32GB eMMC 5.1，8-bit | Samsung KLMBG2JETD-B041 候选已进原理图 |
 | 扩展存储 | 1×MicroSD，SDMMC0 4-bit | 原理图页已建立，电压切换/DTS 待验证 |
-| 显示 | 1×HDMI 2.0a | 未画 |
-| 有线网络 | 1×Gigabit Ethernet，RGMII PHY + MagJack | 未画；RTL8211F 系列候选 |
+| 显示 | 1×HDMI 2.0a | 已新增第13页设计草案；电气/供电/ERC待验证 |
+| 有线网络 | 1×Gigabit Ethernet，RGMII PHY + MagJack | 已新增第14页设计草案；MagJack精确封装缺失 |
 | USB Host | 1×USB3 HOST1 Type-A + 2×USB2 HOST2/HOST3 Type-A | USB3 HOST1/OTG0 页已建立；USB2 HOST2/HOST3 独立页已建立，ERC/网表待验证 |
 | 下载/恢复 | USB3_OTG0 DP/DM → USB-C 服务接口，USB2 Device / MaskROM / Loader | 原理图已建立，需核对 VBUSDET、角色切换和下载验证 |
-| 无线 | 1 个焊接式 Wi-Fi/BT Combo 模块，SDIO + UART | 未画；模块与 pinmux 待确定 |
-| GPIO | 40-pin 2.54mm 排针 | 未画；只引出确认的 3.3V GPIO/I2C/SPI/UART/PWM，保留 5V/GND |
+| 无线 | 1 个焊接式 Wi-Fi/BT Combo 模块，SDIO + UART | 已新增第15页AP6256候选；SDMMC2+UART4已分配，模块仍待验证 |
+| GPIO | 40-pin 2.54mm 排针 | 已新增第16页，28路3.3V信号加供电/地，pinmux与保护仍待验证 |
 | 调试 | 3-pin 3.3V UART + Recovery/MaskROM | UART2、Recovery 已建立；生产测试点待补 |
 | 电源输入 | USB-C PD 15V/3A（45W） | 原理图原型已建立，保护与 PDO 实测待完成 |
 | PCB | 六层 FR-4，1.6mm 初始目标 | 叠层/阻抗需板厂确认 |
@@ -63,7 +63,7 @@
 | 12 | WIFI_BT_GPIO | Combo 模块、SDIO、UART、天线净空、40-pin GPIO、按键和 LED |
 | 13 | TEST_RECOVERY | UART、MaskROM/Recovery、JTAG 测试点、电源测试点、生产测试焊盘 |
 
-当前根页及 11 张子页已经存在；USB2 HOST2/HOST3 原理图已建立。HDMI、Ethernet、Wi-Fi/BT、40-pin GPIO 和生产测试页仍未完成。表中未完成页面是交付目标，不代表已画好。
+当前根页及15张子页已存在。HDMI、Ethernet、Wi-Fi/BT、GPIO均已有原生可编辑设计草案；完整ERC、器件签核和生产测试页仍未完成，绝不可投板。
 
 ## 5. 必须先关闭的硬门槛
 
@@ -108,7 +108,7 @@
 
 - 已有：RK3568 主控球位图、RK809-5、主电源、3.3V、CPU Buck、2GB LPDDR4X、eMMC、MicroSD、启动/调试、部分 USB。
 - 已修正：SoC DDR_RZQ H7 的 R41=120Ω±1% 接 VCC_DDR_1V1；DRAM ZQ0 的 R40=240Ω±1% 接 VCC0V6_DDR。
-- 未完成：DDR 模板/BIN 确认、HDMI、Ethernet、Wi-Fi/BT、GPIO、生产测试、完整电源审查。
-- 尚未执行原生 KiCad ERC、网表导出、PCB DRC、DDR Training 或 Linux 启动验证。
+- 未完成：DDR 模板/BIN 确认、HDMI/以太网/无线/GPIO电气签核、MagJack封装、生产测试、完整电源审查。
+- GitHub Actions原生KiCad ERC/网表导出流程已提交，结果必须结合实际运行日志确认；PCB DRC、DDR Training、Linux 启动验证均未完成。
 
 **当前工程为 DESIGN-IN-PROGRESS，禁止投板。**

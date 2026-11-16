@@ -55,10 +55,10 @@ PD Sink器件必须明确支持15V/3A PDO、输入额定电压、CC状态及过�
 ## 4. Wi-Fi / Bluetooth
 
 - 优先采用已集成Wi-Fi/BT的焊接式combo模块，不在A1首版单独设计RF前端。
-- Wi-Fi优先使用SDMMC1（默认分配），UART接口接Bluetooth；需核对模块是否支持该总线宽度、IO电压、UART流控和32.768kHz要求。
+- Wi-Fi已选择SDMMC2 M0 (VCCIO6=1.8V)，采用AP6256 4位SDIO；Bluetooth使用UART4 M0，经过1.8V/3.3V电平转换；待核对UART流控和32.768kHz。GMAC0已占用SDMMC1复用球位。
 - 低功耗待机时，如果VDD_LOGIC会关断，SDIO Wi-Fi相关控制脚需迁移到PMUIO1/2域或保证模块掉电策略；不能把普通VCCIO域GPIO作为掉电后保持状态的控制脚。
 - 天线端保留π型匹配位和净空区；模块型号、天线形式及认证约束冻结前不得出PCB。
-- 不再预设SDMMC2作为Wi-Fi总线，待与40-pin GPIO、PinMux和电压域一起做全局冲突审查后选择唯一控制器。
+- Wi-Fi已分配SDMMC2 M0，并与GPIO扩展口完成信号源级冲突检查；Linux DTS pinctrl和整板ERC尚未验证。
 
 ## 5. Ethernet
 

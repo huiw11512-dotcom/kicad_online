@@ -22,12 +22,12 @@ Performance note: RK3568 uses four Cortex-A55 cores; Raspberry Pi 4B uses Cortex
 | Removable storage | MicroSD, SDMMC0 4-bit | Schematic page added; VCCIO switching and DTS validation open |
 | PMIC | RK809-5 | Selected; full EVB rail map, unused-pin treatment and startup sequence still require review |
 | CPU rail | Separate dynamic Buck, TCS4525_WT candidate | Schematic added; startup timing, feedback and load validation open |
-| Display | 1 × HDMI 2.0a | Product requirement; schematic not yet added |
-| Ethernet | 1 × Gigabit Ethernet, GMAC0 RGMII + external PHY | RTL8211F-series candidate; schematic not yet added |
+| Display | 1 × HDMI 2.0a | Native page 13 added; ERC, voltage and compliance pending |
+| Ethernet | 1 × Gigabit Ethernet, GMAC0 RGMII + external PHY | Page 14 RTL8211F-CG candidate added, MagJack footprint missing, ERC pending |
 | USB host | 1 × USB 3.x HOST1 Type-A + 2 × USB 2.0 HOST2/HOST3 Type-A | USB3 HOST1/OTG0 page plus separate HOST2/HOST3 page added; native ERC and PCB validation pending |
 | Service/download | USB3_OTG0 DP/DM on a USB-C service connector, USB2 download/recovery mode | Connector and OTG0 USB2 path are present; verify VBUSDET, role behavior and flashing |
-| Wireless | 1 soldered Wi-Fi/Bluetooth combo module, SDIO + UART | Architecture target; module and pinmux not frozen |
-| GPIO | 40-pin, 2.54mm header | Feature target; final pinout subject to pinmux and voltage-domain audit |
+| Wireless | 1 soldered Wi-Fi/Bluetooth combo module, SDIO + UART | Page 15 AP6256 SDMMC2 1.8V + UART4 level shifter, power and RF pending |
+| GPIO | 40-pin, 2.54mm header | Page 16: 40 pins/28 user 3.3V signals; ESD and voltage-domain signoff pending |
 | Debug | 3-pin 3.3V UART + Recovery/MaskROM access | UART2 and Recovery page present; production test pads still open |
 | Input | USB-C PD 15 V / 3 A (45 W) | Schematic prototype present; PDO and protection validation open |
 | Main rail | 15 V_IN → 5 V_SYS, LM76005, 5A target | Schematic prototype; power/thermal/transient validation open |
@@ -90,7 +90,7 @@ The 2GB part is the Rev1 first-spin choice to reduce memory topology and bring-u
 
 ## 6. Current schematic page inventory
 
-The KiCad root sheet currently links eleven child pages:
+The KiCad root sheet currently links fifteen child pages:
 
 1. RK809-5 PMIC
 2. DDR power rails
@@ -103,8 +103,12 @@ The KiCad root sheet currently links eleven child pages:
 9. MicroSD
 10. USB3 HOST1 / USB-C OTG0 recovery
 11. USB2 HOST2 / HOST3
+12. HDMI TX (native KiCad page 13)
+13. RTL8211F-CG Ethernet (native KiCad page 14)
+14. AP6256 Wi-Fi / BT (native KiCad page 15)
+15. 40-pin GPIO (native KiCad page 16)
 
-Still to add: HDMI, Gigabit Ethernet PHY/MagJack, Wi-Fi/BT, 40-pin GPIO and production test/recovery points. A page with reserved net labels is not a completed peripheral circuit.
+Production test/recovery point page and electrical signoff remain outstanding. Page existence is NOT a passed ERC or design release.
 
 ## 7. Hard gates before fabrication
 
@@ -126,4 +130,4 @@ No board fabrication is authorized until all gates are closed and native KiCad E
 
 ## 9. Release status
 
-The project has native editable hierarchical schematics and local symbols/footprints, but it has not passed native KiCad load, ERC, netlist export, visual review, PCB DRC or hardware bring-up. Static source parsing and ball-map comparisons do not replace these checks. **Rev1 remains DESIGN-IN-PROGRESS and NOT FABRICATION READY.**
+The project has native editable hierarchical schematics and local symbols/footprints. Native KiCad 9 ERC/netlist verification has an automated GitHub Actions workflow, but no result may be claimed without checking the actual run. PCB DRC and hardware bring-up remain outstanding. Static source parsing and ball-map comparisons do not replace these checks. **Rev1 remains DESIGN-IN-PROGRESS and NOT FABRICATION READY.**

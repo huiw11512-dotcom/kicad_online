@@ -7,7 +7,7 @@ Open A1.kicad_pro, then A1.kicad_sch.
 
 ## Hierarchical native schematics
 
-The root sheet currently links **11 child sheets**.
+The root sheet currently links **15 child sheets**; added pages 13–16 are preliminary, not signoff-ready.
 
 | Sheet | File | Current content / status |
 |---|---|---|
@@ -23,6 +23,10 @@ The root sheet currently links **11 child sheets**.
 | 10 | A1_SD_CARD.kicad_sch | TFP09-2-12B microSD, SDMMC0 4-bit, series resistors and ESD |
 | 11 | A1_USB_PORTS.kicad_sch | One USB3 HOST1 Type-A and one USB-C OTG0 USB2 recovery/download connector |
 | 12 | A1_USB2_HOST23.kicad_sch | Two independent USB2 HOST2/HOST3 Type-A ports; TPS2553 VBUS switches, GPIO enables, 2.2Ω series resistors and ESD5341N protection |
+| 13 | A1_HDMI_TX.kicad_sch | HDMI TMDS, HPD, CEC, DDC, ESD; supply signoff pending |
+| 14 | A1_GIGABIT_ETHERNET.kicad_sch | RTL8211F-CG GMAC0 PHY and candidate MagJack (missing vendor-approved footprint) |
+| 15 | A1_WIFI_BT_SDIO2.kicad_sch | AP6256 SDMMC2 1.8V + UART4 translated 3.3V, RF/clock verification pending |
+| 16 | A1_GPIO_40PIN.kicad_sch | 40Pin with 28 independent 3.3V IO nets plus power and ground |
 
 ## Rev1 DDR implementation
 
@@ -49,7 +53,7 @@ The Rockchip Hardware Design Guide Rev1.2 names an SD6 template while the curren
 
 ## Static source checks completed
 
-- Ten hierarchical child schematic files are linked from the root sheet.
+- Fifteen child sheets are linked; pages 13–16 have passed static balanced-S-expression checks, not native ERC.
 - Child schematic files checked so far pass balanced S-expression checks.
 - U7 RK3568 has 17 units; all 636 ball positions are represented.
 - U8 TCS4525 symbol and candidate footprint: 20 balls each.
@@ -58,12 +62,12 @@ The Rockchip Hardware Design Guide Rev1.2 names an SD6 template while the curren
 - DRAM pin-map-to-SoC-ball comparison: 67/67 signals found; 0 mismatches; 0 duplicate SoC balls.
 - R41 SoC DDR_RZQ termination is now present in the LPDDR4X page and BOM.
 
-Static source parsing is not an authoritative KiCad ERC/DRC. Native KiCad CLI is not available in the current execution environment, so **native KiCad load, ERC, netlist and DRC have not been run**.
+Static parsing is not native KiCad verification. GitHub Actions now runs a KiCad 9 netlist/ERC workflow: `.github/workflows/a1-native-kicad-erc.yml`. Inspect actual run status and ERC JSON before claiming any passed check. PCB DRC and hardware bring-up have not been done.
 
 ## Remaining minimum Linux-boot requirements
 
 - Confirm exact Rockchip-approved LPDDR4X MPN/template/BIN pairing and WDQS requirement.
 - Validate the new USB2 HOST2/HOST3 page with native ERC/netlist, regulator GPIO device-tree mapping and hot-plug tests; also validate USB3 host and OTG0 recovery path.
-- Complete Gigabit Ethernet PHY/RJ45, HDMI/display, Wi-Fi/BT and 40-pin GPIO.
+- Complete validation of newly drawn Ethernet PHY/MagJack, HDMI, Wi-Fi/BT and 40Pin GPIO. Ethernet MagJack approved mechanical footprint is still absent.
 - Confirm all vendor package pad/paste patterns, sourcing, thermal and power startup.
 - Complete PCB layout using the confirmed Rockchip DDR template and board-house impedance stackup.
