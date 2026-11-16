@@ -5,18 +5,18 @@ Date: 2026-11-16
 - U7 RK3568 represented as 17 editable unit instances on A1_RK3568_SOC.kicad_sch.
 - All 636 ball positions are explicitly accounted for: 607 net-labeled pins and 29 no-connect markers.
 - Original ball names and primary functions are retained in A1_RK3568_PINNETS.csv; each ball is assigned either a named net or explicit NC status.
-- Power and ground nets have been mapped provisionally. Every signal without verified final mux or peripheral mapping has a *unique* SOC_<ball>_<function> net, preventing accidental short-circuit by a common unknown net.
+- Power and ground nets have been mapped to named rails; supply capacity, sequencing, filtering and local decoupling remain under review. Every signal without verified final mux or peripheral mapping has a unique SOC_<ball>_<function> net, preventing accidental short-circuit by a common unknown net.
 - Per-ball net labeling is **not** equivalent to completion of the peripheral schematic or ERC success.
 
 ## Important electrical decisions and flags
 - RK3568 LPDDR4X DDRPHY_VDDQ pins → VCC_DDR_1V1.
 - RK3568 LPDDR4X DDRPHY_VDDQL pins → VCC0V6_DDR (NOT 1.1V).
 - RK3568 DDR_RZQ ball H7 → R41 120Ω ±1% → VCC_DDR_1V1 (1.1V), per Hardware Design Guide Rev1.2 §2.1.7.2. This SoC reference resistor is distinct from DRAM U10 ZQ0 R40 240Ω ±1% to VCC0V6_DDR.
-- VDD_CPU balls → VDD_CPU from a separately controlled dynamic CPU Buck (not yet drawn).
-- VDD_CPU_COM has its own VDD_CPU_REMOTE_SENSE net, **do not short** to GND or 3.3V; check the chosen regulator's remote-sense arrangement.
+- VDD_CPU balls → VDD_CPU from the separate TCS4525_WT dynamic Buck on A1_CPU_POWER.kicad_sch; output load, compensation, startup timing and thermal margin remain to validate.
+- VDD_CPU_COM has its own VDD_CPU_REMOTE_SENSE net, **do not short** to GND or 3.3V. A1 uses the TCS4525_WT FB pin and R20 fail-safe bias; verify the exact remote-sense implementation against the selected regulator datasheet before layout.
 - IO-domain voltage assignments now match the RK3568 EVB IO-domain reference and DTS example; the final Linux DTS must use the same supplies:
   - PMUIO1 / PMUIO2 → VCC3V3_PMU (3.3V)
-  - VCCIO1 → VCC_3V3 (3.3V)
+  - VCCIO1 → VCC_3V3 (3.3V; audio codec is not populated, so the dedicated codec rail is not used)
   - VCCIO2 → VCC_1V8 (1.8V)
   - VCCIO3 → VCCIO_SD (3.3V default; switch to 1.8V only for validated UHS-I)
   - VCCIO4 → VCC_1V8 (1.8V)
@@ -39,4 +39,6 @@ Date: 2026-11-16
 ## Reference
 - Rockchip RK3568 Hardware Design Guide Rev 1.2, section 2.1.7.5, LPDDR4X DDRPHY rails.
 - RK3568 Datasheet Rev 2.1, package / pin list.
-- RK3568 EVB IO voltage domain checklist and Linux RK3568 device-tree IO power domain definitions.
+- RK3568 EVB User Guide Rev1.2, Figure 2-2 Power Diagram: https://dl.xkwy2018.com/downloads/RK3568/RK356X/Hardware/Rockchip_RK3568_EVB_User_Guide_V1.2_EN.pdf
+- Rockchip RK3568 IO Power Domain Map: https://dl.xkwy2018.com/downloads/RK3568/RK356X/Rockchip_RK356X_Introduction_IO_Power_Domains_Configuration_CN.pdf
+- Rockchip RK3568 EVB DTS IO-domain example (vccio1..7 and PMUIO1/2): https://kernel.googlesource.com/pub/scm/linux/kernel/git/mmind/linux-rockchip/%2B/for-next/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
