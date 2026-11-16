@@ -83,10 +83,10 @@ The 2GB part is the Rev1 first-spin choice to reduce memory topology and bring-u
 
 - Public transcription of Rockchip DDR AVL v3.01 lists the selected 2GB MPN as T/A for RK3568.
 - The 4GB MT53E1G32D2FW-046 WT:C alternate also appears T/A in the RK3568 column, but its D2/FW dual-die organization is not the current first-spin schematic.
-- The public rkbin template table lists RK3568_Template_LP4XD200P132SD4_43x28_1600MHz.
-- Rockchip Hardware Design Guide Rev1.2 names RK3568_Template_LP4XD200P132SD6_43x28_1600MHz for its LPDDR4/LPDDR4X-compatible reference circuit.
-- This SD4/SD6 discrepancy is unresolved. Do not freeze DDR PCB placement/routing or claim template compatibility until Rockchip/FAE supplies the current exact template files, confirms the MPN mapping, and provides the matching DDR BIN.
-- Confirm whether the selected MPN carries any WDQS application-note requirement in the current official AVL/reference list. Do not choose a WDQS or non-WDQS BIN by guess.
+- Rockchip Hardware Design Guide Rev1.2 names RK3568_Template_LP4XD200P132SD6_43x28_1600MHz for its LPDDR4/LPDDR4X reference circuit; treat SD6 as the base-template candidate.
+- The rkbin RK3568 table lists template families with WDQS-capable versions, including SD4. It explicitly restricts WDQS DDR BINs to parts requiring WDQS; SD4 in that list is not evidence that this non-WDQS candidate should use SD4.
+- The selected Micron MPN has T/A for RK3568 and no [35]/[36] application-note marker in the public AVL v3.01 transcription. The working path is standard non-WDQS, subject to current official AVL and FAE confirmation.
+- Public standard BIN candidates include rk3568_ddr_1560MHz_v1.26.bin, rk3568_ddr_1332MHz_v1.26.bin, rk3568_ddr_1056MHz_v1.26.bin and rk3568_ddr_920MHz_v1.26.bin. Evaluate 1560MHz v1.26 first against the SD6 reference layout; do not freeze until exact MPN/template/BIN/frequency pairing is confirmed.
 
 ## 6. Current schematic page inventory
 
@@ -108,7 +108,7 @@ Still to add: HDMI, Gigabit Ethernet, USB2 HOST2/HOST3, Wi-Fi/BT, 40-pin GPIO an
 ## 7. Hard gates before fabrication
 
 - Gate A — SoC: verify all 636 ball numbers/names against Rockchip RK3568 Datasheet Rev2.1; verify BGA origin, A1 orientation, pitch and land dimensions against package drawing and assembly recommendation.
-- Gate B — DDR: official AVL + exact MPN + exact reference template + matching DDR BIN + WDQS status + full DQ/DQS/CA/CK/CS/RESET/ZQ/ODT mapping.
+- Gate B — DDR: official AVL/app-note flags + exact MPN + SD6 base template + standard non-WDQS DDR BIN version/frequency + full DQ/DQS/CA/CK/CS/RESET/ZQ/ODT mapping.
 - Gate C — PMIC/power: transcribe the full EVB RK809-5 implementation pin-by-pin; verify every rail, startup sequence, current, ripple, DC drop and thermal rise.
 - Gate D — interfaces: finalize pinmux, IO-bank voltages, USB Multi-PHY allocation, PHY straps, ESD and connector circuits.
 - Gate E — PCB: 6-layer stackup and impedance controlled by fabricator; DDR placement/routing follows the confirmed Rockchip template; complete ERC/DRC and netlist review.
