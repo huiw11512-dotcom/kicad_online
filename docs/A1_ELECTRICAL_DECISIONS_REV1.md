@@ -1,6 +1,6 @@
 # A1 Rev1 — 已核实的电气实现决策
 
-日期：2026-11-15
+日期：2026-11-16
 状态：架构/接口决策。不是已完成KiCad原理图。与[A1_MASTER_BASELINE_REV1.md](A1_MASTER_BASELINE_REV1.md)冲突时，以主基线为准。
 
 ## 1. 重要更正：USB控制器资源
@@ -31,7 +31,7 @@ A1 Rev 1输入冻结为USB-C PD 15V/3A（45W），与当前KiCad输入级一致�
 USB-C PD Sink → 输入保险/电子保险及TVS/反灌保护 → 15V_IN → 5V_SYS同步Buck → RK809-5及后级DC/DC。
 RK809-5工作输入为2.7–5.5V，不允许15V直接进入PMIC。
 
-USB VBUS总电流预算暂定1.9A（USB3 Host1 0.9A + 两个USB2 Host各0.5A），每口独立限流。Service USB-C为Device下载接口，不向主机反向供电；VBUS只作检测并按原厂推荐电路处理。
+USB VBUS总限流阈值预算按2.34A计（USB3 HOST1 0.989A max + USB2 HOST2/HOST3各0.673A max），每口独立限流。该值是限流阈值上限之和，不是预期持续负载；5V_SYS功率预算必须覆盖最坏情况并校核PD/主Buck余量。Service USB-C为Device下载接口，不向主机反向供电；VBUS只作检测并按原厂推荐电路处理。
 
 PD Sink器件必须明确支持15V/3A PDO、输入额定电压、CC状态及过压保护。HUSB238当前阻值：RVSET=14kΩ请求15V，RISET=22.6kΩ请求3.0A（Hynetek参考设计电阻表）；仍须按芯片版本和目标适配器PDO实测确认。
 
@@ -45,19 +45,22 @@ PD Sink器件必须明确支持15V/3A PDO、输入额定电压、CC状态及过�
 
 ## 4. Wi-Fi / Bluetooth
 
-- 优先采用已集成Wi-Fi/BT的焊接式combo模块，不在A1首版单独设计RF前端。
-- Wi-Fi优先使用SDMMC1（默认分配），UART接口接Bluetooth；需核对模块是否支持该总线宽度、IO电压、UART流控和32.768kHz要求。
-- 低功耗待机时，如果VDD_LOGIC会关断，SDIO Wi-Fi相关控制脚需迁移到PMUIO1/2域或保证模块掉电策略；不能把普通VCCIO域GPIO作为掉电后保持状态的控制脚。
-- 天线端保留π型匹配位和净空区；模块型号、天线形式及认证约束冻结前不得出PCB。
-- 不再预设SDMMC2作为Wi-Fi总线，待与40-pin GPIO、PinMux和电压域一起做全局冲突审查后选择唯一控制器。
+- 组合模块候选为 AMPAK AP6275S；首版不单独设计 RF 前端。
+- **不能继续使用 SDMMC1 作为 Wi-Fi 总线。** A1 的 GMAC0 RGMII 引脚与 RK3568 SDMMC1 复用球位重叠，二者不能同时占用。
+- 当前临时分配为 **SDMMC2 M0 / VCCIO6=1.8V** 承载 4-bit SDIO；**UART8 M0 / VCCIO4=1.8V** 承载 Bluetooth HCI UART。SoC 原理图和 pin assignment CSV 已同步更新，详见 `hardware/kicad/docs/A1_WIFI_BT_PINMUX_REV1.md`。
+- AP6275S 支持 SDR50 100MHz、SDR104 208MHz 和 DDR50 50MHz；RK3568 SDMMC2 上限 150MHz，首版按 SDR50/100MHz 设计，不得宣称 SDR104/208MHz。
+- AP6275S 的 VBAT=3.0–3.8V（典型3.3V，峰值约1.2A），VDDIO=1.8V；需为 VBAT 预留至少1.5A瞬态余量并验证整板3.3V电源预算。
+- 模块需要 37.4MHz 晶体/参考及 1.8V 幅度的 32.768kHz LPO。当前 PMIC/SoC 32kHz 网络位于 3.3V PMUIO2 域，不可直接接模块 LPO，必须增加合适的 1.8V 缓冲/电平转换或独立时钟源。
+- AA1/AA5 暂分配 WIFI_HOST_WAKE/WIFI_REG_ON，但位于 VCCIO6，不能保证 VDD_LOGIC 关闭时保持。BT_REG_ON、BT_WAKE、BT_HOST_WAKE 尚未分配；需先确定是否要求深度待机唤醒，再决定 PMUIO 保持域与 1.8V 电平转换。
+- 天线端保留 π 型匹配位和净空区；模块型号、封装、天线形式及认证约束冻结前不得出 PCB。
 
 ## 5. Ethernet
 
-- 使用GMAC0 RGMII + RTL8211F系列PHY候选。
-- PHY具体后缀、25MHz晶振/时钟输入方式、PHY strap、RGMII TX/RX delay模式、LED配置、磁性器件和RJ45必须按PHY完整数据手册与RK3568 EVB核对。
-- 不能同时在MAC和PHY端重复加入RGMII延时。
-- RJ45每对线按磁性器件推荐电路，连接器侧预留ESD和共模EMI调试位。
-- GMAC0与SDMMC/其他GPIO存在PinMux和VCCIO Bank复用风险，所有信号必须以最终PinOut表逐球核对。
+- 使用 GMAC0 RGMII + RTL8211F-CG + HR911130A 候选；初步原理图页 `A1_ETHERNET.kicad_sch` 已建立，但尚未通过逐引脚审查。
+- GMAC0 RGMII 与 SDMMC1 复用球位重叠，因此 Wi-Fi 已从 SDMMC1 改分配至 SDMMC2 M0；不要再把 SDMMC1 分配给 Wi-Fi。
+- PHY 具体后缀、25MHz 晶振/时钟输入方式、PHY strap、RGMII TX/RX delay 模式、LED 配置、磁性器件和 RJ45 必须按 PHY 完整数据手册与 RK3568 EVB 核对。
+- 不能同时在 MAC 和 PHY 端重复加入 RGMII 延时。
+- RJ45 每对线按磁性器件推荐电路，连接器侧预留 ESD 和共模 EMI 调试位。
 
 ## 6. 不再变更的首版范围
 
@@ -87,4 +90,4 @@ PD Sink器件必须明确支持15V/3A PDO、输入额定电压、CC状态及过�
 - Rockchip RK3568 Hardware Design Guide V1.2, §2.3.4 USB2.0/USB3.0: controllers, PHY sharing, OTG download port, VBUSDET, ESD, series components and VBUS current limiting.
   https://dl.xkwy2018.com/downloads/RK3568/RK356X/Hardware/Rockchip_RK3568_Hardware_Design_Guide_V1.2_EN.pdf
 - Rockchip RK3568 Hardware Design Guide V1.2, §2.3.1 SDMMC0/1/2 and SDIO Wi-Fi standby requirements.
-- Rockchip RK3568 Hardware Design Guide V1.2, §2.2 and Figures 2-62/2-63 for RK809-5 rail assignment and fixed power-on sequence.
+- Rockchip RK3568 Hardware Design Guide V1.2, §2.2 and Figures 2-62/2-63 for RK809-5 rail assignment and fixed power-on sequence.\n- AMPAK AP6275S Datasheet Rev.2.7 for SDIO modes, 1.8V VDDIO, 3.3V VBAT, LPO and 37.4MHz crystal requirements.
