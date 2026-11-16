@@ -51,6 +51,7 @@ RK3568 ARM64 Linux SBC。目标是树莓派 4B 级别的使用场景与接口体
 - Micron 200-ball 封装图与当前 footprint 的 200 个 pad 名称逐一对应；未发现缺失或重复 pad。
 - 当前 DRAM 球位表共 200 行：67 个信号连接、110 个电源/地、12 个 DNU、10 个 NC，以及 1 个 ZQ 电阻网络。
 - 67 个 DRAM 信号均能在 RK3568 球位表中找到对应网络；本轮脚本核对未发现 SoC 球号错配或重复占用。
+- RK3568 SoC 页的 11 个 ECC 球、P8 DDR_VREFOUT 和 F5 已按 LPDDR4X 使用条件标记 NC；全 SoC 636 球位为 607 个网络标签 + 29 个显式 NC。
 - R40：DRAM ZQ0 → 240Ω ±1% → VCC0V6_DDR。
 - R41：RK3568 DDR_RZQ（H7）→ 120Ω ±1% → VCC_DDR_1V1。
 - Rockchip Hardware Design Guide Rev1.2 与当前 rkbin 模板表存在 SD6/SD4 模板名称差异，尚未取得 FAE 对应的正式模板与 DDR BIN 确认。
