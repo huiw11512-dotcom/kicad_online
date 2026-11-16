@@ -1,44 +1,74 @@
-# A1 DDR内存方案
+# A1 DDR 内存方案 Rev1.0
 
-状态：**2GB单颗x32方案已进入原理图；Rockchip模板/BIN匹配仍待确认，不能投板。**
+**首板容量：2GB。状态：原理图已建立，Rockchip 模板/BIN 兼容性仍未关闭，不能投板。**
 
-## 基线选型
+## 1. 首板选型
 
 | 项目 | 方案 |
 |---|---|
 | 颗粒 | Micron MT53E512M32D1ZW-046B WT:B |
 | 容量 | 16Gb = 2GB |
-| 位宽 | x32（两个x16通道A/B） |
-| 组织 | 单颗、单Die、Single Rank |
+| 位宽 | x32（两个 x16 通道 A/B） |
+| 组织 | 单颗、单 Die、Single Rank |
 | 封装 | 200-ball TFBGA ZW，10.0 × 14.5 × 1.05mm |
-| 球距 | 横向0.8mm，纵向0.65mm |
-| 额定速率 | 4266MT/s；实际运行速率以Rockchip匹配模板/BIN为准 |
+| 球距 | 横向 0.8mm，纵向 0.65mm |
+| 焊盘 | Micron 封装图指定 Ø0.40mm SMD ball pads |
+| 额定速率 | 4266MT/s；实际运行速率以 Rockchip 匹配模板/BIN 为准 |
 | 电源 | VDD1=1.8V；VDD2=1.1V；VDDQ=0.6V |
 
-首版先采用2GB，优先确保Linux启动和DDR训练路径清晰。原4GB候选MT53E1G32D2FW-046 WT:C保留为后续备选，不进入首版冻结BOM。
+首板先采用 2GB 单 Die / 单 Rank，优先降低 DDR 拓扑与启动风险。4GB 候选 MT53E1G32D2FW-046 WT:C 在公开 Rockchip DDR AVL v3.01 转录中也显示 RK3568 T/A，但其 D2/FW 双 Die 组织属于独立容量版本，不能直接沿用本次 2GB 球位图和 DDR BIN。
 
-## Rockchip模板候选
+## 2. Rockchip 模板与 BIN
 
-首先核验：
+公开 rockchip-linux/rkbin 表列出：
+
 - RK3568_Template_LP4XD200P132SD4_43x28_1600MHz
 
-该模板是单颗x32方向的优先核验对象，不代表已确认与上述完整料号匹配。必须取得Rockchip当前AVL、应用注释和匹配DDR BIN后才能冻结。
+但 Rockchip RK3568 Hardware Design Guide Rev1.2 §2.1.7.5 使用：
 
-## 原理图与球位映射
+- RK3568_Template_LP4XD200P132SD6_43x28_1600MHz
 
-- 原理图：`hardware/kicad/A1_LPDDR4X_2GB.kicad_sch`
-- 完整200球映射：`hardware/kicad/A1_LPDDR4X_2GB_PINMAP.csv`
-- U10封装：`A1_DDR:LPDDR4X_200Ball_ZW`
-- 67个DRAM信号连接到RK3568对应球位；ZQ0通过R40接VDDQ。
+SD4/SD6 名称不一致，必须向 Rockchip/FAE 取得当前模板包并确认版本、颗粒匹配和 DDR BIN。未确认前不允许开始 DDR 关键走线。
+
+公开 AVL v3.01 转录显示当前 2GB MPN 在 RK3568 栏为 T/A；4GB D2FW 备选也有 T/A 记录。T/A 不是 A1 板级 DDR Training 通过证明，最终以当前官方 AVL 和 FAE 正式资料为准。
+
+## 3. 原理图与球位映射
+
+- 原理图：hardware/kicad/A1_LPDDR4X_2GB.kicad_sch
+- 完整 200 球映射：hardware/kicad/A1_LPDDR4X_2GB_PINMAP.csv
+- U10 封装：A1_DDR:LPDDR4X_200Ball_ZW
+- 67 个 DRAM 信号连接到 RK3568 对应球位；脚本核对未发现缺失网络、球号不匹配或重复占用。
 - Micron CA0..CA5→RK3568 A0..A5；CK_t/c→CLKP/CLKN；DQS_t/c→DQSxP/N；DMI→DM；CS0→CS0n；RESET_n→RESETn。
-- 单Rank不使用RK3568 CS1n、CKE1、ODT1_CA（A/B通道），对应6个SoC球位标记NC。
-- R40：240Ω ±1%，ZQ0至VDDQ(0.6V)。
+- 单 Rank 不使用 RK3568 CS1n、CKE1、ODT1_CA（A/B 通道），对应 6 个 SoC 球位标记 NC。
+- DRAM 电源：VDD1→VCC1V8_DDR；VDD2→VCC_DDR_1V1；VDDQ→VCC0V6_DDR；VSS→GND。
+- R40：DRAM ZQ0 至 VCC0V6_DDR，240Ω ±1%。
+- R41：RK3568 DDR_RZQ H7 至 VCC_DDR_1V1，120Ω ±1%。
 
-## 冻结条件
+## 4. Footprint 静态核对
 
-1. 取得Rockchip当前DDR Approved Vendor List并确认完整料号及应用注释。
-2. 确认200-ball单Rank x32模板及对应DDR初始化BIN。
-3. 确认是否需要WDQS及对应工具/BIN。
-4. 按模板完成DDR布线拓扑、Byte Lane、DQS/CA/CK时序、阻抗、过孔及长度约束。
-5. 核对Micron封装land pattern、钢网、阻焊及板厂装配能力。
-6. 原生KiCad ERC/Netlist/DRC通过后，再进行DDR训练、内存压力测试和Linux启动验证。
+- 封装 pad 数量：200。
+- 球位表行数：200。
+- 缺失 pad：0；额外 pad：0；重复 pad 名称：0。
+- Pad 尺寸：0.40×0.40mm。
+- 列中心距：0.8mm；行中心距：0.65mm。
+- 中心跨度：X=8.8mm，Y=13.65mm。
+- 保留 L/M 空行位置，A1 位于顶视图左上。
+
+以上为源文件几何核对，最终铜焊盘、阻焊开窗、钢网和装配工艺仍需按 Micron package drawing、Rockchip 模板和装配厂 DFM 确认。
+
+## 5. 冻结条件
+
+1. 取得 Rockchip 当前 DDR Approved Vendor List，核对完整 MPN 和应用注释。
+2. 解决 SD4/SD6 模板名称差异，取得实际模板文件和匹配 DDR 初始化 BIN。
+3. 确认 WDQS 要求、BIN 版本、启动频率和 Bootloader 集成方式。
+4. 按正式模板完成 Byte Lane、DQS/CA/CK 时序、阻抗、过孔及长度约束。
+5. 核对 Micron 封装 land pattern、钢网、阻焊和板厂装配能力。
+6. 原生 KiCad ERC/Netlist/DRC 通过后，再进行 DDR Training、内存压力测试和 Linux 启动验证。
+
+## 6. 参考资料
+
+- Micron MT53E512M32D1ZW-046B WT:B: https://my.micron.com/products/memory/lpddr-components/lpddr4/part-catalog/part-detail/mt53e512m32d1zw-046bwt-b
+- Micron Z42M datasheet Rev.I 04/2023: https://www.mouser.com/datasheet/2/671/Micron_05092023_z42m_embedded_lpddr4x_lpddr4-3175595.pdf
+- Rockchip RK3568 Hardware Design Guide Rev1.2: https://dl.xkwy2018.com/downloads/RK3568/RK356X/Hardware/Rockchip_RK3568_Hardware_Design_Guide_V1.2_EN.pdf
+- Rockchip DDR template/BIN table: https://github.com/rockchip-linux/rkbin/blob/master/specific/Rockchip_Specific_PCB_Template_and_DDR_bin_Configuration_Table.md
+- Public transcription of Rockchip DDR AVL v3.01; verify against official current PDF: https://cseker.com/zh-cn/news/40.html
