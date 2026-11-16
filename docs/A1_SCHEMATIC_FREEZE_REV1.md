@@ -48,23 +48,27 @@
 
 ## 4. 原理图分页和交付范围
 
-| 页面 | 文件/模块 | 必须完成的内容 |
-|---|---|---|
-| 01 | 根页 / USB-C PD / MAIN_POWER | Type-C、HUSB238、输入保护、15V→5V Buck、软启动、PG、测试点、电流/热预算 |
-| 02 | RK809_PMIC | 全部引脚、BUCK/LDO/SW、VCC 输入分配、I2C、INT、PWRON、RESETB、RTC、未用引脚 |
-| 03 | DDR_POWER | 1.1V、0.6V、1.8V 轨，反馈、使能、去耦、时序 |
-| 04 | 3V3_POWER | 5V_SYS→3.3V 预 PMIC Buck |
-| 05 | CPU_POWER | CPU 动态 Buck、远端反馈、EN/VSEL/I2C、补偿和负载验证 |
-| 06 | RK3568_SOC | 636 球位、电源/地、时钟、Reset、Boot、UART、I2C、DDR_RZQ |
-| 07 | LPDDR4X_2GB | Micron 颗粒、67 条信号、200-ball map、R40/R41、完整电源和去耦 |
-| 08 | EMMC_MICROSD | eMMC 8-bit、MicroSD 4-bit、RST/CLK/CMD/DATA/STROBE、VCC/VCCQ、ESD |
-| 09 | USB3_USB2 | USB3 HOST1、USB2 HOST2/3、OTG0 下载口、VBUS 限流、OC/EN、ESD |
-| 10 | HDMI | HDMI TX、DDC、HPD、CEC、+5V、ESD |
-| 11 | GIGABIT_ETHERNET | RGMII、PHY Strap、25MHz、MDC/MDIO、磁性器件、RJ45、ESD |
-| 12 | WIFI_BT_GPIO | Combo 模块、SDIO、UART、天线净空、40-pin GPIO、按键和 LED |
-| 13 | TEST_RECOVERY | UART、MaskROM/Recovery、JTAG 测试点、电源测试点、生产测试焊盘 |
+| 页码 | 状态 | KiCad 文件 | 内容 |
+|---|---|---|---|
+| 00 | 已建立 | `A1.kicad_sch` | 根页：USB-C PD、输入保护、15V→5V Buck |
+| 01 | 已建立 | `A1_RK809_PMIC.kicad_sch` | RK809-5、BUCK/LDO/SW、I2C、RESET、RTC |
+| 02 | 已建立 | `A1_DDR_POWER.kicad_sch` | DDR 1.1V/0.6V/1.8V 电源 |
+| 03 | 已建立 | `A1_3V3_POWER.kicad_sch` | 5V_SYS→3.3V 预 PMIC Buck |
+| 04 | 已建立 | `A1_RK3568_SOC.kicad_sch` | RK3568 636 球位、PinMux、DDR、USB、Ethernet、Wi-Fi/BT 临时信号分配 |
+| 05 | 已建立 | `A1_CPU_POWER.kicad_sch` | CPU 动态 Buck、远端反馈 |
+| 06 | 已建立 | `A1_EMMC_32GB.kicad_sch` | 32GB eMMC 8-bit |
+| 07 | 已建立 | `A1_BOOT_OSC_DEBUG.kicad_sch` | 24MHz、POR、UART2、Recovery |
+| 08 | 已建立 | `A1_LPDDR4X_2GB.kicad_sch` | Micron 2GB LPDDR4X、67 条信号、R40/R41 |
+| 09 | 已建立 | `A1_SD_CARD.kicad_sch` | MicroSD、SDMMC0、ESD、串阻、SWOUT2 供电 |
+| 10 | 已建立 | `A1_USB_PORTS.kicad_sch` | USB3 HOST1、USB-C OTG0 下载口 |
+| 11 | 已建立 | `A1_USB2_HOSTS.kicad_sch` | USB2 HOST2/HOST3 两个独立 Type-A Host |
+| 12 | 初步页 | `A1_ETHERNET.kicad_sch` | RTL8211F-CG + HR911130A；strap/电源/时钟/RGMII 审查未关闭 |
+| 13 | 待建立 | `A1_HDMI.kicad_sch` | HDMI TX、DDC、HPD、CEC、ESD |
+| 14 | 待建立 | `A1_WIFI_BT.kicad_sch` | AP6275S 候选、SDIO、UART、供电、时钟、唤醒控制 |
+| 15 | 待建立 | `A1_GPIO.kicad_sch` | 40-pin GPIO、按键、LED、电平与复用 |
+| 16 | 待建立 | `A1_TEST_RECOVERY.kicad_sch` | UART、MaskROM/Recovery、JTAG、电源和生产测试点 |
 
-当前根页及 12 张子页已经存在；Ethernet 为初步页，尚未完成电气审查。HDMI、Wi-Fi/BT 模块电路、40-pin GPIO 和生产测试页仍未完成。表中未完成页面是交付目标，不代表已画好。
+当前根页及 12 张子页已经存在；Ethernet 是初步页，不代表已完成电气验证。HDMI、Wi-Fi/BT 模块电路、40-pin GPIO 和生产测试页仍未建立。
 
 ## 5. 必须先关闭的硬门槛
 
