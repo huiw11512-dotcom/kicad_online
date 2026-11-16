@@ -16,4 +16,5 @@
 
   (lib (name "A1_IO") (type "KiCad") (uri "${KIPRJMOD}/A1_IO.kicad_sym") (options "") (descr "A1 SD and I/O interface symbols"))
   (lib (name "A1_USB") (type "KiCad") (uri "${KIPRJMOD}/A1_USB.kicad_sym") (options "") (descr "A1 USB3 host and USB-C recovery interface symbols"))
+  (lib (name "A1_HDMI")(type "KiCad")(uri "${KIPRJMOD}/A1_HDMI.kicad_sym")(options "")(descr "A1 HDMI TX symbols"))
 )
