@@ -68,11 +68,19 @@ PD Sink器件必须明确支持15V/3A PDO、输入额定电压、CC状态及过�
 - 1×Gigabit Ethernet
 - 1×MicroSD
 - 1×32GB eMMC目标
-- 1×4GB LPDDR4X目标
+- 1×2GB LPDDR4X首板基线（Micron MT53E512M32D1ZW-046B WT:B）；4GB D2FW 作为独立后续版本
 - 1×Wi-Fi/BT combo module
 - 1×40-pin GPIO header
 - 1×USB-C PD 15V/3A input
 - 6-layer PCB
+
+## 7. LPDDR4X 首板决策
+
+- 首板采用 Micron MT53E512M32D1ZW-046B WT:B，2GB、x32、单 Die、单 Rank。
+- 4GB MT53E1G32D2FW-046 WT:C 作为后续独立版本候选；公开 Rockchip DDR AVL v3.01 转录也显示 RK3568 T/A，但需单独核对双 Die/rank、封装和模板/BIN。
+- DRAM ZQ0 使用 240Ω±1% 接 VCC0V6_DDR；RK3568 DDR_RZQ H7 使用 120Ω±1% 接 VCC_DDR_1V1。
+- Rockchip Hardware Design Guide Rev1.2 命名 SD6 模板，当前 rkbin 表命名 SD4 模板；未取得 FAE 确认前不得冻结 DDR 走线。
+- 67 条 DRAM 信号与 SoC 球位表已做源文件比对，未发现球号错配；该检查不等于 KiCad ERC/DRC 或 DDR Training。
 
 ## 7. 依据
 
