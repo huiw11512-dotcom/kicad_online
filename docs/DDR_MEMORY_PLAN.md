@@ -25,6 +25,7 @@
 - Rockchip 对 WDQS 需求的判断依据是 AVL Application Note [35]/[36] 或 Reference Vendor List Application Note [5]/[6]。
 - 当前 2GB MPN 在公开 AVL v3.01 转录中标记 RK3568 T/A，未见 [35]/[36] 标记；目前按标准 non-WDQS 路径推进，但须以当前官方 AVL 和 FAE 确认。
 - 当前公开 rkbin 仓库存在标准 BIN 候选：rk3568_ddr_1560MHz_v1.26.bin、rk3568_ddr_1332MHz_v1.26.bin、rk3568_ddr_1056MHz_v1.26.bin、rk3568_ddr_920MHz_v1.26.bin。先评估 1560MHz v1.26 与 SD6 参考布局的匹配性，不将其直接冻结为最终 BIN。
+- 1560MHz v1.26 文件：https://github.com/rockchip-linux/rkbin/blob/master/bin/rk35/rk3568_ddr_1560MHz_v1.26.bin
 - 未获得官方应用注释或 FAE 确认前，不使用 rk3568_ddr_XXXXMHz_wdqs_vX.XX.bin。
 
 SD4 出现在 WDQS-capable 模板集合，不构成选定颗粒必须使用 SD4 的证据。真正未关闭的门槛是取得 SD6 基础模板文件、精确 MPN 映射、标准 DDR BIN 版本/频率和 Bootloader 集成说明。未确认前不开始 DDR 关键走线。
