@@ -25,7 +25,7 @@
 | 有线网络 | 1×Gigabit Ethernet，RGMII PHY + MagJack | 初步页 `A1_ETHERNET.kicad_sch` 已建立；RTL8211F-CG + HR911130A 候选；strap/电源/时钟/时序审查未关闭 |
 | USB Host | 1×USB3 HOST1 Type-A + 2×USB2 HOST2/HOST3 Type-A | 三个 Host 端口原理图页已建立；USB2 SoC 球位 R1/R2/T1/T2 已纠正；native ERC/netlist 待执行 |
 | 下载/恢复 | USB3_OTG0 DP/DM → USB-C 服务接口，USB2 Device / MaskROM / Loader | 原理图已建立，需核对 VBUSDET、角色切换和下载验证 |
-| 无线 | 1 个焊接式 Wi-Fi/BT Combo 模块，SDIO + UART | AP6275S 候选；SDMMC2 M0 + UART8 M0 已作临时 pinmux 分配；模块页/电源/时钟/唤醒控制待完成 |
+| 无线 | 1 个焊接式 Wi-Fi/BT Combo 模块，SDIO + UART | AP6275S 候选；SDMMC2 M0 + UART8 M0 已作临时 pinmux 分配；AMPAK Rev.2.7 与 LCSC C2918717 pin33/35/48 不一致，模块 padout/RF 端口未冻结；模块页/内部Buck/电源/时钟/唤醒控制待完成 |
 | GPIO | 40-pin 2.54mm 排针 | 未画；只引出确认的 3.3V GPIO/I2C/SPI/UART/PWM，保留 5V/GND |
 | 调试 | 3-pin 3.3V UART + Recovery/MaskROM | UART2、Recovery 已建立；生产测试点待补 |
 | 电源输入 | USB-C PD 15V/3A（45W） | 原理图原型已建立，保护与 PDO 实测待完成 |
