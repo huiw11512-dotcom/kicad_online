@@ -23,4 +23,4 @@
 | OI-017 | HDMI | 5V经Schottky可能低于4.8V；RK809 Image LDO1/9使能 | 满载电压测量与ERC通过 |
 | OI-018 | GPIO | 40Pin外部5V反灌/ESD、3.3V银行及Linux pinctrl | 安全审查与系统测试 |
 | OI-019 | KiCad | GitHub Actions ERC已提交，实际运行与阻断错误待处理 | 原生ERC报告和网表通过审查 |
-| OI-020 | 生产测试 | 关键电源测点、MaskROM/Recovery、治具焊盘 | 原理图和制造检查 |
+| OI-020 | 生产测试 | 第17页TP1701/TP1702已加入；核对Pogo治具针位、1.27mm焊盘对位、测试电压和流程 | 治具图纸、限压规范和首板测试流程验证通过 |

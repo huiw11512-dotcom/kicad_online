@@ -61,9 +61,9 @@
 | 10 | HDMI | HDMI TX、DDC、HPD、CEC、+5V、ESD |
 | 11 | GIGABIT_ETHERNET | RGMII、PHY Strap、25MHz、MDC/MDIO、磁性器件、RJ45、ESD |
 | 12 | WIFI_BT_GPIO | Combo 模块、SDIO、UART、天线净空、40-pin GPIO、按键和 LED |
-| 13 | TEST_RECOVERY | UART、MaskROM/Recovery、JTAG 测试点、电源测试点、生产测试焊盘 |
+| 13（原理图页17） | TEST_RECOVERY | UART、MaskROM/Recovery、MCU_JTAG复用测试点、电源测试点、生产测试焊盘 |
 
-当前根页及15张子页已存在。HDMI、Ethernet、Wi-Fi/BT、GPIO均已有原生可编辑设计草案；完整ERC、器件签核和生产测试页仍未完成，绝不可投板。
+当前根页及16张子页已存在。HDMI、Ethernet、Wi-Fi/BT、GPIO和生产测试/恢复均已有原生可编辑设计草案；完整ERC、器件签核、测试治具验证仍未完成，绝不可投板。
 
 ## 5. 必须先关闭的硬门槛
 
@@ -108,7 +108,7 @@
 
 - 已有：RK3568 主控球位图、RK809-5、主电源、3.3V、CPU Buck、2GB LPDDR4X、eMMC、MicroSD、启动/调试、部分 USB。
 - 已修正：SoC DDR_RZQ H7 的 R41=120Ω±1% 接 VCC_DDR_1V1；DRAM ZQ0 的 R40=240Ω±1% 接 VCC0V6_DDR。
-- 未完成：DDR 模板/BIN 确认、HDMI/以太网/无线/GPIO电气签核、MagJack封装、生产测试、完整电源审查。
+- 未完成：DDR 模板/BIN 确认、HDMI/以太网/无线/GPIO电气签核、MagJack封装、生产测试治具验证、完整电源审查。
 - GitHub Actions原生KiCad ERC/网表导出流程已提交，结果必须结合实际运行日志确认；PCB DRC、DDR Training、Linux 启动验证均未完成。
 
 **当前工程为 DESIGN-IN-PROGRESS，禁止投板。**

@@ -7,7 +7,7 @@ Open A1.kicad_pro, then A1.kicad_sch.
 
 ## Hierarchical native schematics
 
-The root sheet currently links **15 child sheets**; added pages 13–16 are preliminary, not signoff-ready.
+The root sheet currently links **16 child sheets**. Pages 13–17 cover HDMI, Ethernet, Wi-Fi/BT, 40-pin GPIO and production test/recovery; all remain subject to native ERC and electrical signoff.
 
 | Sheet | File | Current content / status |
 |---|---|---|
@@ -27,6 +27,7 @@ The root sheet currently links **15 child sheets**; added pages 13–16 are prel
 | 14 | A1_GIGABIT_ETHERNET.kicad_sch | RTL8211F-CG GMAC0 PHY and candidate MagJack (missing vendor-approved footprint) |
 | 15 | A1_WIFI_BT_SDIO2.kicad_sch | AP6256 SDMMC2 1.8V + UART4 translated 3.3V, RF/clock verification pending |
 | 16 | A1_GPIO_40PIN.kicad_sch | 40Pin with 28 independent 3.3V IO nets plus power and ground |
+| 17 | A1_TEST_RECOVERY.kicad_sch | TP1701 2x5 power-rail pogo array; TP1702 2x7 UART2/PMIC/recovery/MCU-JTAG-mux pogo array; no fitted connectors |
 
 ## Rev1 DDR implementation
 
@@ -53,7 +54,7 @@ The Rockchip Hardware Design Guide Rev1.2 names an SD6 template while the curren
 
 ## Static source checks completed
 
-- Fifteen child sheets are linked; pages 13–16 have passed static balanced-S-expression checks, not native ERC.
+- Sixteen child sheets are linked. New page 17 and repaired GPIO page 16 pass static balanced-S-expression checks; native ERC/netlist and footprint validation must be checked from the latest GitHub Actions artifact.
 - Child schematic files checked so far pass balanced S-expression checks.
 - U7 RK3568 has 17 units; all 636 ball positions are represented.
 - U8 TCS4525 symbol and candidate footprint: 20 balls each.
@@ -68,6 +69,7 @@ Static parsing is not native KiCad verification. GitHub Actions now runs a KiCad
 
 - Confirm exact Rockchip-approved LPDDR4X MPN/template/BIN pairing and WDQS requirement.
 - Validate the new USB2 HOST2/HOST3 page with native ERC/netlist, regulator GPIO device-tree mapping and hot-plug tests; also validate USB3 host and OTG0 recovery path.
+- Verify TP1701/TP1702 pogo-pad alignment, fixture voltage limits and production test sequence before PCB freeze.
 - Complete validation of newly drawn Ethernet PHY/MagJack, HDMI, Wi-Fi/BT and 40Pin GPIO. Ethernet MagJack approved mechanical footprint is still absent.
 - Confirm all vendor package pad/paste patterns, sourcing, thermal and power startup.
 - Complete PCB layout using the confirmed Rockchip DDR template and board-house impedance stackup.

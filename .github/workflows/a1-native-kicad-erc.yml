@@ -20,32 +20,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y kicad
           kicad-cli version
-      - name: Export root and per-sheet netlists, then run ERC
+      - name: Run real KiCad ERC and netlist export
         shell: bash
         run: |
-          mkdir -p artifacts/per-sheet
+          mkdir -p artifacts
           set +e
           cd hardware/kicad
           kicad-cli sch export netlist --output ../../artifacts/A1.net A1.kicad_sch 2>&1 | tee ../../artifacts/netlist.log
           net_rc=${PIPESTATUS[0]}
-          for sch in A1_*.kicad_sch; do
-            base="${sch%.kicad_sch}"
-            kicad-cli sch export netlist --output "../../artifacts/per-sheet/${base}.net" "$sch" > "../../artifacts/per-sheet/${base}.log" 2>&1
-            page_rc=$?
-            echo "$base,$page_rc" >> ../../artifacts/per-sheet/exit-codes.csv
-          done
           kicad-cli sch erc --format json --output ../../artifacts/A1-erc.json --exit-code-violations A1.kicad_sch 2>&1 | tee ../../artifacts/erc.log
           erc_rc=${PIPESTATUS[0]}
           cd ../..
-          python3 - <<'PY'
-          import glob,re,csv,os
-          rows=[["schematic","components","nets"]]
-          for path in sorted(glob.glob("artifacts/per-sheet/*.net")):
-              data=open(path,encoding="utf-8").read()
-              rows.append([os.path.basename(path),len(re.findall(r'\(comp \(ref ',data)),len(re.findall(r'\(net \(code ',data))])
-          with open("artifacts/per-sheet-summary.csv","w",newline="") as f:
-              csv.writer(f).writerows(rows)
-          PY
           printf 'netlist_rc=%d\nerc_rc=%d\n' "$net_rc" "$erc_rc" > artifacts/status.txt
           test "$net_rc" -eq 0 && test "$erc_rc" -eq 0
       - name: Archive ERC and netlist outputs even on failure

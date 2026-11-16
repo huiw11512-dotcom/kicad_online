@@ -28,7 +28,7 @@ Performance note: RK3568 uses four Cortex-A55 cores; Raspberry Pi 4B uses Cortex
 | Service/download | USB3_OTG0 DP/DM on a USB-C service connector, USB2 download/recovery mode | Connector and OTG0 USB2 path are present; verify VBUSDET, role behavior and flashing |
 | Wireless | 1 soldered Wi-Fi/Bluetooth combo module, SDIO + UART | Page 15 AP6256 SDMMC2 1.8V + UART4 level shifter, power and RF pending |
 | GPIO | 40-pin, 2.54mm header | Page 16: 40 pins/28 user 3.3V signals; ESD and voltage-domain signoff pending |
-| Debug | 3-pin 3.3V UART + Recovery/MaskROM access | UART2 and Recovery page present; production test pads still open |
+| Debug | 3-pin 3.3V UART + Recovery/MaskROM access | UART2 and Recovery page present; production test/recovery pogo arrays added on page 17; fixture verification open |
 | Input | USB-C PD 15 V / 3 A (45 W) | Schematic prototype present; PDO and protection validation open |
 | Main rail | 15 V_IN → 5 V_SYS, LM76005, 5A target | Schematic prototype; power/thermal/transient validation open |
 | Pre-PMIC rail | 5 V_SYS → VCC3V3_SYS, TPS62132RGTT, 3.3 V / 3 A target | Schematic page added; full-load thermal/transient validation open |
@@ -90,7 +90,7 @@ The 2GB part is the Rev1 first-spin choice to reduce memory topology and bring-u
 
 ## 6. Current schematic page inventory
 
-The KiCad root sheet currently links fifteen child pages:
+The KiCad root sheet currently links sixteen child pages:
 
 1. RK809-5 PMIC
 2. DDR power rails
@@ -107,6 +107,7 @@ The KiCad root sheet currently links fifteen child pages:
 13. RTL8211F-CG Ethernet (native KiCad page 14)
 14. AP6256 Wi-Fi / BT (native KiCad page 15)
 15. 40-pin GPIO (native KiCad page 16)
+16. Production test / recovery pogo pads (native KiCad page 17)
 
 Production test/recovery point page and electrical signoff remain outstanding. Page existence is NOT a passed ERC or design release.
 
