@@ -9,4 +9,5 @@
 
   (lib (name "A1_IO") (type "KiCad") (uri "${KIPRJMOD}/A1_IO.pretty") (options "") (descr "A1 SD and I/O interface footprints"))
   (lib (name "A1_USB") (type "KiCad") (uri "${KIPRJMOD}/A1_USB.pretty") (options "") (descr "A1 USB interface footprints"))
+  (lib (name "A1_ETHERNET") (type "KiCad") (uri "${KIPRJMOD}/A1_ETHERNET.pretty") (options "") (descr "Linux MiniHost A1 Ethernet footprints"))
 )
