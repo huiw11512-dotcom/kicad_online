@@ -36,6 +36,7 @@ The earlier SD4/SD6 wording looked like a direct conflict, but the Rockchip sour
 - Rockchip defines WDQS-required parts by Application Note [35]/[36] in the Approved Vendor List or [5]/[6] in the Reference Vendor List.
 - The selected MT53E512M32D1ZW-046B WT:B row has T/A for RK3568 and no [35]/[36] marker in the public AVL v3.01 transcription. This points to the standard non-WDQS path, subject to confirmation against the current official list.
 - The public rkbin repository currently contains standard BIN candidates including rk3568_ddr_1560MHz_v1.26.bin, rk3568_ddr_1332MHz_v1.26.bin, rk3568_ddr_1056MHz_v1.26.bin and rk3568_ddr_920MHz_v1.26.bin. The 1560MHz v1.26 binary is the first candidate to evaluate against the guide's 1600MHz reference layout; it is not yet selected or proven for this exact MPN.
+- Candidate binary file: https://github.com/rockchip-linux/rkbin/blob/master/bin/rk35/rk3568_ddr_1560MHz_v1.26.bin
 - Do not use rk3568_ddr_XXXXMHz_wdqs_vX.XX.bin unless the official AVL/reference list or Rockchip FAE confirms that this exact MPN requires WDQS.
 
 The SD4 entry in the WDQS-capable template list is therefore not evidence that the selected non-WDQS Micron part should use SD4 instead of the guide's SD6 base reference. The remaining gate is to obtain the actual template package, confirm the MPN-to-template mapping, and obtain Rockchip/FAE confirmation of the standard DDR BIN version, frequency and bootloader integration.
