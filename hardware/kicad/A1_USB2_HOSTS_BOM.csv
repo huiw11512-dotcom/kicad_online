@@ -13,5 +13,5 @@ D38,ESD5341N,TECH PUBLIC,ESD5341N,C3021106,A1_IO:ESD5341N_DFN1006-2L,1,HOST2 D- 
 D39,ESD5341N,TECH PUBLIC,ESD5341N,C3021106,A1_IO:ESD5341N_DFN1006-2L,1,HOST2 D+ ESD,"One low-capacitance protector per USB2 data line"
 D40,ESD5341N,TECH PUBLIC,ESD5341N,C3021106,A1_IO:ESD5341N_DFN1006-2L,1,HOST3 D- ESD,"One low-capacitance protector per USB2 data line"
 D41,ESD5341N,TECH PUBLIC,ESD5341N,C3021106,A1_IO:ESD5341N_DFN1006-2L,1,HOST3 D+ ESD,"One low-capacitance protector per USB2 data line"
-J6,U-USBAR04P-F002,Ckmtw,U-USBAR04P-F002,C386736,A1_USB:USB-A-TH_USB-302-T,1,USB2 HOST2 Type-A receptacle,"4 signal contacts plus 2 shell tabs; shell pads to GND"
+J6,U-USBAR04P-F002,Ckmtw,U-USBAR04P-F002,C386736,A1_USB:USB-A-TH_USB-302-T,1,USB2 HOST2 Type-A receptacle,"4 signal contacts plus 2 shell tabs; shell pads to GND; commercial 0-50C, confirm enclosure thermal"
 J7,U-USBAR04P-F002,Ckmtw,U-USBAR04P-F002,C386736,A1_USB:USB-A-TH_USB-302-T,1,USB2 HOST3 Type-A receptacle,"4 signal contacts plus 2 shell tabs; shell pads to GND"
