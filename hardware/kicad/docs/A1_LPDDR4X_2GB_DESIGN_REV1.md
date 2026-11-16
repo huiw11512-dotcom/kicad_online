@@ -53,7 +53,7 @@ The remaining gate is to obtain the actual SD6 template package, exact MPN-to-te
 
 1. Confirm exact MPN and current stock/traceability with the supplier.
 2. Obtain the current official Rockchip AVL and confirm the exact MPN row/application-note flags.
-3. Resolve the Rockchip guide SD6 versus rkbin table SD4 template-name discrepancy and obtain the actual matching template files and DDR BIN.
+3. Obtain the SD6 base template package, exact MPN-to-template confirmation, and standard non-WDQS DDR BIN version/frequency from Rockchip/FAE.
 4. Validate the 200-ball footprint land pattern, mask and paste against Micron and the assembly house.
 5. Complete DDR byte-lane routing, impedance, topology, via and length-matching rules using the confirmed Rockchip template.
 6. Run native KiCad load/ERC/netlist/DRC, then prototype DDR training and memory stress tests.
