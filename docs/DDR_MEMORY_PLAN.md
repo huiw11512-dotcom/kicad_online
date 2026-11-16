@@ -18,19 +18,17 @@
 
 首板先采用 2GB 单 Die / 单 Rank，优先降低 DDR 拓扑与启动风险。4GB 候选 MT53E1G32D2FW-046 WT:C 在公开 Rockchip DDR AVL v3.01 转录中也显示 RK3568 T/A，但其 D2/FW 双 Die 组织属于独立容量版本，不能直接沿用本次 2GB 球位图和 DDR BIN。
 
-## 2. Rockchip 模板与 BIN
+## 2. Rockchip 基础模板与 WDQS / DDR BIN
 
-公开 rockchip-linux/rkbin 表列出：
+- RK3568 Hardware Design Guide Rev1.2 §2.1.7.5 的 LPDDR4/LPDDR4X 参考设计命名为 RK3568_Template_LP4XD200P132SD6_43x28_1600MHz；将其作为首板基础模板候选。
+- rockchip-linux/rkbin 的 RK3568 表列出带 WDQS 能力的模板版本集合，其中包含 SD4。该表明确说明：只有需要 WDQS 的 LPDDR4/LPDDR4X 颗粒，才使用对应的 wdqs DDR BIN。
+- Rockchip 对 WDQS 需求的判断依据是 AVL Application Note [35]/[36] 或 Reference Vendor List Application Note [5]/[6]。
+- 当前 2GB MPN 在公开 AVL v3.01 转录中标记 RK3568 T/A，未见 [35]/[36] 标记；目前按标准 non-WDQS 路径推进，但须以当前官方 AVL 和 FAE 确认。
+- 当前公开 rkbin 仓库存在标准 BIN 候选：rk3568_ddr_1560MHz_v1.26.bin、rk3568_ddr_1332MHz_v1.26.bin、rk3568_ddr_1056MHz_v1.26.bin、rk3568_ddr_920MHz_v1.26.bin。先评估 1560MHz v1.26 与 SD6 参考布局的匹配性，不将其直接冻结为最终 BIN。
+- 1560MHz v1.26 文件：https://github.com/rockchip-linux/rkbin/blob/master/bin/rk35/rk3568_ddr_1560MHz_v1.26.bin
+- 未获得官方应用注释或 FAE 确认前，不使用 rk3568_ddr_XXXXMHz_wdqs_vX.XX.bin。
 
-- RK3568_Template_LP4XD200P132SD4_43x28_1600MHz
-
-但 Rockchip RK3568 Hardware Design Guide Rev1.2 §2.1.7.5 使用：
-
-- RK3568_Template_LP4XD200P132SD6_43x28_1600MHz
-
-SD4/SD6 名称不一致，必须向 Rockchip/FAE 取得当前模板包并确认版本、颗粒匹配和 DDR BIN。未确认前不允许开始 DDR 关键走线。
-
-公开 AVL v3.01 转录显示当前 2GB MPN 在 RK3568 栏为 T/A；4GB D2FW 备选也有 T/A 记录。T/A 不是 A1 板级 DDR Training 通过证明，最终以当前官方 AVL 和 FAE 正式资料为准。
+SD4 出现在 WDQS-capable 模板集合，不构成选定颗粒必须使用 SD4 的证据。真正未关闭的门槛是取得 SD6 基础模板文件、精确 MPN 映射、标准 DDR BIN 版本/频率和 Bootloader 集成说明。未确认前不开始 DDR 关键走线。
 
 ## 3. 原理图与球位映射
 
@@ -59,8 +57,8 @@ SD4/SD6 名称不一致，必须向 Rockchip/FAE 取得当前模板包并确认�
 ## 5. 冻结条件
 
 1. 取得 Rockchip 当前 DDR Approved Vendor List，核对完整 MPN 和应用注释。
-2. 解决 SD4/SD6 模板名称差异，取得实际模板文件和匹配 DDR 初始化 BIN。
-3. 确认 WDQS 要求、BIN 版本、启动频率和 Bootloader 集成方式。
+2. 取得 SD6 基础模板文件，确认 Micron MPN-to-template 映射和标准 DDR 初始化 BIN。
+3. 根据官方 AVL/FAE 确认该 MPN 不需要 WDQS，并确认标准 BIN 版本、启动频率和 Bootloader 集成方式。
 4. 按正式模板完成 Byte Lane、DQS/CA/CK 时序、阻抗、过孔及长度约束。
 5. 核对 Micron 封装 land pattern、钢网、阻焊和板厂装配能力。
 6. 原生 KiCad ERC/Netlist/DRC 通过后，再进行 DDR Training、内存压力测试和 Linux 启动验证。

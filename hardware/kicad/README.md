@@ -34,7 +34,7 @@ The root sheet currently links **10 child sheets**.
 - R41: RK3568 DDR_RZQ H7 → 120Ω ±1% → VCC_DDR_1V1.
 - Full package map: A1_LPDDR4X_2GB_PINMAP.csv; component list: A1_LPDDR4X_2GB_BOM.csv.
 
-The Rockchip Hardware Design Guide Rev1.2 names an SD6 template while the current rkbin configuration table lists an SD4 template. The exact template/BIN pair is not frozen.
+Rockchip Hardware Design Guide Rev1.2 names SD6 as the LPDDR4/LPDDR4X base reference. The rkbin RK3568 table lists WDQS-capable template variants including SD4; the selected Micron MPN has no WDQS marker in the public AVL transcription, so the standard non-WDQS path is the working assumption. Exact template/BIN/frequency still requires FAE confirmation.
 
 ## microSD implementation status
 
