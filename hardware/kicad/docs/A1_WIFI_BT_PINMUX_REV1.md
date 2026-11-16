@@ -17,6 +17,8 @@ The A1 Ethernet implementation uses RK3568 GMAC0 in RGMII mode. The selected GMA
 - Candidate orderable listing: LCSC C2918717. Confirm exact revision, origin and current stock before BOM release.
 - Current AMPAK datasheet revision 2.7 is dated 2026-05-20.
 
+**Important part-revision discrepancy — do not freeze the module footprint yet:** the current AMPAK Rev.2.7 pin table assigns pin 33=WL_GPIO_10, pin 35=WL_GPIO_11 and pin 48=NC. The older LCSC C2918717-hosted datasheet assigns pin 33=NC, pin 35=NC and pin 48=BT_ANT. This changes the Bluetooth RF/antenna interface. The SoC-side SDMMC2/UART pin allocation remains a valid host-side reservation, but the AP6275S module padout, antenna topology and native footprint are **not released** until the exact purchased module revision is confirmed by AMPAK/LCSC. Do not combine the Rev.2.7 pinout with the older C2918717 footprint.
+
 ## 3. RK3568 pin allocation
 
 ### Wi-Fi SDIO — SDMMC2 M0 / VCCIO6 = 1.8 V
@@ -58,8 +60,8 @@ Rockchip's RK3568 Hardware Design Guide states that SDMMC2 supports up to 150 MH
 - **VBAT:** 3.0–3.8 V, nominal 3.3 V. AMPAK lists 1.2 A peak consumption at VBAT=3.3 V. Reserve at least 1.5 A transient headroom on the 3.3 V source pending a complete board power budget.
 - **VDDIO:** 1.68–1.98 V, nominal 1.8 V. Connect to a verified 1.8 V rail; do not drive the module I/O from 3.3 V.
 - **LPO:** external 32.768 kHz clock, 1.8 V amplitude. A1's PMIC/SoC 32.768 kHz net is in the 3.3 V PMUIO2 domain; it must not be connected directly to the module LPO. Add a suitable 1.8 V clock buffer/level translation or a dedicated 1.8 V oscillator.
-- **Reference clock:** external 37.4 MHz crystal/reference per the AP6275S datasheet; crystal load capacitance is specified as 18 pF. Add the oscillator network to the Wi-Fi page and verify crystal ESR/load.
-- **Power-up sequence:** VBAT must be present before or at the same time as VDDIO. WL_REG_ON and BT_REG_ON must be controlled only after the module's required supply/LPO timing.
+- **Reference clock:** external 37.4 MHz crystal; ±10 ppm frequency tolerance, 18 pF load capacitance and ESR≤60 Ω. Add the oscillator network to the Wi-Fi page and verify crystal ESR/load.
+- **Power-up sequence:** VBAT must be present before or at the same time as VDDIO; its rise time must be 40 µs to 100 ms. Keep WL_REG_ON and BT_REG_ON low until approximately two LPO cycles after the supplies rise. BT_REG_ON must never float.
 - **RF:** reserve both antenna feed paths and the module's keep-out area; antenna matching and enclosure clearance require mechanical review.
 
 ## 6. Wake and standby limitation
@@ -74,9 +76,9 @@ BT_REG_ON, BT_WAKE and BT_HOST_WAKE are not yet allocated. Their retention and v
 
 ## 7. Release gates
 
-- Create the native KiCad AP6275S symbol and 50-pad footprint from the current AMPAK package drawing; verify pin-1 orientation, paste apertures and assembly capability.
-- Add VBAT/VDDIO decoupling, local VBAT filtering and a 1.5 A transient power budget.
-- Add 37.4 MHz crystal and a valid 1.8 V 32.768 kHz LPO source/translator.
+- Resolve the AMPAK Rev.2.7 versus LCSC C2918717 pin-33/pin-35/pin-48 discrepancy and obtain the exact purchased module revision. Only then create the native symbol and 50-pad footprint; verify pin-1 orientation, paste apertures, RF port count and assembly capability.
+- Add VBAT/VDDIO decoupling, local VBAT filtering and a 1.5 A transient power budget. Confirm the required external network for CBUCK_0P9/CSR_VLX and ASR_VLX/ABUCK_1P12 against the matching module-revision reference schematic; these pins must not be left floating or grounded by guesswork.
+- Add 37.4 MHz crystal and a valid 1.8 V 32.768 kHz LPO source/translator; keep NC pins floating exactly as specified by the confirmed module revision.
 - Complete WL_REG_ON, BT_REG_ON, WL_HOST_WAKE, BT_WAKE and BT_HOST_WAKE allocation with the chosen standby policy.
 - Add the module page and BOM; run native KiCad ERC and netlist cross-check.
 - Confirm the RK3568 device tree selects SDMMC2 M0, 1.8 V VCCIO6, SDR50/100 MHz and UART8 M0; validate firmware and Wi-Fi/BT enumeration on the first board.
