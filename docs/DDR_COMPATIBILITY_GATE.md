@@ -27,16 +27,18 @@ T/A is the list's sample-tested/applicable status; it is not proof that the A1 b
 
 The 4GB D2/FW part is a valid future alternate lead, not the current schematic baseline. Its dual-die package and rank topology require a separate package-map, template, BIN and routing review. Do not copy the 2GB single-rank map to the 4GB part.
 
-## 3. Rockchip template discrepancy — unresolved
+## 3. Base template and WDQS interpretation
 
-The public Rockchip sources currently expose two different template names:
+The earlier SD4/SD6 wording looked like a direct conflict, but the Rockchip sources describe different template contexts:
 
-- Current rockchip-linux/rkbin configuration table lists RK3568_Template_LP4XD200P132SD4_43x28_1600MHz.
-- RK3568 Hardware Design Guide Rev1.2 §2.1.7.5 names RK3568_Template_LP4XD200P132SD6_43x28_1600MHz for its LPDDR4/LPDDR4X-compatible reference circuit.
+- RK3568 Hardware Design Guide Rev1.2 §2.1.7.5 names RK3568_Template_LP4XD200P132SD6_43x28_1600MHz for the LPDDR4/LPDDR4X reference circuit. Treat this as the base-template candidate for the selected x32 first-spin device.
+- The RK3568 section of the current rockchip-linux/rkbin table lists template families that have WDQS-capable versions; SD4 appears in that list. The table explicitly says the WDQS DDR BINs are only for LPDDR4/LPDDR4X parts that require WDQS.
+- Rockchip defines WDQS-required parts by Application Note [35]/[36] in the Approved Vendor List or [5]/[6] in the Reference Vendor List.
+- The selected MT53E512M32D1ZW-046B WT:B row has T/A for RK3568 and no [35]/[36] marker in the public AVL v3.01 transcription. This points to the standard non-WDQS path, subject to confirmation against the current official list.
+- The public rkbin repository currently contains standard BIN candidates including rk3568_ddr_1560MHz_v1.26.bin, rk3568_ddr_1332MHz_v1.26.bin, rk3568_ddr_1056MHz_v1.26.bin and rk3568_ddr_920MHz_v1.26.bin. The 1560MHz v1.26 binary is the first candidate to evaluate against the guide's 1600MHz reference layout; it is not yet selected or proven for this exact MPN.
+- Do not use rk3568_ddr_XXXXMHz_wdqs_vX.XX.bin unless the official AVL/reference list or Rockchip FAE confirms that this exact MPN requires WDQS.
 
-The rkbin table lists a set of RK3568 templates and describes WDQS-specific template/BIN variants, but does not by itself prove the exact MPN-to-template mapping for this Micron ordering code.
-
-**Do not select SD4 or SD6 by guess.** Obtain the actual current reference template package, the MPN-to-template confirmation and matching DDR initialization BIN from Rockchip/FAE. Confirm operating frequency, bootloader integration and whether WDQS is required. The selected AVL row does not show an application-note marker in the public transcription, but the current official reference list and FAE must still be checked.
+The SD4 entry in the WDQS-capable template list is therefore not evidence that the selected non-WDQS Micron part should use SD4 instead of the guide's SD6 base reference. The remaining gate is to obtain the actual template package, confirm the MPN-to-template mapping, and obtain Rockchip/FAE confirmation of the standard DDR BIN version, frequency and bootloader integration.
 
 ## 4. Schematic and source-level audits
 
@@ -55,9 +57,9 @@ These are source-file and mapping checks only. They are not KiCad ERC/netlist/DR
 ## 5. Required closure evidence
 
 1. Obtain current official Rockchip DDR AVL and confirm exact full MPN and application-note requirements.
-2. Obtain the official LPDDR4X reference template package and resolve the SD4/SD6 naming/version difference.
+2. Obtain the official LPDDR4X base template package (guide reference: SD6) and confirm the exact MPN-to-template mapping.
 3. Confirm exact MPN-to-template mapping and obtain the matching DDR initialization BIN, version, frequency and bootloader integration instructions.
-4. Confirm WDQS requirement from the official AVL/reference list and Rockchip/FAE.
+4. Confirm from the official AVL/reference list that this MPN uses the standard non-WDQS path; obtain FAE confirmation.
 5. Cross-check SoC/DRAM balls, byte lanes, DQS, CA, CK, CS, RESET, ZQ, ODT and power pins against the released template.
 6. Validate the 200-ball footprint land pattern, mask and paste against Micron and the assembly house.
 7. Complete DDR placement/routing using the released topology and constraints.
