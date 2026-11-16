@@ -56,9 +56,10 @@ The 2GB part is the Rev1 first-spin choice to reduce memory topology and bring-u
 4. LM76005 is the current 5V/5A converter candidate. 5V_SYS feeds the pre-PMIC 3.3V buck, PMIC and other 5V loads. The 5V converter's 5A output limit is the binding board-level power limit (25W nominal), not the 45W PD contract.
 5. The power budget must include conversion losses, SoC/DDR/PHY, Wi-Fi, HDMI, and up to 1.9A USB VBUS. USB ports must be current-limited and total load managed.
 6. RK809-5 VCC1–VCC9 and VCC_RTC use VCC3V3_SYS (3.3V); VCC_SPK_HP retains a separate filtered 5V_SYS supply. Never connect 15V_IN directly to the PMIC.
-7. VDD_CPU uses an independent dynamic Buck with remote feedback to VDD_CPU_COM. TCS4525_WT is a candidate, not a validated production choice.
-8. RK809-5 rails and fixed power-on sequence must follow the complete RK3568 EVB reference schematic and Hardware Design Guide, not a simplified block diagram.
-9. LPDDR4X SoC PHY rails and DRAM VDD1/VDD2/VDDQ are separate networks. For the selected Micron part: VDD1=1.8V, VDD2=1.1V, VDDQ=0.6V. RK3568 DDRPHY_VDDQ=1.1V and DDRPHY_VDDQL=0.6V.
+7. RK809-5 SWOUT2 supplies VCC3V3_SD for MicroSD (sequence slot 4). The optional 0Ω R57 bypass from VCC3V3_SYS is DNP; do not populate it.
+8. VDD_CPU uses an independent dynamic Buck with remote feedback to VDD_CPU_COM. TCS4525_WT is a candidate, not a validated production choice.
+9. RK809-5 rails and fixed power-on sequence must follow the complete RK3568 EVB reference schematic and Hardware Design Guide, not a simplified block diagram.
+10. LPDDR4X SoC PHY rails and DRAM VDD1/VDD2/VDDQ are separate networks. For the selected Micron part: VDD1=1.8V, VDD2=1.1V, VDDQ=0.6V. RK3568 DDRPHY_VDDQ=1.1V and DDRPHY_VDDQL=0.6V.
 
 ### Existing input-stage review flags
 
