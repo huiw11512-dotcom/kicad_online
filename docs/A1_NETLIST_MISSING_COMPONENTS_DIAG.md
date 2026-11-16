@@ -1,7 +1,30 @@
-# Diagnostic: missing components in native netlist (2026-11-16)
+# A1 root netlist component coverage diagnosis — 2026-11-16
 
-Confirmed KiCad 9.0.9 execution from GitHub Actions run 43843532754: exported netlist has only 97 components and **no U3, U7, U8, U9, U10 or J201**; only root/late-added Ethernet, AP6256, GPIO devices populated. ERC reports 325 violations.
+## Current observation
 
-This change targets only two pages as a controlled test: removes obsolete inline (id N) tokens from symbol property nodes for **RK809_PMIC** and **HDMI_TX**. It DOES NOT assert a fix without a subsequent native netlist and ERC report; other sheets intentionally unchanged for comparison. Do not start PCB before original page devices appear in the exported netlist and ERC reviewed.
+The KiCad 9 root export for the 17-page project produced 99 component records. The parsed records currently belong to the root sheet and the Ethernet, Wi-Fi/BT, GPIO and production-test pages. The root export does not currently show components from the RK809, DDR power, 3V3 power, RK3568 SoC, CPU power, eMMC, boot/debug, LPDDR4X, SD card, USB ports, USB2 HOST2/HOST3 or HDMI pages.
 
-Check the next CI artifact for U3 and J201 and then investigate other original subpages, especially RK3568/DDR/eMMC.
+This is an observed discrepancy, not yet a proven cause.
+
+## Important correction to earlier diagnostic
+
+A child sheet such as `A1_RK809_PMIC.kicad_sch` is not a standalone root schematic. Running `kicad-cli sch export netlist` directly against a child file returns `Failed to load schematic`; that is expected for a hierarchical child and does **not** establish that the child page is malformed.
+
+The workflow now exports only from `A1.kicad_sch` and archives:
+- `A1.net` — hierarchical root netlist
+- `A1-BOM.csv` — root BOM
+- `A1-Schematic.pdf` — all 17 sheets
+- `A1-erc.json` — native ERC report
+- `netlist-bom-summary.txt` — component count comparison
+
+## Next investigation
+
+1. Compare root BOM row count and component references with the root netlist component records.
+2. If BOM also omits the legacy sheets, inspect child sheet references, component annotation instances, library resolution and project load.
+3. If BOM includes those components but netlist does not, inspect the placed-symbol electrical pin data and netlist connectivity.
+4. Inspect the exported full PDF to confirm all child sheets load and render.
+5. Do not change electrical designators or sheet UUIDs speculatively. Use the artifact evidence first.
+
+## Related integrity fix
+
+GPIO page 16 UUID collisions were repaired in commit `91a2334`; the production-test page 17 was added in the same change set. The current branch includes both changes after restoration on the latest baseline.

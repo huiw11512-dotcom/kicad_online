@@ -15,12 +15,15 @@ kicad-cli sch erc --format json --output A1-erc.json --exit-code-violations A1.k
 Do not waive global net mismatches, duplicate pin positions or missing footprints without inspecting the schematic and BOM. PCB design is not begun. RTL8211F Ethernet MagJack footprint, AP6256 candidate footprint, DDR template/BIN, RK809 power sequencing and HDMI 5V requirement are hard gates.
 
 
-## Per-sheet netlist diagnosis
+## Root-project netlist and BOM diagnosis
 
-The workflow now exports the assembled root netlist and a separate standalone netlist for every `A1_*.kicad_sch` child page. Review `per-sheet-summary.csv` and `per-sheet/exit-codes.csv` in the latest artifact:
+Always run netlist, BOM, PDF and ERC export against the **root** file `A1.kicad_sch`. Child files such as `A1_RK809_PMIC.kicad_sch` are hierarchical child sheets, not standalone project roots; exporting them individually returns “Failed to load schematic” and is not a valid diagnostic.
 
-- If a child page's standalone netlist contains its components but the root netlist does not, investigate the parent sheet UUID, project instance path, page references and duplicate UUIDs.
-- If a standalone page netlist is also empty, inspect that page's placed-symbol instances, library cache, reference/unit fields and `in_bom/on_board` flags.
-- A successful export command does not imply complete connectivity. Compare component references and named nets against the schematic/BOM, then resolve ERC violations.
+Review the latest artifact:
+- `A1.net`: hierarchical root netlist.
+- `A1-BOM.csv`: hierarchical BOM.
+- `A1-Schematic.pdf`: all sheets in one PDF for visual inspection.
+- `A1-erc.json`: native ERC results.
+- `netlist-bom-summary.txt`: component count and references from the netlist versus BOM.
 
-The GPIO page's duplicate UUID namespace was repaired in commit `91a2334`; the page's 3.3V pinmux and external 5V protection remain open design gates. Page 17 adds measurement-only pogo arrays; it is not a populated connector.
+A discrepancy between BOM and netlist counts must be investigated at the root project level. Do not interpret child-sheet standalone export failures as proof that a child page is malformed.

@@ -54,7 +54,7 @@ The Rockchip Hardware Design Guide Rev1.2 names an SD6 template while the curren
 
 ## Static source checks completed
 
-- Sixteen child sheets are linked. New page 17 and repaired GPIO page 16 pass static balanced-S-expression checks; native ERC/netlist and footprint validation must be checked from the latest GitHub Actions artifact.
+- Sixteen child sheets are linked. The workflow exports the assembled root netlist, BOM, full multi-page PDF and ERC JSON; inspect the latest GitHub Actions artifact. Child schematic files are hierarchical and must not be exported as standalone root netlists.
 - Child schematic files checked so far pass balanced S-expression checks.
 - U7 RK3568 has 17 units; all 636 ball positions are represented.
 - U8 TCS4525 symbol and candidate footprint: 20 balls each.

@@ -20,35 +20,38 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y kicad
           kicad-cli version
-      - name: Export root and per-sheet netlists, then run ERC
+      - name: Export root netlist, BOM, PDF and run ERC
         shell: bash
         run: |
-          mkdir -p artifacts/per-sheet
+          mkdir -p artifacts
           set +e
           cd hardware/kicad
           kicad-cli sch export netlist --output ../../artifacts/A1.net A1.kicad_sch 2>&1 | tee ../../artifacts/netlist.log
           net_rc=${PIPESTATUS[0]}
-          for sch in A1_*.kicad_sch; do
-            base="${sch%.kicad_sch}"
-            kicad-cli sch export netlist --output "../../artifacts/per-sheet/${base}.net" "$sch" > "../../artifacts/per-sheet/${base}.log" 2>&1
-            page_rc=$?
-            echo "$base,$page_rc" >> ../../artifacts/per-sheet/exit-codes.csv
-          done
+          kicad-cli sch export bom --output ../../artifacts/A1-BOM.csv A1.kicad_sch 2>&1 | tee ../../artifacts/bom.log
+          bom_rc=${PIPESTATUS[0]}
+          kicad-cli sch export pdf --output ../../artifacts/A1-Schematic.pdf A1.kicad_sch 2>&1 | tee ../../artifacts/pdf.log
+          pdf_rc=${PIPESTATUS[0]}
           kicad-cli sch erc --format json --output ../../artifacts/A1-erc.json --exit-code-violations A1.kicad_sch 2>&1 | tee ../../artifacts/erc.log
           erc_rc=${PIPESTATUS[0]}
           cd ../..
           python3 - <<'PY'
-          import glob,re,csv,os
-          rows=[["schematic","components","nets"]]
-          for path in sorted(glob.glob("artifacts/per-sheet/*.net")):
-              data=open(path,encoding="utf-8").read()
-              rows.append([os.path.basename(path),len(re.findall(r'\(comp \(ref ',data)),len(re.findall(r'\(net \(code ',data))])
-          with open("artifacts/per-sheet-summary.csv","w",newline="") as f:
-              csv.writer(f).writerows(rows)
+          import csv,re,os
+          net=open("artifacts/A1.net",encoding="utf-8").read() if os.path.exists("artifacts/A1.net") else ""
+          comps=re.findall(r'\(comp \(ref "([^"]+)"\)',net)
+          try:
+              with open("artifacts/A1-BOM.csv",newline="",encoding="utf-8-sig") as f:
+                  bom=list(csv.DictReader(f))
+          except Exception:
+              bom=[]
+          with open("artifacts/netlist-bom-summary.txt","w") as f:
+              f.write(f"netlist_component_records={len(comps)}\n")
+              f.write(f"bom_rows={len(bom)}\n")
+              f.write("netlist_refs="+",".join(comps)+"\n")
           PY
-          printf 'netlist_rc=%d\nerc_rc=%d\n' "$net_rc" "$erc_rc" > artifacts/status.txt
-          test "$net_rc" -eq 0 && test "$erc_rc" -eq 0
-      - name: Archive ERC and netlist outputs even on failure
+          printf 'netlist_rc=%d\nbom_rc=%d\npdf_rc=%d\nerc_rc=%d\n' "$net_rc" "$bom_rc" "$pdf_rc" "$erc_rc" > artifacts/status.txt
+          test "$net_rc" -eq 0 && test "$bom_rc" -eq 0 && test "$pdf_rc" -eq 0 && test "$erc_rc" -eq 0
+      - name: Archive ERC, netlist, BOM and full schematic PDF even on failure
         if: always()
         uses: actions/upload-artifact@v4
         with:
