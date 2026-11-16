@@ -50,12 +50,13 @@ The Rockchip Hardware Design Guide Rev1.2 names an SD6 template while the curren
 
 - Ten hierarchical child schematic files are linked from the root sheet.
 - Child schematic files checked so far pass balanced S-expression checks.
-- U7 RK3568 has 17 units; all 636 ball positions are represented.
+- U7 RK3568 has 17 units; all 636 ball positions are represented as 607 labeled nets + 29 explicit NC markers.
 - U8 TCS4525 symbol and candidate footprint: 20 balls each.
 - U9 eMMC symbol and candidate footprint: 153 balls each.
 - U10 DRAM footprint: 200 unique pads; pin map: 200 unique ball rows.
 - DRAM pin-map-to-SoC-ball comparison: 67/67 signals found; 0 mismatches; 0 duplicate SoC balls.
-- R41 SoC DDR_RZQ termination is now present in the LPDDR4X page and BOM.
+- R41 SoC DDR_RZQ termination is present in the LPDDR4X page and BOM.
+- LPDDR4X-unused SoC pins are explicitly NC: 11 ECC pins, P8 DDR_VREFOUT and F5 (no LPDDR4 function); six single-rank control pins remain NC.
 
 Static source parsing is not an authoritative KiCad ERC/DRC. Native KiCad CLI is not available in the current execution environment, so **native KiCad load, ERC, netlist and DRC have not been run**.
 
