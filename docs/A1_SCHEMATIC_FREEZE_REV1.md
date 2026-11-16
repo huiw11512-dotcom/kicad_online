@@ -77,8 +77,9 @@
 
 - 首板 MPN：MT53E512M32D1ZW-046B WT:B，2GB、x32、单 Die / 单 Rank。
 - 公开 Rockchip DDR AVL v3.01 转录中该 MPN 在 RK3568 栏为 T/A；须以当前官方 AVL 核对。
-- Rockchip Hardware Design Guide Rev1.2 使用 SD6 模板名；当前 rkbin 配置表列出 SD4 模板名。必须由 Rockchip/FAE 确认实际适用模板、版本和完整文件。
-- 取得匹配 DDR 初始化 BIN、频率、WDQS 要求和 Bootloader 集成说明。
+- Rockchip Hardware Design Guide Rev1.2 将 SD6 列为 LPDDR4/LPDDR4X 参考模板；rkbin 表中的 SD4 属于带 WDQS 能力的模板集合，不是选定颗粒必须使用 SD4 的依据。
+- 当前 MPN 在公开 AVL v3.01 中没有 [35]/[36] WDQS 标记，首板按标准 non-WDQS 路径推进；仍须由当前官方 AVL/FAE 确认。
+- 取得 SD6 基础模板文件、精确 MPN 映射、标准 DDR BIN 版本/频率和 Bootloader 集成说明。
 - 按确认模板完成 Byte Lane、DQS、CA、CK、CS、RESET、ODT、ZQ 的连接与布线约束。
 - 在 Gate B 关闭前，不得将 DDR 页标记为电气冻结。
 
