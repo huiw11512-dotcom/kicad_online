@@ -21,7 +21,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p artifacts
-          docker run --rm \
+          docker run --rm --user 0:0 \
             -v "${GITHUB_WORKSPACE}:/work" \
             -w /work/hardware/kicad \
             kicad/kicad:9.0 \
