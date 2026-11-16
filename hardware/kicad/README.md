@@ -7,7 +7,7 @@ Open A1.kicad_pro, then A1.kicad_sch.
 
 ## Hierarchical native schematics
 
-The root sheet currently links **10 child sheets**.
+The root sheet currently links **11 child sheets**.
 
 | Sheet | File | Current content / status |
 |---|---|---|
@@ -21,7 +21,8 @@ The root sheet currently links **10 child sheets**.
 | 8 | A1_BOOT_OSC_DEBUG.kicad_sch | 24MHz clock, POR, FLASH_VOL_SEL, UART2, Recovery |
 | 9 | A1_LPDDR4X_2GB.kicad_sch | Micron MT53E512M32D1ZW-046B WT:B, 2GB x32, 200-ball map, R40 and R41 |
 | 10 | A1_SD_CARD.kicad_sch | TFP09-2-12B microSD, SDMMC0 4-bit, series resistors and ESD |
-| 11 | A1_USB_PORTS.kicad_sch | One USB3 HOST1 Type-A and one USB-C OTG0 USB2 recovery/download connector; USB2 HOST2/3 still absent |
+| 11 | A1_USB_PORTS.kicad_sch | One USB3 HOST1 Type-A and one USB-C OTG0 USB2 recovery/download connector |
+| 12 | A1_USB2_HOSTS.kicad_sch | Two independent USB2 HOST2/HOST3 Type-A ports; TPS2553DBVR per-port VBUS switches; ESD5341N on each D+/D− line; separate BOM and USB-A footprint |
 
 ## Rev1 DDR implementation
 
@@ -46,10 +47,20 @@ Rockchip Hardware Design Guide Rev1.2 names SD6 as the LPDDR4/LPDDR4X base refer
 - VCCIO_SD is connected to RK809-5 LDO5 / RK3568 VCCIO3 domain; 3.3V default and 1.8V UHS transition still require PMIC/DTS validation.
 - BOM: A1_SD_CARD_BOM.csv.
 
+## USB2 HOST2/HOST3 implementation
+
+- SoC pin mapping: R1=USB2_HOST2_DM, R2=USB2_HOST2_DP; T1=USB2_HOST3_DM, T2=USB2_HOST3_DP. Four pins were previously incorrectly labeled as VDD_CPU / VDD_LOGIC_0V9 and are now corrected on the SoC sheet; the pin assignment CSV is updated.
+- U12/U13: TPS2553DBVR (LCSC C55266), active-high EN tied to VCC3V3_SYS; FAULT pins intentionally NC.
+- R71/R72: 43.2kΩ 1% (Yageo AF0402FR-0743K2L, LCSC C2097969). TI Table 9-2 current-limit threshold: 544.3mA minimum, 604.6mA nominal, 673.1mA maximum.
+- C105/C108: 100nF input bypass; C106/C109: Panasonic 20SVPF120M 120uF 20V polymer (LCSC C186713); C107/C110: 100nF output bypass (Samsung CL05B104KO5NNNC, LCSC C1525).
+- D38–D41: ESD5341N (LCSC C3021106), one device per USB2 data line. J6/J7: Ckmtw U-USBAR04P-F002 (LCSC C386736), USB-A-TH_USB-302-T footprint; pads 5/6 are grounded shell tabs.
+- USB2 page contains 16 component instances and 46 global labels. `A1_USB2_HOSTS_BOM.csv` records the parts. The USB2 D+/D− pairs require 90Ω differential routing and short stubs in PCB layout.
+- USB2 ports are always enabled with the main 3.3V rail; Linux port power switching is not implemented in this Rev1 baseline.
+
 ## Static source checks completed
 
-- Ten hierarchical child schematic files are linked from the root sheet. On 2026-11-16, all child-sheet symbol instance paths and `sheet_instances` records were corrected to the full `/root-sheet-uuid/child-sheet-uuid` hierarchy path; six misassigned component paths on the 3V3 page were also corrected. Static S-expression and path checks pass; native KiCad ERC/netlist still pending.
-- Child schematic files checked so far pass balanced S-expression checks.
+- Eleven hierarchical child schematic files are linked from the root sheet. On 2026-11-16, all child-sheet symbol instance paths and `sheet_instances` records were corrected to the full `/root-sheet-uuid/child-sheet-uuid` hierarchy path; six misassigned component paths on the 3V3 page were also corrected. Static S-expression and path checks pass; native KiCad ERC/netlist still pending.
+- Child schematic files checked so far pass balanced S-expression checks, including the new USB2 HOST2/HOST3 page. The new USB2 page has 16 component instances, 46 global labels, and the full hierarchical sheet-instance path.
 - U7 RK3568 has 17 units; all 636 ball positions are represented as 607 labeled nets + 29 explicit NC markers.
 - U8 TCS4525 symbol and candidate footprint: 20 balls each.
 - U9 eMMC symbol and candidate footprint: 153 balls each.
@@ -63,7 +74,7 @@ Static source parsing is not an authoritative KiCad ERC/DRC. Native KiCad CLI is
 ## Remaining minimum Linux-boot requirements
 
 - Confirm exact Rockchip-approved LPDDR4X MPN/template/BIN pairing and WDQS requirement.
-- Complete USB2 HOST2/HOST3, then validate USB3 host and OTG0 recovery path.
+- Run native ERC/netlist on the USB host pages; validate VBUS inrush, thermal margin and USB2 enumeration on hardware.
 - Complete Gigabit Ethernet PHY/RJ45, HDMI/display, Wi-Fi/BT and 40-pin GPIO.
 - Confirm all vendor package pad/paste patterns, sourcing, thermal and power startup.
 - Complete PCB layout using the confirmed Rockchip DDR template and board-house impedance stackup.
