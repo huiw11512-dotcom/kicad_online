@@ -58,7 +58,7 @@ J4 pin 4 is VDD (VCC3V3_SD); pin 6 is VSS; pin 10 is the shell ground pad number
 
 ## Validation still required
 
-1. Verify J4 pin-1 orientation and the complete 15-pad land pattern against the supplier's latest drawing.
+1. Verify J4 pin-1 orientation and the 13 copper-pad pattern plus two NPTH locating holes against the supplier's latest drawing.
 2. Confirm current orderability of the TFP09-2-12B and all seven ESD5341N devices.
 3. Check VCCIO_SD LDO5 output range, boot default, PMIC register configuration and 3.3V↔1.8V transition timing.
 4. Run native KiCad ERC/netlist/DRC and inspect the page in the KiCad GUI.
