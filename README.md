@@ -23,7 +23,7 @@ RK3568 ARM64 Linux SBC。目标是树莓派 4B 级别的使用场景与接口体
 
 **状态：原理图开发中，禁止投板。**
 
-已建立的 KiCad 层级原理图包括根页及 10 张子页：
+已建立的 KiCad 层级原理图包括根页及 11 张子页：
 
 1. RK809-5 PMIC 与电源管理
 2. LPDDR4X 电源
@@ -34,11 +34,12 @@ RK3568 ARM64 Linux SBC。目标是树莓派 4B 级别的使用场景与接口体
 7. 24MHz、复位、启动配置、UART2 与 Recovery
 8. Micron 2GB LPDDR4X
 9. MicroSD
-10. USB Host / Recovery
+10. USB3 HOST1 / USB-C OTG0 下载恢复
+11. USB2 HOST2 / HOST3 两个独立 Type-A 接口
 
 已完成的部分电路不等于完整产品接口已经完成。当前明确缺项：
 
-- USB2 HOST2、USB2 HOST3 两个独立 Type-A 接口尚未完成；现有 USB 页包含一个 USB3 HOST1 Type-A 和一个 USB-C OTG0 下载/恢复接口。
+- USB2 HOST2/HOST3 已建立独立原理图页，采用独立TPS2553限流开关、2.2Ω串联电阻和ESD；仍待原生KiCad ERC、网表和PCB验证。
 - HDMI 完整电路尚未完成。
 - 千兆 Ethernet PHY、磁性器件和 RJ45 尚未完成。
 - Wi-Fi/BT 模块、天线及供电尚未完成。
