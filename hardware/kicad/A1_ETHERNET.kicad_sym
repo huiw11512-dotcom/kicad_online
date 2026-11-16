@@ -84,7 +84,7 @@
  (pin_names (offset 0.508)) (pin_numbers (offset 0.254)) (in_bom yes) (on_board yes)
  (property "Reference" "L" (id 0) (at 0 0 0) (effects (font (size 1.27 1.27))))
 (property "Value" "L_POWER" (id 1) (at 0 0 0) (effects (font (size 1.1 1.1))))
-(property "Footprint" "A1_ETHERNET:TDK_SPM5030T_5.2x5.0mm" (id 2) (at 0 0 0) (effects (font (size 1 1)) (hide yes)))
+(property "Footprint" "A1_ETHERNET:DMBJ_PNLS4030_4x4mm" (id 2) (at 0 0 0) (effects (font (size 1 1)) (hide yes)))
 (property "Datasheet" "" (id 3) (at 0 0 0) (effects (font (size 1 1)) (hide yes)))
  (symbol "L_POWER_1_1"
   (rectangle (start -2.54 3.81) (end 2.54 -3.81) (stroke (width 0.254) (type default)) (fill (type background)))
