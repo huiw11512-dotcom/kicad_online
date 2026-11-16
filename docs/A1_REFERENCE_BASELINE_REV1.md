@@ -20,7 +20,7 @@ A1不复制第三方SBC工程。SoC供电、DDR拓扑、PMIC时序、PHY参考�
 
 ## 2. DDR设计边界
 
-Rockchip公开DDR配置表列出RK3568 LPDDR4X模板：
+Rockchip公开 rkbin 配置表列出具有 WDQS-capable 版本的 RK3568 模板系列（不是普通基础模板的完整清单）：
 - RK3568_Template_LP4XD200P132SD4_43x28_1600MHz
 - RK3568_Template_LP4XD200P232DD61346_43R0x28R0_1056MHz
 - RK3568_Template_LP4XD320P164SD6H1_46X28_1600MHz
