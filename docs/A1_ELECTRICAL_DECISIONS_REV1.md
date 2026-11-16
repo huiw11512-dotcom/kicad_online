@@ -1,7 +1,7 @@
 # A1 Rev1 — 已核实的电气实现决策
 
-日期：2026-11-15
-状态：架构/接口决策。不是已完成KiCad原理图。与[A1_MASTER_BASELINE_REV1.md](A1_MASTER_BASELINE_REV1.md)冲突时，以主基线为准。
+日期：2026-11-16
+状态：接口/电气决策记录；USB2 HOST2/HOST3 已建立独立原理图页，整板仍未完成。与[A1_MASTER_BASELINE_REV1.md](A1_MASTER_BASELINE_REV1.md)冲突时，以主基线为准。
 
 ## 1. 重要更正：USB控制器资源
 
@@ -22,6 +22,15 @@ RK3568不是“任意组合两个USB3+两个USB2”。原厂指南2.3.4说明：
 7. USB2 DP/DM串联2.2Ω；USB3 TX串联100nF AC耦合电容（0201），RX预留0Ω；USB3 ESD寄生电容≤0.4pF；USB2 ESD按原厂≤3pF要求。
 8. MULTI_PHY和USB PHY模拟电源的磁珠隔离、4.7µF+100nF去耦不得省略。
 
+## 2. USB2 HOST2/HOST3 原理图实现
+
+- 新增 `hardware/kicad/A1_USB2_HOST23.kicad_sch`，分别实现HOST2与HOST3 Type-A接口。
+- HOST2：RK3568 R1/R2；HOST3：T1/T2。
+- VBUS分别由TPS2553DBVR控制；RILIM=47kΩ，EN由GPIO4_C2（AF8）和GPIO4_D2（AB9）控制，100kΩ下拉保证复位期间关闭。
+- DP/DM各串联2.2Ω；连接器侧每根数据线使用ESD5341N。
+- 两个Type-A插座使用USB3.0 9触点插座，但HOST2/HOST3只接USB2 VBUS/DP/DM/GND；SuperSpeed触点NC。
+- USB2页已建立，不代表ERC、网表、USB眼图/热插拔或Linux设备树验证通过。
+
 ## 2. 输入电源决策
 
 A1 Rev 1输入冻结为USB-C PD 15V/3A（45W），与当前KiCad输入级一致。
@@ -31,7 +40,7 @@ A1 Rev 1输入冻结为USB-C PD 15V/3A（45W），与当前KiCad输入级一致�
 USB-C PD Sink → 输入保险/电子保险及TVS/反灌保护 → 15V_IN → 5V_SYS同步Buck → RK809-5及后级DC/DC。
 RK809-5工作输入为2.7–5.5V，不允许15V直接进入PMIC。
 
-USB VBUS总电流预算暂定1.9A（USB3 Host1 0.9A + 两个USB2 Host各0.5A），每口独立限流。Service USB-C为Device下载接口，不向主机反向供电；VBUS只作检测并按原厂推荐电路处理。
+USB VBUS总电流预算按2.2A预留：USB3 HOST1约0.9A，USB2 HOST2/HOST3每口按TPS2553最坏限流约0.62A计。每口独立限流；具体连续负载能力仍须按热设计和USB规范验证。Service USB-C为Device下载接口，不向主机反向供电；VBUS只作检测并按原厂推荐电路处理。
 
 PD Sink器件必须明确支持15V/3A PDO、输入额定电压、CC状态及过压保护。HUSB238当前阻值：RVSET=14kΩ请求15V，RISET=22.6kΩ请求3.0A（Hynetek参考设计电阻表）；仍须按芯片版本和目标适配器PDO实测确认。
 
