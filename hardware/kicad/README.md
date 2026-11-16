@@ -7,7 +7,7 @@ Open A1.kicad_pro, then A1.kicad_sch.
 
 ## Hierarchical native schematics
 
-The root sheet currently links **11 child sheets**.
+The root sheet currently links **12 child sheets**.
 
 | Sheet | File | Current content / status |
 |---|---|---|
@@ -23,6 +23,7 @@ The root sheet currently links **11 child sheets**.
 | 10 | A1_SD_CARD.kicad_sch | TFP09-2-12B microSD, SDMMC0 4-bit, series resistors and ESD |
 | 11 | A1_USB_PORTS.kicad_sch | One USB3 HOST1 Type-A and one USB-C OTG0 USB2 recovery/download connector |
 | 12 | A1_USB2_HOSTS.kicad_sch | Two independent USB2 HOST2/HOST3 Type-A ports; TPS2553DBVR per-port VBUS switches; ESD5341N on each D+/D− line; separate BOM and USB-A footprint |
+| 13 | A1_ETHERNET.kicad_sch | Preliminary RTL8211F-CG Gigabit Ethernet PHY and HR911130A MagJack implementation; requires pin/power/clock and netlist verification |
 
 ## Rev1 DDR implementation
 
@@ -50,7 +51,7 @@ Rockchip Hardware Design Guide Rev1.2 names SD6 as the LPDDR4/LPDDR4X base refer
 ## Symbol-library syntax repair
 
 - Fixed malformed embedded generic symbol definitions (`A1:R`, `A1:C`, `A1:L`, `A1:SW_PUSH`) on RK809_PMIC, DDR_POWER, 3V3_POWER, CPU_POWER, EMMC_32GB and BOOT_DEBUG using the valid definitions from `A1_CUSTOM.kicad_sym`.
-- Static parse checks now pass on all 12 child sheets. Native KiCad open/ ERC still needs to be run locally; ZiroEDA read-only preview must be refreshed to confirm its renderer displays the repaired symbols.
+- Static parse checks now pass on all 12 child sheets. The malformed generic symbol blocks were the reason the six affected pages could fail to render; the BOOT_DEBUG page now has 10 component instances and 23 labels in the source. Native KiCad open/ERC still needs to be run locally; ZiroEDA read-only preview must be hard-refreshed to confirm its renderer displays the repaired symbols.
 
 ## USB2 HOST2/HOST3 implementation
 
@@ -64,7 +65,7 @@ Rockchip Hardware Design Guide Rev1.2 names SD6 as the LPDDR4/LPDDR4X base refer
 
 ## Static source checks completed
 
-- Eleven hierarchical child schematic files are linked from the root sheet. On 2026-11-16, all child-sheet symbol instance paths and `sheet_instances` records were corrected to the full `/root-sheet-uuid/child-sheet-uuid` hierarchy path; six misassigned component paths on the 3V3 page were also corrected. Static S-expression and path checks pass; native KiCad ERC/netlist still pending.
+- Twelve hierarchical child schematic files are linked from the root sheet. On 2026-11-16, all child-sheet symbol instance paths and `sheet_instances` records were corrected to the full `/root-sheet-uuid/child-sheet-uuid` hierarchy path; six misassigned component paths on the 3V3 page were also corrected. Static S-expression and path checks pass; native KiCad ERC/netlist still pending.
 - Child schematic files checked so far pass balanced S-expression checks, including the new USB2 HOST2/HOST3 page. The new USB2 page has 16 component instances, 46 global labels, and the full hierarchical sheet-instance path.
 - U7 RK3568 has 17 units; all 636 ball positions are represented as 607 labeled nets + 29 explicit NC markers.
 - U8 TCS4525 symbol and candidate footprint: 20 balls each.
@@ -80,6 +81,6 @@ Static source parsing is not an authoritative KiCad ERC/DRC. Native KiCad CLI is
 
 - Confirm exact Rockchip-approved LPDDR4X MPN/template/BIN pairing and WDQS requirement.
 - Run native ERC/netlist on the USB host pages; validate VBUS inrush, thermal margin and USB2 enumeration on hardware.
-- Complete Gigabit Ethernet PHY/RJ45, HDMI/display, Wi-Fi/BT and 40-pin GPIO.
+- Validate the preliminary RTL8211F-CG / HR911130A Ethernet implementation (PHY power rails, reference clock, reset straps, RGMII, MDIO and magnetics mapping); complete HDMI/display, Wi-Fi/BT and 40-pin GPIO.
 - Confirm all vendor package pad/paste patterns, sourcing, thermal and power startup.
 - Complete PCB layout using the confirmed Rockchip DDR template and board-house impedance stackup.
