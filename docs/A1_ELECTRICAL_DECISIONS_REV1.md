@@ -45,14 +45,14 @@ PD Sink器件必须明确支持15V/3A PDO、输入额定电压、CC状态及过�
 
 ## 4. Wi-Fi / Bluetooth
 
-- 组合模块候选为 AMPAK AP6275S；首版不单独设计 RF 前端。
+- 组合模块候选为 AMPAK AP6275S；但当前 AMPAK Rev.2.7 与 LCSC C2918717 旧版数据手册在 pin33/pin35/pin48 上存在差异，模块版本和 RF 天线端口尚未冻结。不得先画 footprint 或模块页。
 - **不能继续使用 SDMMC1 作为 Wi-Fi 总线。** A1 的 GMAC0 RGMII 引脚与 RK3568 SDMMC1 复用球位重叠，二者不能同时占用。
 - 当前临时分配为 **SDMMC2 M0 / VCCIO6=1.8V** 承载 4-bit SDIO；**UART8 M0 / VCCIO4=1.8V** 承载 Bluetooth HCI UART。SoC 原理图和 pin assignment CSV 已同步更新，详见 `hardware/kicad/docs/A1_WIFI_BT_PINMUX_REV1.md`。
 - AP6275S 支持 SDR50 100MHz、SDR104 208MHz 和 DDR50 50MHz；RK3568 SDMMC2 上限 150MHz，首版按 SDR50/100MHz 设计，不得宣称 SDR104/208MHz。
 - AP6275S 的 VBAT=3.0–3.8V（典型3.3V，峰值约1.2A），VDDIO=1.8V；需为 VBAT 预留至少1.5A瞬态余量并验证整板3.3V电源预算。
 - 模块需要 37.4MHz 晶体/参考及 1.8V 幅度的 32.768kHz LPO。当前 PMIC/SoC 32kHz 网络位于 3.3V PMUIO2 域，不可直接接模块 LPO，必须增加合适的 1.8V 缓冲/电平转换或独立时钟源。
 - AA1/AA5 暂分配 WIFI_HOST_WAKE/WIFI_REG_ON，但位于 VCCIO6，不能保证 VDD_LOGIC 关闭时保持。BT_REG_ON、BT_WAKE、BT_HOST_WAKE 尚未分配；需先确定是否要求深度待机唤醒，再决定 PMUIO 保持域与 1.8V 电平转换。
-- 天线端保留 π 型匹配位和净空区；模块型号、封装、天线形式及认证约束冻结前不得出 PCB。
+- 模块 pin25/26/28/29 为内部 Buck 相关引脚，需按对应版本参考电路补齐外部网络；LPO、37.4MHz 晶体、BT 控制脚、NC 脚和天线拓扑均待确认。天线端保留 π 型匹配位和净空区；模块型号、封装、天线形式及认证约束冻结前不得出 PCB。
 
 ## 5. Ethernet
 
