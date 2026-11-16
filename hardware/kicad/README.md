@@ -53,7 +53,7 @@ Rockchip Hardware Design Guide Rev1.2 names SD6 as the LPDDR4/LPDDR4X base refer
 - U12/U13: TPS2553DBVR (LCSC C55266), active-high EN tied to VCC3V3_SYS; FAULT pins intentionally NC.
 - R71/R72: 43.2kΩ 1% (Yageo AF0402FR-0743K2L, LCSC C2097969). TI Table 9-2 current-limit threshold: 544.3mA minimum, 604.6mA nominal, 673.1mA maximum.
 - C105/C108: 100nF input bypass; C106/C109: Panasonic 20SVPF120M 120uF 20V polymer (LCSC C186713); C107/C110: 100nF output bypass (Samsung CL05B104KO5NNNC, LCSC C1525).
-- D38–D41: ESD5341N (LCSC C3021106), one device per USB2 data line. J6/J7: Ckmtw U-USBAR04P-F002 (LCSC C386736), USB-A-TH_USB-302-T footprint; pads 5/6 are grounded shell tabs.
+- D38–D41: ESD5341N (LCSC C3021106), one device per USB2 data line. J6/J7: Ckmtw U-USBAR04P-F002 (LCSC C386736), USB-A-TH_USB-302-T footprint; pads 5/6 are grounded shell tabs. Note: C386736 is commercial grade, rated 0-50C; place away from SoC/PMIC hot spots or substitute an 0-85C part after footprint verification.
 - USB2 page contains 16 component instances and 46 global labels. `A1_USB2_HOSTS_BOM.csv` records the parts. The USB2 D+/D− pairs require 90Ω differential routing and short stubs in PCB layout.
 - USB2 ports are always enabled with the main 3.3V rail; Linux port power switching is not implemented in this Rev1 baseline.
 
