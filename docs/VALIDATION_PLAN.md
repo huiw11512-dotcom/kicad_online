@@ -5,7 +5,7 @@
 - LPDDR4X的DQ/DQS/CA/CK/CS/RESET/ZQ与正式模板逐项核对；核验R40=240Ω到VCC0V6_DDR及R41=120Ω到VCC_DDR_1V1。
 - RK809-5电源树和上电时序核对。
 - eMMC、MicroSD、电压域和启动配置核对。
-- USB3 Host/DRD Multi-PHY复用、USB-C OTG0下载口和USB2 HOST2/3资源核对。
+- USB3 Host/DRD Multi-PHY复用、USB-C OTG0下载口和USB2 HOST2/3原理图、GPIO4_C2/GPIO4_D2使能、TPS2553限流及USB2数据路径核对。
 - HDMI、RTL8211F、MagJack和ESD电路核对。
 - Wi-Fi/BT模块电源、SDIO、UART和天线网络核对。
 - KiCad ERC无未解释错误。
@@ -14,7 +14,7 @@
 - 6层叠层与阻抗计算书核对。
 - DDR区域和拓扑与匹配模板对照。
 - BGA逃线、过孔、焊盘和板厂工艺能力确认。
-- USB3/HDMI/RGMII差分线及参考平面检查。
+- USB3/USB2/HDMI/RGMII差分线及参考平面检查。
 - SoC、PMIC、DDR电源回路和去耦位置检查。
 - USB/HDMI/RJ45插拔空间、天线净空和散热器检查。
 - KiCad DRC无未解释错误。
