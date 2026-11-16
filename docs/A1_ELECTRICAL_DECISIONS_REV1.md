@@ -56,11 +56,14 @@ PD Sink器件必须明确支持15V/3A PDO、输入额定电压、CC状态及过�
 
 ## 5. Ethernet
 
-- 使用 GMAC0 RGMII + RTL8211F-CG + HR911130A 候选；初步原理图页 `A1_ETHERNET.kicad_sch` 已建立，但尚未通过逐引脚审查。
-- GMAC0 RGMII 与 SDMMC1 复用球位重叠，因此 Wi-Fi 已从 SDMMC1 改分配至 SDMMC2 M0；不要再把 SDMMC1 分配给 Wi-Fi。
-- PHY 具体后缀、25MHz 晶振/时钟输入方式、PHY strap、RGMII TX/RX delay 模式、LED 配置、磁性器件和 RJ45 必须按 PHY 完整数据手册与 RK3568 EVB 核对。
-- 不能同时在 MAC 和 PHY 端重复加入 RGMII 延时。
-- RJ45 每对线按磁性器件推荐电路，连接器侧预留 ESD 和共模 EMI 调试位。
+- 使用 GMAC0 RGMII + RTL8211F-CG + HR911130A（LCSC C54408）；初步原理图页已建立。
+- PHY strap 已从当前原理图解码：PHYAD[2:0]=001，Linux PHY address=1；CFG_EXT=0、CFG_LDO[1:0]=10，使用内部 1.8V RGMII I/O LDO；TXDLY=1、RXDLY=1，PHY 两方向均加入约2ns内部时钟延迟。
+- 因 PHY 已启用 TX/RX 内部延迟，RK3568 MAC/设备树不得再叠加 TX/RX delay；首版按无额外延迟的 RGMII 模式配置，最终以 Rockchip 驱动和 PHY driver 实际配置核实。
+- 25MHz 时钟当前由 RK3568 `ETH0_REFCLKO_25M` 经 R134=22Ω 串联电阻送到 RTL8211F pin37 XTAL_OUT/EXT_CLK；pin36 XTAL_IN 接地。SoC VCCIO4=1.8V，符合 Realtek 外部时钟输入 VIH≥1.4V / VIL≤0.4V 门限，但仍需验证频率、占空比、抖动和边沿。
+- MDIO 上拉 R138=1.5kΩ 到 VCC_1V8；PHYRSTB 上拉 R136=10kΩ 到 VCC3V3_SYS；PHY_INT_N 上拉 R137=4.7kΩ 到 VCC3V3_SYS；RSET R148=2.49kΩ 到 GND。
+- HR911130A 绿色 LED 极性已纠正：pin11 anode 经 R149=510Ω 接 PHY LED1（active-high），pin12 cathode 接 GND；黄色 LED pin14 anode 经 R150=510Ω 接 3.3V，pin13 cathode 接 PHY LED2（active-low）。
+- GMAC0 RGMII 与 SDMMC1 复用球位重叠，Wi-Fi 已改分配到 SDMMC2 M0；不得再把 SDMMC1 分配给 Wi-Fi。
+- 尚未关闭：PHY 全部供电/去耦与上电时序、MagJack P10/TCT/屏蔽端接、ESD、native ERC/netlist、RGMII/MDI PCB 阻抗和首板链路验证。详见 `hardware/kicad/docs/A1_ETHERNET_VALIDATION_REV1.md`。
 
 ## 6. 不再变更的首版范围
 
