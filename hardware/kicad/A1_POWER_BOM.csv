@@ -9,7 +9,7 @@ index,Ref,Value,Manufacturer / Part,Footprint,Status / notes
 5,R4,49.9k 1% 0603,Generic,Resistor_SMD:R_0603_1608Metric,PMOS gate pull-up to VBUS
 6,C1,1uF 35V X7R 0603,Generic,Capacitor_SMD:C_0603_1608Metric,HUSB238 VIN bypass
 7,Q1,AO4407A,Alpha & Omega AO4407A,Package_SO:SO-8_3.9x4.9mm_P1.27mm,"P-MOS; verify exact pinout, Rds(on), thermal, and 30V VDS margin"
-8,U2,LM76005RNPR,Texas Instruments LM76005RNPR,TBD: WQFN RNP 30-pin 6x4mm,5V/5A synchronous buck; exact land pattern must be sourced/verified
+8,U2,LM76005RNPR,Texas Instruments LM76005RNPR (LCSC C2866241),A1_POWER:LM76005_WQFN-30_4x6mm_P0.5mm_EP1.8x4.5mm,5V/5A buck; TI QFND666 land pattern; pins 19 and 27-30 plus EP31 to GND; pins 7 and 23 floating; RT floating=400kHz; SS/TRK floating=6.3ms
 9,"C2,C3",4.7uF 50V X7R 1210,Generic,Capacitor_SMD:C_1210_3225Metric,Input ceramic bulk; verify effective capacitance under 15V DC bias
 10,C4,47nF 50V X7R 0603,Generic,Capacitor_SMD:C_0603_1608Metric,High-frequency input bypass
 11,C5,470nF 10V X7R 0603,Generic,Capacitor_SMD:C_0603_1608Metric,BOOT-SW bootstrap capacitor
@@ -22,4 +22,4 @@ index,Ref,Value,Manufacturer / Part,Footprint,Status / notes
 18,R7,732k 1% 0603,Generic,Resistor_SMD:R_0603_1608Metric,EN divider top; VIN rising threshold approx 10.0V
 19,R8,100k 1% 0603,Generic,Resistor_SMD:R_0603_1608Metric,EN divider bottom
 20,R9,10k 1% 0603,Generic,Resistor_SMD:R_0603_1608Metric,PGOOD pull-up to 5V_SYS
-21,L1,"6.8uH, Isat >=8A","Select shielded power inductor, low DCR",TBD,TI 5V/5A design example; choose Isat >8A and verify DCR/thermal
+21,L1,6.8uH,Bourns SRR1280A-6R8Y (6.8uH ±30%; DCR 18.5mΩ max; Irms 7.6A; Isat 8.0A),A1_POWER:SRR1280A_12.5x12.5mm,At 15V to 5V/400kHz: calculated ΔIL≈1.23A; peak≈5.61A at 5A load; verify thermal rise and inductor saturation on final PCB
