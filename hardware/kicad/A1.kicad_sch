@@ -381,36 +381,36 @@
       (pin "1" (uuid "134cce35-9843-4f12-8e8e-cd41fa4b3143"))(pin "2" (uuid "268beceb-a9a5-4223-b2eb-a9f322094e28"))
       (instances (project "A1" (path "/11111111-1111-4111-8111-111111111111" (reference "L1") (unit 1))))
     )
-(label "SW_NODE" (at 324.76 112.3 180) (effects (font (size 1 1)) (justify left bottom)) (uuid "87d079cf-3550-4c18-a08b-059271cf58f4"))
-(label "SW_NODE" (at 324.76 114.84 180) (effects (font (size 1 1)) (justify left bottom)) (uuid "9011ea2d-48b8-4117-a1a5-d7c6a3ba7a47"))
-(label "SW_NODE" (at 324.76 117.38 180) (effects (font (size 1 1)) (justify left bottom)) (uuid "b7b0ca12-9aee-4ef4-839a-34188751959e"))
-(label "SW_NODE" (at 324.76 119.92 180) (effects (font (size 1 1)) (justify left bottom)) (uuid "7ddcaba4-96d7-41b2-ac02-c8d8ed876247"))
-(label "SW_NODE" (at 324.76 122.46 180) (effects (font (size 1 1)) (justify left bottom)) (uuid "4728706f-2091-4fee-93ee-e0bdba5acbb5"))
+
+
+
+
+
 (label "BOOT" (at 324.76 125 180) (effects (font (size 1 1)) (justify left bottom)) (uuid "5920965f-6f1f-4fbc-b6aa-eb8bd9ea4bf1"))
 (no_connect (at 324.76 127.54) (uuid "d1238af1-0af2-4978-b3b6-f329c0327652"))
-(label "VCC" (at 324.76 130.08 180) (effects (font (size 1 1)) (justify left bottom)) (uuid "bf72fe27-a15a-4ad8-b171-24f6b7eec323"))
-(label "5V_SYS" (at 324.76 132.62 180) (effects (font (size 1 1)) (justify left bottom)) (uuid "cd05a2f6-3d6b-4258-a0f7-4ec827f2dbeb"))
+
+
 (no_connect (at 324.76 135.16) (uuid "44c08a02-235b-4b99-8ffa-9ed36b1a62d2"))
 (no_connect (at 324.76 137.7) (uuid "59a447d2-1342-4b27-bb43-53f0d6a4f39a"))
-(label "FB_5V" (at 332.38 145.32 270) (effects (font (size 1 1)) (justify left bottom)) (uuid "2498a998-988a-45dd-8fda-8d0dd081d76e"))
-(label "GND" (at 337.46 145.32 270) (effects (font (size 1 1)) (justify left bottom)) (uuid "fac0f7c4-d007-45c2-9027-15e105d57a03"))
-(label "GND" (at 342.54 145.32 270) (effects (font (size 1 1)) (justify left bottom)) (uuid "2782284c-844a-4d4a-9bb2-81c9c982c287"))
-(label "GND" (at 347.62 145.32 270) (effects (font (size 1 1)) (justify left bottom)) (uuid "adc3cbc6-4af7-4dbb-bbe1-80b9149270bd"))
-(label "PWR5_PGOOD_N" (at 355.24 112.3 0) (effects (font (size 1 1)) (justify left bottom)) (uuid "889276dc-d67e-4dec-bb0c-fe6152695b2e"))
+
+
+
+
+
 (label "GND" (at 355.24 114.84 0) (effects (font (size 1 1)) (justify left bottom)) (uuid "31e13774-224f-4248-a71f-898b5933a860"))
-(label "EN_5V" (at 355.24 117.38 0) (effects (font (size 1 1)) (justify left bottom)) (uuid "910beed0-7183-4ac3-8858-5c69b980e7af"))
-(label "GND" (at 355.24 119.92 0) (effects (font (size 1 1)) (justify left bottom)) (uuid "58ca1553-62a7-45df-92c7-36e07cf7449e"))
+
+
 (label "PD_15V_IN" (at 355.24 122.46 0) (effects (font (size 1 1)) (justify left bottom)) (uuid "06b5a202-744f-4cc2-9bfe-fb4f2329d156"))
 (label "PD_15V_IN" (at 355.24 125 0) (effects (font (size 1 1)) (justify left bottom)) (uuid "7f9db4e7-7fba-4d2d-8c47-1d4b0d78ccd9"))
 (label "PD_15V_IN" (at 355.24 127.54 0) (effects (font (size 1 1)) (justify left bottom)) (uuid "91a46cc6-e2ff-41e8-87f4-5f1a648d3a53"))
 (no_connect (at 355.24 130.08) (uuid "99cc6593-313b-4f1f-bab9-b7a936a6cc0f"))
-(label "GND" (at 355.24 132.62 0) (effects (font (size 1 1)) (justify left bottom)) (uuid "e2cdffc4-9a5f-4b45-aa6b-8f879361f384"))
+
 (label "GND" (at 355.24 135.16 0) (effects (font (size 1 1)) (justify left bottom)) (uuid "3807bbf9-396e-4a81-947f-79d1a241b4ff"))
-(label "GND" (at 355.24 137.7 0) (effects (font (size 1 1)) (justify left bottom)) (uuid "7c977a3a-341b-4c86-8d55-a1a5d682fe1a"))
-(label "GND" (at 334.92 104.68 90) (effects (font (size 1 1)) (justify left bottom)) (uuid "854941e7-41ae-452a-be89-d5fc180beda6"))
-(label "GND" (at 338.73 104.68 90) (effects (font (size 1 1)) (justify left bottom)) (uuid "71044e81-34f3-4a08-8012-1d7af1abc117"))
-(label "GND" (at 341.27 104.68 90) (effects (font (size 1 1)) (justify left bottom)) (uuid "eb34b887-759b-44a2-b7b0-77d3ff9872e4"))
-(label "GND" (at 345.08 104.68 90) (effects (font (size 1 1)) (justify left bottom)) (uuid "f39ec48f-5e3f-492a-89c8-08fc1c16d05a"))
+
+
+
+
+
 (label "PD_15V_IN" (at 285 99.92 90) (effects (font (size 1 1)) (justify left bottom)) (uuid "d18046d7-93c8-40ee-ade8-50b8200593bc"))
 (label "GND" (at 285 110.08 270) (effects (font (size 1 1)) (justify left bottom)) (uuid "2daf6686-727a-4723-ab12-1faf9debc97a"))
 (label "PD_15V_IN" (at 300 99.92 90) (effects (font (size 1 1)) (justify left bottom)) (uuid "599efe6d-b340-4611-968a-791b1d698fcf"))
