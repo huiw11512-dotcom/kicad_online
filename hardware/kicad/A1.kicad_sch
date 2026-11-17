@@ -591,12 +591,12 @@
 (label "PMOS_GATE" (at 205 140.08 90) (effects (font (size 1 1)) (justify left bottom)) (uuid "a5110000-0000-4000-8000-000000000037"))
 (label "PMOS_GATE" (at 219.84 100 180) (effects (font (size 1 1)) (justify left bottom)) (uuid "a5110000-0000-4000-8000-000000000038"))
 (label "USB_VBUS_RAW" (at 205 129.92 270) (effects (font (size 1 1)) (justify left bottom)) (uuid "a5110000-0000-4000-8000-000000000039"))
-(wire (pts (xy 230 105.08) (xy 230 110.16)) (stroke (width 0) (type default)) (uuid "a5110000-0000-4000-8000-000000000040"))
-(wire (pts (xy 230 107.62) (xy 250 107.62)) (stroke (width 0) (type default)) (uuid "a5110000-0000-4000-8000-000000000041"))
+
+
 (label "USB_VBUS_RAW" (at 250 107.62 0) (effects (font (size 1 1)) (justify left bottom)) (uuid "a5110000-0000-4000-8000-000000000042"))
-(wire (pts (xy 230 87.3) (xy 230 94.92)) (stroke (width 0) (type default)) (uuid "a5110000-0000-4000-8000-000000000043"))
-(wire (pts (xy 230 91.11) (xy 250 91.11)) (stroke (width 0) (type default)) (uuid "a5110000-0000-4000-8000-000000000044"))
-(label "PD_15V_IN" (at 250 91.11 0) (effects (font (size 1 1)) (justify left bottom)) (uuid "a5110000-0000-4000-8000-000000000045"))
+
+
+
 (no_connect (at 135.16 103.81) (uuid "a5110000-0000-4000-8000-000000000046"))
 (no_connect (at 135.16 107.62) (uuid "a5110000-0000-4000-8000-000000000047"))
 (no_connect (at 39.84 96.19) (uuid "a5110000-0000-4000-8000-000000000048"))
@@ -624,5 +624,13 @@
 (global_label "GND" (shape passive) (at 340 147.86 90) (fields_autoplaced) (effects (font (size 1 1)) (justify left)) (uuid "a5230000-0000-4000-8000-000000000022") (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 340 147.86 90) (effects (font (size 1.27 1.27)) hide)))
 (no_connect (at 324.76 114.84) (uuid "a5230000-0000-4000-8000-000000000023"))
 (no_connect (at 324.76 112.3) (uuid "a5230000-0000-4000-8000-000000000024"))
+(wire (pts (xy 230 105.08) (xy 230 107.62)) (stroke (width 0) (type default)) (uuid "a5240000-0000-4000-8000-000000000002"))
+(wire (pts (xy 230 107.62) (xy 230 110.16)) (stroke (width 0) (type default)) (uuid "a5240000-0000-4000-8000-000000000003"))
+(wire (pts (xy 230 107.62) (xy 250 107.62)) (stroke (width 0) (type default)) (uuid "a5240000-0000-4000-8000-000000000004"))
+(wire (pts (xy 230 87.3) (xy 230 89.84)) (stroke (width 0) (type default)) (uuid "a5240000-0000-4000-8000-000000000005"))
+(wire (pts (xy 230 89.84) (xy 230 92.38)) (stroke (width 0) (type default)) (uuid "a5240000-0000-4000-8000-000000000006"))
+(wire (pts (xy 230 92.38) (xy 230 94.92)) (stroke (width 0) (type default)) (uuid "a5240000-0000-4000-8000-000000000007"))
+(wire (pts (xy 230 92.38) (xy 250 92.38)) (stroke (width 0) (type default)) (uuid "a5240000-0000-4000-8000-000000000008"))
+(label "PD_15V_IN" (at 250 92.38 0) (effects (font (size 1 1)) (justify left bottom)) (uuid "a5240000-0000-4000-8000-000000000001"))
 (sheet_instances (path "/" (page "1")))
 )
